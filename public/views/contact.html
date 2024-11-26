@@ -69,7 +69,28 @@
                     </form>
                     <!-- When user has login -->
                     <div ng-if="!showLoginForm">
-                        <p>Welcome, user! You're on your personal page</p>
+                        <div ng-if="accountInfo">
+                            <!-- Profile section with icon and name -->
+                            <div class="profile-info">
+                                <div class="account-icon-container">
+                                    <img src="img/account.png" alt="Account Icon" class="account-icon" />
+                                </div>
+                                <div class="name">
+                                    <p><strong>{{ accountInfo.first_name }} {{ accountInfo.last_name }}</strong></p>
+                                    <p><em>{{ accountInfo.email }}</em></p>
+                                </div>
+                            </div>
+
+                            <!-- Settings button -->
+                            <a ng-href="/settings/{{ accountInfo.id }}" class="settings-button">
+                                <h3>Settings ></h3>
+                            </a>
+                            <hr class="divider">
+                        </div>
+                        <!-- Loading message when info not loaded yet -->
+                        <div ng-if="!accountInfo">
+                            <p>{{ errorMessage || 'Loading account information...' }}</p>
+                        </div>
                     </div>
                     <li>
                         <!-- Error and Success Messages -->
