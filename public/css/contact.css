@@ -418,6 +418,7 @@ html, body {
 
 .account-button {
     display: flex;
+    align-items: center;
     background-color: white;
     color: #9B8F6B;  
     padding: 0px 20px;
@@ -426,7 +427,6 @@ html, body {
     text-align: center;
     text-decoration: none;
     border-radius: 4px;
-    font-size: 18px;
     border: 1px solid #9B8F6B;
     border-radius: 12px;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -438,8 +438,13 @@ html, body {
     color: white;  
 }
 
+.account-button i {
+    font-size: 25px;
+}
+
 .account-button h3 {
     margin: 0;
+    font-size: 22px;
 }
 
 /* Sidebars End */
