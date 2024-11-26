@@ -3,8 +3,11 @@
     <!-- Navigation Bar Start-->
     <nav class="navbar fade-in blur">
         <div class="navbar-logo">
-            <a ng-href="/">
-                <img src="img/brand-logo.png" id="navbar-logo">    
+            <a ng-if="!accountInfo" ng-href="/">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
+            </a>
+            <a ng-if="accountInfo" ng-href="/{{ accountInfo.id }}">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
             </a>
         </div>
         <div class="navbar-menu">
@@ -13,18 +16,21 @@
                 <li><a href="../Products/index.html"><h3>Products</h3></a></li>
                 <li><a href="../Products/indexmale.html"><h3>Male</h3></a></li>
                 <li><a href="../Products/indexfemale.html"><h3>Female</h3></a></li>
-                <li><a ng-href="/contact"><h3>Contact</h3></a></li>
+                <li>
+                    <a ng-if="!accountInfo" ng-href="/contact"><h3>Contact</h3></a>
+                    <a ng-if="accountInfo" ng-href="/contact/{{ accountInfo.id }}"><h3>Contact</h3></a> 
+                </li>
             </ul>
             <!-- Mobile Icons -->
             <div class="mobile-icons">
-                <a href=""><div class="icon-container"><a id="account-button-mobile"><img class="icon" src="img/account.png"></div></a></a>
-                <a href=""><div class="icon-container"><a id="cart-button-mobile"><img class="icon" src="img/cart.png"></div></a></a>
+                <a href=""><div class="icon-container"><a id="account-button-mobile"><img class="icon" src="/img/account.png"></div></a></a>
+                <a href=""><div class="icon-container"><a id="cart-button-mobile"><img class="icon" src="/img/cart.png"></div></a></a>
             </div>
         </div>        
         <!-- Destkop Icons -->
         <div class="icons">
-            <a href=""><div class="icon-container"><a id="account-button"><img class="icon" src="img/account.png"></div></a> </a>
-            <a href=""><div class="icon-container"><a id="cart-button"><img class="icon" src="img/cart.png"></div></a> </a>
+            <a href=""><div class="icon-container"><a id="account-button"><img class="icon" src="/img/account.png"></div></a> </a>
+            <a href=""><div class="icon-container"><a id="cart-button"><img class="icon" src="/img/cart.png"></div></a> </a>
         </div>
         <div class="burger-menu" id="burger-menu">
             <div class="line"></div>
@@ -52,7 +58,8 @@
     <div class="sidebar-account" id="sidebar-account">
         <div class="sidebar-container">
             <button class="close-sidebar" id="close-account">&times;</button> 
-            <h3>LOGIN</h3>
+            <h3 ng-if="showLoginForm">LOGIN</h3>
+            <h3 ng-if="!showLoginForm">YOUR ACCOUNT</h3>
             <hr class="divider">
                 <ul>
                     <form id="account-form" ng-submit="login()" ng-if="showLoginForm">
@@ -73,7 +80,7 @@
                             <!-- Profile section with icon and name -->
                             <div class="profile-info">
                                 <div class="account-icon-container">
-                                    <img src="img/account.png" alt="Account Icon" class="account-icon" />
+                                    <img src="/img/account.png" alt="Account Icon" class="account-icon" />
                                 </div>
                                 <div class="name">
                                     <p><strong>{{ accountInfo.first_name }} {{ accountInfo.last_name }}</strong></p>
@@ -81,10 +88,16 @@
                                 </div>
                             </div>
 
-                            <!-- Settings button -->
-                            <a ng-href="/settings/{{ accountInfo.id }}" class="settings-button">
-                                <h3>Settings ></h3>
-                            </a>
+                            <!-- Buttons -->
+                            <div class="account-buttons">
+                                <a ng-href="/settings/{{ accountInfo.id }}" class="account-button">
+                                    <h3>Settings ></h3>
+                                </a>
+                                <a ng-href="/settings/{{ accountInfo.id }}" class="account-button">
+                                    <h3>Transactions ></h3>
+                                </a>   
+                            </div>
+
                             <hr class="divider">
                         </div>
                         <!-- Loading message when info not loaded yet -->
@@ -171,23 +184,24 @@
     <footer class="footer fade-in blur">
         <div class="footer-content">
             <div class="logo">
-                <img src="img/brand-logo.png"/>
+                <img src="/img/brand-logo.png"/>
             </div>
             <div class="footer-menu">
                 <a href="" class="footer-link">Products</a>
                 <a href="" class="footer-link">Male</a>
                 <a href="" class="footer-link">Female</a>
-                <a ng-href="/contact" class="footer-link">Contact</a>
+                <a ng-if="!accountInfo" ng-href="/contact" class="footer-link">Contact</a>
+                <a ng-if="accountInfo" ng-href="/contact/{{ accountInfo.id }}" class="footer-link">Contact</a>
             </div>
             <div class="social">
                 <div class="social-icon-container">
-                    <a href="" target="_blank" class="social-icon"><img src="img/instagram.png"/></a>    
+                    <a href="" target="_blank" class="social-icon"><img src="/img/instagram.png"/></a>    
                 </div>
                 <div class="social-icon-container">
-                    <a href="" target="_blank" class="social-icon"><img src="img/twitter.png"/></a>    
+                    <a href="" target="_blank" class="social-icon"><img src="/img/twitter.png"/></a>    
                 </div>
                 <div class="social-icon-container">
-                    <a href="" target="_blank" class="social-icon"><img src="img/whatsapp.png"/></a>    
+                    <a href="" target="_blank" class="social-icon"><img src="/img/whatsapp.png"/></a>    
                 </div>
             </div>
         </div>

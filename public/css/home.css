@@ -415,8 +415,14 @@ html, body {
     font-weight: bold;
 }
 
-/* Settings button */
-.settings-button {
+/* Account buttons */
+.account-buttons {
+    display: flex;
+    flex-direction: column;
+    gap:4px;
+}
+
+.account-button {
     display: flex;
     background-color: white;
     color: #9B8F6B;  
@@ -433,12 +439,12 @@ html, body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.settings-button:hover {
+.account-button:hover {
     background-color: #9B8F6B; 
     color: white;  
 }
 
-.settings-button h3 {
+.account-button h3 {
     margin: 0;
 }
 
