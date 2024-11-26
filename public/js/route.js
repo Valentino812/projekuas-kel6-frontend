@@ -9,6 +9,15 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }
         })
+        .when('/settings', {
+            templateUrl: '/views/settings.html',
+            controller: 'SettingsController',
+            resolve: {
+                load: function($ocLazyLoad) {
+                    return $ocLazyLoad.load('/js/settingsController.js');
+                }
+            }
+        })
         .when('/', {
             templateUrl: '/views/home.html',
             controller: 'HomeController',
