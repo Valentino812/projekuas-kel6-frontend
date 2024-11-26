@@ -1,4 +1,4 @@
-app.controller('ContactController', function($scope, $timeout, $routeParams, $http) {
+app.controller('SettingsController', function($scope, $timeout, $http) {
     // Using jQuery to change an element's style after the page is loaded
     $scope.$on('$viewContentLoaded', function() {
         // This ensures the DOM is fully loaded before running jQuery
@@ -138,44 +138,4 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
     $scope.updateAccount = function() {
         console.log($scope.accountData);
     };
-
-    // LOGIN
-    // Check if the 'id' is part of the route
-    $scope.userId = $routeParams.id;
-
-    // Derterment what to show on sidebar account (login form or account info)
-    $scope.showLoginForm = !$scope.userId;
-
-    $scope.errorMessage = '';
-    $scope.successMessage = '';
-
-    $scope.login = function() {
-        const routeName = 'contactLogin'; 
-        $http.put('/api/login', {
-            email: $scope.login.email,
-            password: $scope.login.password,
-            redirect_route: routeName
-        })
-        .then(function(response) {
-            $scope.successMessage = response.data.message;;
-            $scope.errorMessage = '';
-            $scope.login = {};
-
-            // Redirect user to the provided URL
-            if (response.data.redirect_url) {
-                window.location.href = response.data.redirect_url;
-            }
-        })
-        .catch(function(error) {
-            console.error('Error:', error);
-            if (error.data && error.data.errors) {
-                $scope.errorMessage = Object.values(error.data.errors).join(' ');
-            } else if (error.data && error.data.message) {
-                $scope.errorMessage = error.data.message;
-            } else {
-                $scope.errorMessage = 'An error occurred. Please try again.';
-            }
-            $scope.successMessage = '';
-        });
-    }
-});
+})
