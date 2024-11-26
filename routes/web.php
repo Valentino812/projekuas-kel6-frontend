@@ -23,6 +23,7 @@ Route::prefix('api')->group(function () {
     Route::post('/contact', [ContactController::class, 'contact']);
     Route::get('/account-info/{id}', [LoginController::class, 'getAccountInfo']);
     Route::post('/admin-login', [AdminController::class, 'adminLogin']);
+    Route::patch('/account-update/{id}', [AccountUpdateController::class, 'updateAccount']);
 });
 
 // Fallback route for AngularJS

@@ -108,31 +108,35 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
         sidebarForgot.classList.remove('active');
     });
 
-    $scope.contactData = {
+    $scope.accountData = {
         first_name: '',
         last_name: '',
-        work_email: '',
+        email: '',
         password: '',
     };
 
     $scope.errorMessage = '';
     $scope.successMessage = '';
 
-    $scope.contact = function() {
-        $http.post('/api/contact', $scope.contactData)
+    $scope.accountUpdate = function() {
+        $http.put('/api/account-update/' + $scope.userId, $scope.accountData)
         .then(function(response) {
             $scope.successMessage = response.data.message;
             $scope.errorMessage = '';
-            $scope.contactData = {}; // Reset form fields
+            $scope.accountData = {};            
         })
         .catch(function(error) {
             if (error.data && error.data.errors) {
-                $scope.errorMessage = error.data.errors; 
+                $scope.errorMessage = error.data.errors;
             } else {
                 $scope.errorMessage = 'An error occurred. Please try again.';
             }
             $scope.successMessage = '';
         });
+    };
+
+    $scope.updateAccount = function() {
+        console.log($scope.accountData);
     };
 
     // LOGIN

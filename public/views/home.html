@@ -73,7 +73,7 @@
                             <p><strong>Account ID:</strong> {{ accountInfo.id }}</p>
                             <p><strong>Email:</strong> {{ accountInfo.email }}</p>
                             <p><strong>Name:</strong> {{ accountInfo.first_name }} {{ accountInfo.last_name }}</p>
-                            <li><a ng-href="/settings"><h3>Settings</h3></a></li>
+                            <li><a ng-href="/settings/{{ accountInfo.id }}"><h3>Settings</h3></a></li>
                         </div>
                         <!-- Loading when info not loaded yet -->
                         <div ng-if="!accountInfo">

@@ -9,7 +9,7 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }
         })
-        .when('/settings', {
+        .when('/settings/:id', {
             templateUrl: '/views/settings.html',
             controller: 'SettingsController',
             resolve: {
@@ -71,6 +71,8 @@ app.config(function($routeProvider, $locationProvider) {
                     return $ocLazyLoad.load('/js/adminController.js');
                 }
             }
+
+            
         })
         .otherwise({
             redirectTo: '/'
