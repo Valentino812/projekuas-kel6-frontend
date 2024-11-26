@@ -3,8 +3,11 @@
     <!-- Navigation Bar Start-->
     <nav class="navbar fade-in blur">
         <div class="navbar-logo">
-            <a ng-href="/">
-                <img src="img/brand-logo.png" id="navbar-logo">    
+            <a ng-if="!accountInfo" ng-href="/">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
+            </a>
+            <a ng-if="accountInfo" ng-href="/{{ accountInfo.id }}">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
             </a>
         </div>
         <div class="navbar-menu">
@@ -13,18 +16,21 @@
                 <li><a href="Products/index.html"><h3>Products</h3></a></li>
                 <li><a href="Products/indexmale.html"><h3>Male</h3></a></li>
                 <li><a href="Products/indexfemale.html"><h3>Female</h3></a></li>
-                <li><a ng-href="/contact"><h3>Contact</h3></a></li>
+                <li>
+                    <a ng-if="!accountInfo" ng-href="/contact"><h3>Contact</h3></a>
+                    <a ng-if="accountInfo" ng-href="/contact/{{ accountInfo.id }}"><h3>Contact</h3></a> 
+                </li>
             </ul>
             <!-- Mobile Icons -->
             <div class="mobile-icons">
-                <a href=""><div class="icon-container"><a id="account-button-mobile"><img class="icon" src="img/account.png"></div></a></a>
-                <a href=""><div class="icon-container"><a id="cart-button-mobile"><img class="icon" src="img/cart.png"></div></a></a>
+                <a href=""><div class="icon-container"><a id="account-button-mobile"><img class="icon" src="/img/account.png"></div></a></a>
+                <a href=""><div class="icon-container"><a id="cart-button-mobile"><img class="icon" src="/img/cart.png"></div></a></a>
             </div>
         </div>        
         <!-- Destkop Icons -->
         <div class="icons">
-            <a href=""><div class="icon-container"><a id="account-button"><img class="icon" src="img/account.png"></div></a> </a>
-            <a href=""><div class="icon-container"><a id="cart-button"><img class="icon" src="img/cart.png"></div></a> </a>
+            <a href=""><div class="icon-container"><a id="account-button"><img class="icon" src="/img/account.png"></div></a> </a>
+            <a href=""><div class="icon-container"><a id="cart-button"><img class="icon" src="/img/cart.png"></div></a> </a>
         </div>
         <div class="burger-menu" id="burger-menu">
             <div class="line"></div>
@@ -51,7 +57,8 @@
     <div class="sidebar-account" id="sidebar-account">
         <div class="sidebar-container">
             <button class="close-sidebar" id="close-account">&times;</button> 
-            <h3>LOGIN</h3>
+            <h3 ng-if="showLoginForm">LOGIN</h3>
+            <h3 ng-if="!showLoginForm">YOUR ACCOUNT</h3>
             <hr class="divider">
                 <ul>
                     <form id="account-form" ng-submit="login()" ng-if="showLoginForm">
@@ -72,7 +79,7 @@
                             <!-- Profile section with icon and name -->
                             <div class="profile-info">
                                 <div class="account-icon-container">
-                                    <img src="img/account.png" alt="Account Icon" class="account-icon" />
+                                    <img src="/img/account.png" alt="Account Icon" class="account-icon" />
                                 </div>
                                 <div class="name">
                                     <p><strong>{{ accountInfo.first_name }} {{ accountInfo.last_name }}</strong></p>
@@ -80,10 +87,16 @@
                                 </div>
                             </div>
 
-                            <!-- Settings button -->
-                            <a ng-href="/settings/{{ accountInfo.id }}" class="settings-button">
-                                <h3>Settings ></h3>
-                            </a>
+                            <!-- Buttons -->
+                            <div class="account-buttons">
+                                <a ng-href="/settings/{{ accountInfo.id }}" class="account-button">
+                                    <h3>Settings ></h3>
+                                </a>
+                                <a ng-href="/settings/{{ accountInfo.id }}" class="account-button">
+                                    <h3>Transactions ></h3>
+                                </a>   
+                            </div>
+
                             <hr class="divider">
                         </div>
                         <!-- Loading message when info not loaded yet -->
@@ -135,9 +148,9 @@
     <!-- Hero Start -->
     <div class="hero fade-in blur">
         <div class="carousel-hero">
-            <img src="img/img1hero.JPG" alt="Image 1">
-            <img src="img/img2hero.jpg" alt="Image 2">
-            <img src="img/img3hero.jpg" alt="Image 3">
+            <img src="/img/img1hero.JPG" alt="Image 1">
+            <img src="/img/img2hero.jpg" alt="Image 2">
+            <img src="/img/img3hero.jpg" alt="Image 3">
         </div>
         <button class="prev" onclick="prevSlide()">❮</button>
         <button class="next" onclick="nextSlide()">❯</button>
@@ -156,8 +169,8 @@
 
     <!-- Shoemaking Images Start -->
     <div class="shoemaking fade-in blur">
-        <img class="shoemaking-img" src="img/img1history.jpg">
-        <img class="shoemaking-img" src="img/img2history.jpg">
+        <img class="shoemaking-img" src="/img/img1history.jpg">
+        <img class="shoemaking-img" src="/img/img2history.jpg">
     </div>
     <!-- Shoemaking Images End -->
 
@@ -170,7 +183,7 @@
             <div class="products-container">
                 <div class="product">
                     <a href ="Products/officer-shoe/produk11.html">
-                        <img class="featured-img" src="img/img1featured.jpg">    
+                        <img class="featured-img" src="/img/img1featured.jpg">    
                     </a>
                     <a href="Products/officer-shoe/produk11.html">
                         <h4>Officer Shoes - Black</h4>    
@@ -178,7 +191,7 @@
                 </div>
                 <div class="product">
                     <a href="Products/legetant/produk7.html">
-                        <img class="featured-img" src="img/img2featured.jpg">    
+                        <img class="featured-img" src="/img/img2featured.jpg">    
                     </a>
                     <a href="Products/legetant/produk7.html">
                         <h4>Legatant - Waxed</h4>    
@@ -186,7 +199,7 @@
                 </div>
                 <div class="product">
                     <a href="Products/Marine-dress-boots/produk9.html">
-                        <img class="featured-img" src="img/img3featured.jpg">    
+                        <img class="featured-img" src="/img/img3featured.jpg">    
                     </a>
                     <a href="Products/Marine-dress-boots/produk9.html">
                         <h4>Marine Dress Shoe - Shell</h4>    
@@ -201,14 +214,14 @@
                 <button class="products-carousel-button next-products" onclick="prevProductCarousel()">❯</button>
             </div>
             <div class="multi-carousel">
-                <a href="Products/liberty-boots/produk8.html" class="product-img"><img src="img/img1.jpg"></a>
-                <a href="Products/cordmaster-shoe/produk4.html" class="product-img"><img src="img/img2.jpg"></a>
-                <a href="Products/regent-boots/produk12.html" class="product-img"><img src="assets/img3.jpg"></a>
-                <a href="Products/Sylt-Pump-In-Black-Brushed-Leather/produk13.html" class="product-img"><img src="img/img4.jpg"></a>
-                <a href="Products/Sylt-Slingback-Pump-In-Light-Beige-Nappa-Leather/produk19.html" class="product-img"><img src="img/img5.jpg"></a>
-                <a href="Products/Ballyrina-Mary-Jane-Pump-In-Black-Leather/produk17.html" class="product-img"><img src="img/img6.jpg"></a>
-                <a href="Products/Kerbs-Driver-In-White-Leather/produk22.html" class="product-img"><img src="img/img7.jpg"></a>
-                <a href="Products/Ballyrina-Flat-In-Black-Leather/produk23.html" class="product-img"><img src="img/img8.jpg"></a>
+                <a href="Products/liberty-boots/produk8.html" class="product-img"><img src="/img/img1.jpg"></a>
+                <a href="Products/cordmaster-shoe/produk4.html" class="product-img"><img src="/img/img2.jpg"></a>
+                <a href="Products/regent-boots/produk12.html" class="product-img"><img src="/img/img3.jpg"></a>
+                <a href="Products/Sylt-Pump-In-Black-Brushed-Leather/produk13.html" class="product-img"><img src="/img/img4.jpg"></a>
+                <a href="Products/Sylt-Slingback-Pump-In-Light-Beige-Nappa-Leather/produk19.html" class="product-img"><img src="/img/img5.jpg"></a>
+                <a href="Products/Ballyrina-Mary-Jane-Pump-In-Black-Leather/produk17.html" class="product-img"><img src="/img/img6.jpg"></a>
+                <a href="Products/Kerbs-Driver-In-White-Leather/produk22.html" class="product-img"><img src="/img/img7.jpg"></a>
+                <a href="Products/Ballyrina-Flat-In-Black-Leather/produk23.html" class="product-img"><img src="/img/img8.jpg"></a>
             </div>
 
              <!-- Slidebar for mobile/tablet view only-->
@@ -221,13 +234,13 @@
     <div class="ip fade-in blur">
         <div class="row-ip">
             <div class="img-ip-container">
-                <img class="img-ip" src ="img/ip_img1.jpg">
+                <img class="img-ip" src ="/img/ip_img1.jpg">
                 <div class="img-ip-text">
                     <h3>QUALITY</h3>
                 </div>
             </div>
             <div class="img-ip-container">
-                <img class="img-ip" src ="img/ip_img2.jpg">
+                <img class="img-ip" src ="/img/ip_img2.jpg">
                 <div class="img-ip-text">
                     <h3>COMFORT</h3>
                 </div> 
@@ -235,13 +248,13 @@
         </div>
         <div class="row-ip">
             <div class="img-ip-container">
-                <img class="img-ip" id="img-ip-spesific" src ="img/ip_img3.jpg">
+                <img class="img-ip" id="img-ip-spesific" src ="/img/ip_img3.jpg">
                 <div class="img-ip-text" id="spesific-img-text">
                     <h3>STYLE</h3>
                 </div> 
             </div>
             <div class="img-ip-container">
-                <img class="img-ip" src ="img/ip_img4.jpg"> 
+                <img class="img-ip" src ="/img/ip_img4.jpg"> 
                 <div class="img-ip-text">
                     <h3>ELEGANCE</h3>
                 </div>
@@ -254,23 +267,24 @@
     <footer class="footer fade-in blur">
         <div class="footer-content">
             <div class="logo">
-                <img src="img/brand-logo.png"/>
+                <img src="/img/brand-logo.png"/>
             </div>
             <div class="footer-menu">
                 <a href="Products/index.html" class="footer-link">Products</a>
                 <a href="/Products/indexmale.html" class="footer-link">Male</a>
                 <a href="/Products/indexfemale.html" class="footer-link">Female</a>
-                <a ng-href="#/contact" class="footer-link">Contact</a>
+                <a ng-if="!accountInfo" ng-href="/contact" class="footer-link">Contact</a>
+                <a ng-if="accountInfo" ng-href="/contact/{{ accountInfo.id }}" class="footer-link">Contact</a>
             </div>
             <div class="social">
                 <div class="social-icon-container">
-                    <a href="" target="_blank" class="social-icon"><img src="img/instagram.png"/></a>    
+                    <a href="" target="_blank" class="social-icon"><img src="/img/instagram.png"/></a>    
                 </div>
                 <div class="social-icon-container">
-                    <a href="" target="_blank" class="social-icon"><img src="img/twitter.png"/></a>    
+                    <a href="" target="_blank" class="social-icon"><img src="/img/twitter.png"/></a>    
                 </div>
                 <div class="social-icon-container">
-                    <a href="" target="_blank" class="social-icon"><img src="img/whatsapp.png"/></a>    
+                    <a href="" target="_blank" class="social-icon"><img src="/img/whatsapp.png"/></a>    
                 </div>
             </div>
         </div>
