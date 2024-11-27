@@ -453,6 +453,29 @@ html, body {
     font-size: 22px;
 }
 
+.logout-button {
+    display: flex; 
+    align-items: center; 
+    text-decoration: none; 
+    color: #000; 
+    font-size: 21px; 
+}
+
+.logout-button i {
+    margin-right: 8px; 
+    font-size: 21px; 
+}
+
+.logout-button small {
+    margin: 0; 
+    line-height: 1; 
+}
+
+.logout-button:hover {
+    color: #d9534f; 
+    text-decoration: none;
+}
+
 /* 4.Sidebars End */
 
 /* 5.Hero Start */
