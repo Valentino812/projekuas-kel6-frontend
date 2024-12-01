@@ -88,7 +88,21 @@
         </div>
         <!-- Dangerous Zone -->
         <div class="modal-content">
-            <h2 class="red-text">DANGEROUS ZONE</h2>
+            <h2>DANGEROUS ZONE</h2>
+            <form ng-submit="deleteAccount()">
+                <div class="form-group">
+                    <label for="password">Password (required)</label>
+                    <input type="password" id="password" name="password" ng-model="accountDeleteData.password" required>
+                </div>
+                <p>Enter your current password to confirm the deletion of your account</p>
+                <div class="form-group">
+                    <div ng-if="errorMessageDelete" class="error-message">
+                        {{ errorMessageDelete }}
+                    </div>
+                    <div ng-if="successMessageDelete" class="success-message">
+                        {{ successMessageDelete }}
+                    </div>
+                </div>
                 <br><br>
                 <button type="submit" class="red-text">Delete Account</button>
             </form>

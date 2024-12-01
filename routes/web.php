@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AccountUpdateController;
+use App\Http\Controllers\AccountDeleteController;
 
 // After login routes to web page:
 Route::get('/{id}', function () {
@@ -26,6 +27,7 @@ Route::prefix('api')->group(function () {
     Route::post('/admin-login', [AdminController::class, 'adminLogin']);
     Route::patch('/accountInfo-update/{id}', [AccountUpdateController::class, 'updateAccountInfo']);
     Route::patch('/accountLogin-update/{id}', [AccountUpdateController::class, 'updateAccountLogin']);
+    Route::delete('/accountDelete/{id}', [AccountDeleteController::class, 'deleteAccount']);
 });
 
 // Fallback route for AngularJS
