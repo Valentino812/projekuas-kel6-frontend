@@ -12,8 +12,6 @@ use App\Models\Admin;
 class AdminController extends Controller
 {
     public function adminLogin(Request $request)
-
-
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|string',
@@ -30,7 +28,11 @@ class AdminController extends Controller
             return response()->json(['message' => 'Invalid password'], 401);
         }
         
-        return response()->json(['message' => 'Login successful'], 200);
+        // return response()->json(['message' => 'Login successful'], 200);
+        return response()->json([
+            'message' => 'Login successful!',
+            'redirect_url' => route('admin', ['id' => $admin->id]) 
+        ], 200);
     }
 
 }

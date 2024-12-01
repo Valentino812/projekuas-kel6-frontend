@@ -264,11 +264,10 @@ html, body {
 
     .modal {
         width: 95%; 
-
+    }
     .form-group-inline {
         flex-direction: column;
     }
-}
 }
 
 .navbar-menu .close-button {
