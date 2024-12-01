@@ -70,9 +70,16 @@ app.config(function($routeProvider, $locationProvider) {
                 load: function($ocLazyLoad) {
                     return $ocLazyLoad.load('/js/adminController.js');
                 }
-            }
-
-            
+            }            
+        })
+        .when('/admin/newProduct/:id', {
+            templateUrl: '/views/newProduct.html',
+            controller: 'NewProductController',
+            resolve: {
+                load: function($ocLazyLoad) {
+                    return $ocLazyLoad.load('/js/newProductController.js');
+                }
+            }            
         })
         .otherwise({
             redirectTo: '/'

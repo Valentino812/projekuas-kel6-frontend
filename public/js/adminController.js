@@ -1,4 +1,4 @@
-app.controller('AdminController', function($scope, $timeout, $http) {
+app.controller('AdminController', function($scope, $timeout, $routeParams, $http) {
     // Using jQuery to change an element's style after the page is loaded
     $scope.$on('$viewContentLoaded', function() {
         // This ensures the DOM is fully loaded before running jQuery
@@ -50,4 +50,6 @@ app.controller('AdminController', function($scope, $timeout, $http) {
 
     // Show the Home section by default
     $('#content-home').removeClass('hidden');
+
+    $scope.adminId = $routeParams.id;
 });

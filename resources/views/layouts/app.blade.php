@@ -25,6 +25,7 @@
     <script src="{{ asset('js/adminLoginController.js') }}"></script>
     <script src="{{ asset('js/adminController.js') }}"></script>
     <script src="{{ asset('js/settingsController.js') }}"></script>
+    <script src="{{ asset('js/newProductController.js') }}"></script>
 
     <!-- Icon for title bar -->
     <link rel="icon" href=
