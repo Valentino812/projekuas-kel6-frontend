@@ -44,6 +44,7 @@
         <li class="menu-item" id="rating">Rating</li>
         <li class="menu-item" id="accounts">Accounts</li>
         <li class="menu-item" id="transactions">Transactions</li>
+        <li class="menu-item" id="contacts">Contacts</li>
       </ul>
     </aside>
 
@@ -73,6 +74,20 @@
       <div class="content-container hidden" id="content-transactions">
         <h1>Transactions</h1>
         <p>View transaction history here.</p>
+      </div>
+      <div class="content-container hidden" id="content-contacts">
+        <h1>Contacts</h1>
+        <p>Contacts from customers.</p>
+        <div ng-if="contacts.length === 0">
+            <p>No contacts found.</p>
+        </div>
+        <ul ng-if="contacts.length > 0">
+            <li ng-repeat="contact in contacts">
+                <strong>{{ contact.first_name }} {{ contact.last_name }}</strong> <br>
+                Email: {{ contact.work_email }} <br>
+                Message: {{ contact.message }}
+            </li>
+        </ul>
       </div>
     </main>
   </div>
