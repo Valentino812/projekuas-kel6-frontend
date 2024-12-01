@@ -10,8 +10,7 @@ app.controller('AdminLoginController', function($scope, $timeout, $http) {
         $('#homeMessage').fadeIn();
     }, 500); // Delay to let Angular render first
 
-
-        // Entrance Transition Start (using jQuery for simpler syntax)
+    // Entrance Transition Start (using jQuery for simpler syntax)
     // Trigger the active class to do the transition for fade-in
     $('.fade-in').each(function(index) {
         $(this).delay(150 * index).queue(function(next) { // 150ms delay between transitions of each element 

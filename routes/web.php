@@ -16,7 +16,9 @@ Route::get('/{id}', function () {
 Route::get('/contact/{id}', function () {
     return view('layouts.app');
 })->name('contactLogin');
-
+Route::get('/admin/{id}', function () {
+    return view('layouts.app');
+})->name('admin');
 
 // API Routes (for CRUD operations)
 Route::prefix('api')->group(function () {

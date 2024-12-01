@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - SuShoes</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- JQuery script -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <link rel="icon" href="../assets/brand-logo.png" type="image/png" />
-</head>
-<body>
-    <!-- Navigation Bar Start-->
-    <nav class="navbar fade-in blur">
+<div>
+    <link rel="stylesheet" href="/css/admin.css">
+      <!-- Navigation Bar Start-->
+      <nav class="navbar fade-in blur">
         <div class="navbar-logo">
-            <a href="../index.html">
-                <img src="../assets/brand-logo.png" id="navbar-logo">    
+            <a ng-href="/">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
             </a>
         </div>
         <div class="navbar-menu">
@@ -25,13 +14,16 @@
             </ul>
             <!-- Mobile Icons -->
             <div class="mobile-icons">
-                <a><a href="../index.html" id="logout-button"><img class="icon" src="../assets/logout.png"></div></a> </a>
+                <a><a ng-href="/" id="logout-button"><img class="icon" src="/img/logout.png"></div></a> </a>
             </div>
-        </div>        
-        <!-- Destkop Icons -->
-        <div class="icons">
-            <a><a href="../index.html" id="logout-button"><img class="icon" src="../assets/logout.png"></div></a> </a>
+            <!-- Destkop Icons -->
+          <div class="icons">
+            <a ng-href="/" id="logout-button">
+                <img class="icon" src="/img/logout.png">
+            </a>
         </div>
+        </div>        
+
         <div class="burger-menu" id="burger-menu">
             <div class="line"></div>
             <div class="line"></div>
@@ -88,7 +80,7 @@
     <footer class="footer fade-in blur">
         <div class="footer-content">
             <div class="logo">
-                <img src="../assets/brand-logo.png"/>
+                <img src="/img/brand-logo.png"/>
             </div>
         </div>
         <div class="copyright">
@@ -96,6 +88,4 @@
         </div>
     </footer>
     <!-- Footer End -->
-    <script src="script.js"></script>
-</body>
-</html>
+</div>
