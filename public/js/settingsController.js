@@ -34,32 +34,7 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
         burgerMenu.classList.remove('active');
     });
 
-    $scope.accountData = {
-        first_name: '',
-        last_name: '',
-        email: '',
-        password: '',
-    };
 
-    $scope.errorMessage = '';
-    $scope.successMessage = '';
-
-    $scope.accountUpdate = function() {
-        $http.put('/api/account-update/' + $scope.userId, $scope.accountData)
-        .then(function(response) {
-            $scope.successMessage = response.data.message;
-            $scope.errorMessage = '';
-            $scope.accountData = {};            
-        })
-        .catch(function(error) {
-            if (error.data && error.data.errors) {
-                $scope.errorMessage = error.data.errors;
-            } else {
-                $scope.errorMessage = 'An error occurred. Please try again.';
-            }
-            $scope.successMessage = '';
-        });
-    };
 
     $scope.updateAccount = function() {
         console.log($scope.accountData);
@@ -75,9 +50,17 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
         
             $http.get('/api/account-info/' + userId)
                 .then(function(response) {
-                    // console.log('Response from API:', response); 
                     $scope.accountInfo = response.data.account;
                     console.log('Account Info:', $scope.accountInfo); 
+
+                    // Pre-fill accountData with the fetched account information
+                    $scope.accountData = {
+                        first_name: $scope.accountInfo.first_name || '', 
+                        last_name: $scope.accountInfo.last_name || '',
+                        email: $scope.accountInfo.email || '',
+                        password: '' // Keep password blank for security reasons
+                    };
+
                     $scope.errorMessage = '';
                 })
                 .catch(function(error) {
@@ -93,4 +76,52 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
         // Call getAccountInfo 
         $scope.getAccountInfo($scope.userId);
     }
+
+    $scope.errorMessage = '';
+    $scope.successMessage = '';
+
+    // Update Account Info (First Name and Last Name)
+    $scope.accountInfoUpdate = function () {
+        const accountInfoData = {
+            first_name: $scope.accountData.first_name,
+            last_name: $scope.accountData.last_name
+        };
+
+        $http.patch('/api/accountInfo-update/' + $scope.userId, accountInfoData)
+            .then(function (response) {
+                $scope.successMessage = response.data.message || 'Account info updated successfully.';
+                $scope.errorMessage = '';
+            })
+            .catch(function (error) {
+                if (error.data && error.data.errors) {
+                    $scope.errorMessage = error.data.errors;
+                } else {
+                    $scope.errorMessage = 'An error occurred. Please try again.';
+                }
+                $scope.successMessage = '';
+            });
+    };
+
+    // Update Login Info (Email and Password)
+    $scope.accountLoginUpdate = function () {
+        const accountLoginData = {
+            email: $scope.accountData.email,
+            password: $scope.accountData.password
+        };
+
+        $http.put('/api/accountLogin-update/' + $scope.userId, accountLoginData)
+            .then(function (response) {
+                $scope.successMessage = response.data.message || 'Login info updated successfully.';
+                $scope.errorMessage = '';
+            })
+            .catch(function (error) {
+                if (error.data && error.data.errors) {
+                    $scope.errorMessage = error.data.errors;
+                } else {
+                    $scope.errorMessage = 'An error occurred. Please try again.';
+                }
+                $scope.successMessage = '';
+            });
+    };
+
 })

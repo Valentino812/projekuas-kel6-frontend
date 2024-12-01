@@ -36,7 +36,7 @@
         <div class="modal-content">
             <h2>Account Info</h2>
             <p>View and update your account details</p>
-            <form ng-submit="accountUpdate()">
+            <form ng-submit="accountInfoUpdate()">
                 <div class="form-group-inline">
                     <div class="form-group">
                         <label for="first-name">First Name</label>
@@ -55,19 +55,24 @@
                         {{ successMessage }}
                     </div>
                 </div>
-                <button type="submit">Change ></button>
+                <button type="submit">Update ></button>
             </form>
         </div>
         <!-- Login Info -->
         <div class="modal-content">
             <h2>Login Info</h2>
-            <form ng-submit="accountUpdate()">
+            <p>View and update your login information</p>
+            <form ng-submit="accountLoginUpdate()">
+                <div class="form-group">
+                    <label for="password">Password (required)</label>
+                    <input type="password" id="password" name="password" ng-model="accountData.password" required>
+                </div>
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" ng-model="accountData.email" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">New Password (optional: to change password)</label>
                     <input type="password" id="password" name="password" ng-model="accountData.password" required>
                 </div>
                 <div class="form-group">
@@ -78,7 +83,7 @@
                         {{ successMessage }}
                     </div>
                 </div>
-                <button type="submit">Change ></button>
+                <button type="submit">Update ></button>
             </form>
         </div>
         <!-- Dangerous Zone -->
