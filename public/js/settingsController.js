@@ -52,14 +52,13 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
             $http.get('/api/account-info/' + userId)
                 .then(function(response) {
                     $scope.accountInfo = response.data.account;
-                    console.log('Account Info:', $scope.accountInfo); 
 
                     // Pre-fill accountData with the fetched account information
                     $scope.accountData = {
                         first_name: $scope.accountInfo.first_name || '', 
                         last_name: $scope.accountInfo.last_name || '',
                         email: $scope.accountInfo.email || '',
-                        password: '', // Keep password blank for security reasons
+                        password: '', 
                         new_password: ''
                     };
 
@@ -129,4 +128,37 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
             });
     };
 
+    $scope.accountDeleteData = {
+        password: '', 
+    };
+
+    $scope.errorMessageDelete = '';
+    $scope.successMessageDelete = '';
+
+    $scope.deleteAccount = function () {
+        $http.delete('/api/accountDelete/' + $scope.userId, {
+            data: { password: $scope.accountDeleteData.password }, 
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(function (response) {
+                $scope.successMessageDelete = response.data.message || 'Account deleted successfully.';
+                $scope.errorMessageDelete = '';
+                $scope.accountDeleteData.password = '';
+                
+                // Redirect user to the provided URL
+                if (response.data.redirect_url) {
+                    window.location.href = response.data.redirect_url;
+                }
+            })
+            .catch(function (error) {
+                if (error.data && error.data.errors) {
+                    $scope.errorMessageDelete = error.data.errors;
+                } else if (error.data && error.data.message) {
+                    $scope.errorMessageDelete = error.data.message;
+                } else {
+                    $scope.errorMessageDelete = 'An error occurred. Please try again.';
+                }
+                $scope.successMessageDelete = '';
+            });
+    };    
 })

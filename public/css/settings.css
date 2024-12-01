@@ -607,8 +607,9 @@ textarea {
     flex: 1;
 }
 
-.red-text {
+button.red-text {
     color: red;
+    font-weight: bold;
 }
 /* Contact Section End */
 
