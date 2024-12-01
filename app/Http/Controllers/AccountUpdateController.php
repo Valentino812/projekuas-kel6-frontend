@@ -12,42 +12,70 @@ use Illuminate\Support\Facades\Hash;
 class AccountUpdateController extends Controller
 
 {
-    public function accountUpdate(Request $request, $id)
+    // Update Account Info (First Name and Last Name)
+    public function updateAccountInfo(Request $request, $id)
     {
+        // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'first_name' => 'nullable|string|max:255',
-            'last_name' => 'nullable|string|max:255',
+            'first_name' => 'string|max:255',
+            'last_name' => 'string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Find the account
+        $account = Account::find($id);
+
+        if (!$account) {
+            return response()->json(['message' => 'Account not found'], 404);
+        }
+
+        // Update first and last name
+        $account->first_name = $request->input('first_name', $account->first_name); // Keep existing value if not provided
+        $account->last_name = $request->input('last_name', $account->last_name);   // Keep existing value if not provided
+        $account->save();
+
+        return response()->json(['message' => 'Account info updated successfully'], 200);
+    }
+
+    // Update Account Login Info (Email and Password)
+    public function updateAccountLogin(Request $request, $id)
+    {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
             'email' => 'nullable|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|string|min:8',
-    ]);
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 422);
-    }
-
-    $account = DB::table('accounts')->where('id', $id)->first();
-
-    if (!$account) {
-        return response()->json(['message' => 'Account not found'], 404);
-    }
-
-    if ($account->email !== $request->input('email')) {
-        $existingAccount = Account::where('email', $request->input('email'))->first();
-        if ($existingAccount) {
-            return response()->json(['message' => 'Email already in use'], 400);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
-    }   
 
-    $account->first_name = $request->input('first_name');
-    $account->last_name = $request->input('last_name');
-    $account->email = $request->input('email');
-    
-    if ($request->filled('password')) {
-        $account->password = Hash::make($request->input('password'));
-    }
+        // Find the account
+        $account = Account::find($id);
 
-    $account->save();
+        if (!$account) {
+            return response()->json(['message' => 'Account not found'], 404);
+        }
 
-    return response()->json(['message' => 'Account updated successfully'], 200);
+        // Check if the email is being updated and is already in use
+        if ($request->input('email') && $account->email !== $request->input('email')) {
+            $existingAccount = Account::where('email', $request->input('email'))->first();
+            if ($existingAccount) {
+                return response()->json(['message' => 'Email already in use'], 400);
+            }
+            $account->email = $request->input('email');
+        }
+
+        // Update password if provided
+        if ($request->filled('password')) {
+            $account->password = Hash::make($request->input('password'));
+        }
+
+        $account->save();
+
+        return response()->json(['message' => 'Login info updated successfully'], 200);
     }
 }
