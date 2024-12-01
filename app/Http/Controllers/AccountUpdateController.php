@@ -17,8 +17,8 @@ class AccountUpdateController extends Controller
     {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'first_name' => 'string|max:255',
-            'last_name' => 'string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -45,8 +45,9 @@ class AccountUpdateController extends Controller
     {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'email' => 'nullable|email|max:255|unique:users,email,' . $id,
-            'password' => 'nullable|string|min:8',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'password' => 'required|string|min:8',
+            'new_password' => 'nullable|string|min:8'
         ]);
 
         if ($validator->fails()) {
@@ -60,6 +61,11 @@ class AccountUpdateController extends Controller
             return response()->json(['message' => 'Account not found'], 404);
         }
 
+        // Check if the provided password matches the current password
+        if (!Hash::check($request->input('password'), $account->password)) {
+            return response()->json(['errors' => 'The provided password is incorrect'], 400);
+        }
+
         // Check if the email is being updated and is already in use
         if ($request->input('email') && $account->email !== $request->input('email')) {
             $existingAccount = Account::where('email', $request->input('email'))->first();
@@ -70,8 +76,8 @@ class AccountUpdateController extends Controller
         }
 
         // Update password if provided
-        if ($request->filled('password')) {
-            $account->password = Hash::make($request->input('password'));
+        if ($request->filled('new_password')) {
+            $account->password = Hash::make($request->input('new_password'));
         }
 
         $account->save();

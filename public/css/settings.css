@@ -607,6 +607,9 @@ textarea {
     flex: 1;
 }
 
+.red-text {
+    color: red;
+}
 /* Contact Section End */
 
 /* Close button for navbar mobile view */
