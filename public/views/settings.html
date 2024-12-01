@@ -1,140 +1,73 @@
 <div>
-    <link rel="stylesheet" href="/css/contact.css">
+    <link rel="stylesheet" href="/css/settings.css">
     <!-- Navigation Bar Start-->
-    <nav class="navbar fade-in blur">
+    <nav class="navbar fade-in">
         <div class="navbar-logo">
-            <a ng-href="/">
-                <img src="img/brand-logo.png" id="navbar-logo">    
+            <a ng-href="/{{ accountInfo.id }}">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
             </a>
         </div>
         <div class="navbar-menu">
             <div class="close-button" id="close-button">&times;</div>
             <ul>
-                <li><a href="../Products/index.html"><h3>Products</h3></a></li>
-                <li><a href="../Products/indexmale.html"><h3>Male</h3></a></li>
-                <li><a href="../Products/indexfemale.html"><h3>Female</h3></a></li>
-                <li><a ng-href="/contact"><h3>Contact</h3></a></li>
-                <li><a ng-href="/settings"><h3>Settings</h3></a></li>
+                <li><h3>Account Settings</h3></a></li>
             </ul>
             <!-- Mobile Icons -->
             <div class="mobile-icons">
-                <a href=""><div class="icon-container"><a id="account-button-mobile"><img class="icon" src="img/account.png"></div></a></a>
-                <a href=""><div class="icon-container"><a id="cart-button-mobile"><img class="icon" src="img/cart.png"></div></a></a>
+                <a><div class="icon-container"><a ng-href="/{{ accountInfo.id }}" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
             </div>
         </div>        
         <!-- Destkop Icons -->
         <div class="icons">
-            <a href=""><div class="icon-container"><a id="account-button"><img class="icon" src="img/account.png"></div></a> </a>
-            <a href=""><div class="icon-container"><a id="cart-button"><img class="icon" src="img/cart.png"></div></a> </a>
+            <a><div class="icon-container"><a ng-href="/{{ accountInfo.id }}" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
         </div>
         <div class="burger-menu" id="burger-menu">
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
         </div>
-    
     </nav>
     <!-- Navigation Bar End -->
 
-    <!-- Sidebars Start -->
-    <div class="sidebar-cart" id="sidebar-cart">
-        <div class="sidebar-container">
-            <button class="close-sidebar" id="close-cart">&times;</button> 
-            <h3>SHOPPING CART</h3>
-            <hr class="divider">
-            <ul class="cart-items">
-                <!-- Will be filled using javascript -->
-            </ul>
-            <h3 class="cart-total"></h3> 
-            <!-- Will be set using javascript -->    
-        </div>
-    </div>
-
-    <div class="sidebar-account" id="sidebar-account">
-        <div class="sidebar-container">
-            <button class="close-sidebar" id="close-account">&times;</button> 
-            <h3>LOGIN</h3>
-            <hr class="divider">
-                <ul>
-                    <form id="account-form" ng-submit="login()" ng-if="showLoginForm">
-                    <li>
-                        <input type="email" id="email-account" name="email-account" placeholder="Email" ng-model="login.email" required>
-                    </li>
-                    <li>
-                        <input type="password" id="password" name="password" placeholder="Password" ng-model="login.password" required>
-                    </li>
-
-                    <li>
-                        <button type="submit" id="login">Login</button>
-                    </li>
-                    </form>
-                    <!-- When user has login -->
-                    <div ng-if="!showLoginForm">
-                        <p>Welcome, user! You're on your personal page</p>
-                    </div>
-                    <li>
-                        <!-- Error and Success Messages -->
-                        <div ng-if="errorMessage" class="error-message">
-                            {{ errorMessage }}
-                        </div>
-                        <div ng-if="successMessage" class="success-message">
-                            {{ successMessage }}
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#" id="forgot-button">Forgot your password?</a>
-                    </li>
-                    <li>
-                        <a ng-href="/register" id="create-account">New customer? Create a new account</a>
-                    </li>
-                    <li>
-                        <a ng-href="/adminLogin" id="admin-login">Admin Login</a>
-                    </li>
-                </ul>
-        </div>
-    </div>
-
-    <div class="sidebar-forgot" id="sidebar-forgot">
-        <div class="sidebar-container">
-            <button class="close-sidebar" id="close-forgot">&times;</button> 
-            <h3>RESET PASSWORD</h3>
-            <hr class="divider">
-            <p>Lost your password? Please enter your email address. You will receive a link to create a new password via email.</p>
-            <ul>
-                <li>
-                    <input type="email" id="email-account" name="email-account" placeholder="Email" required>
-                </li>
-                <li>
-                    <button type="submit" form="account-form" id="reset">Reset Password</button>
-                </li>
-            </ul>    
-        </div>
-    </div>
-    <!-- Sidebars End -->
-
     <!-- Settings Form Start -->
-  
+    <div class="modal fade-in blur">
         <div class="modal-overlay"></div>
+        <!-- Account Info -->
         <div class="modal-content">
-            <h2>Settings</h2>
-            <p>Edit or Delete Account</p>
+            <h2>Account Info</h2>
+            <p>View and update your account details</p>
             <form ng-submit="accountUpdate()">
                 <div class="form-group-inline">
                     <div class="form-group">
-                        <label for="first-name">New First Name</label>
+                        <label for="first-name">First Name</label>
                         <input type="text" id="first-name" name="first-name" ng-model="accountData.first_name" required>
                     </div>
                     <div class="form-group">
-                        <label for="last-name">New Last Name</label>
+                        <label for="last-name">Last Name</label>
                         <input type="text" id="last-name" name="last-name" ng-model="accountData.last_name" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email">New Email</label>
+                    <div ng-if="errorMessage" class="error-message">
+                        {{ errorMessage }}
+                    </div>
+                    <div ng-if="successMessage" class="success-message">
+                        {{ successMessage }}
+                    </div>
+                </div>
+                <button type="submit">Change ></button>
+            </form>
+        </div>
+        <!-- Login Info -->
+        <div class="modal-content">
+            <h2>Login Info</h2>
+            <form ng-submit="accountUpdate()">
+                <div class="form-group">
+                    <label for="email">Email</label>
                     <input type="email" id="email" name="email" ng-model="accountData.email" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">New Password</label>
+                    <label for="password">Password</label>
                     <input type="password" id="password" name="password" ng-model="accountData.password" required>
                 </div>
                 <div class="form-group">
@@ -146,38 +79,27 @@
                     </div>
                 </div>
                 <button type="submit">Change ></button>
+            </form>
+        </div>
+        <!-- Dangerous Zone -->
+        <div class="modal-content">
+            <h2>DANGEROUS ZONE</h2>
                 <br><br>
                 <button type="submit">Delete Account</button>
             </form>
         </div>
     </div>
 
+
     <footer class="footer fade-in blur">
         <div class="footer-content">
             <div class="logo">
-                <img src="img/brand-logo.png"/>
-            </div>
-            <div class="footer-menu">
-                <a href="" class="footer-link">Products</a>
-                <a href="" class="footer-link">Male</a>
-                <a href="" class="footer-link">Female</a>
-                <a ng-href="/contact" class="footer-link">Contact</a>
-            </div>
-            <div class="social">
-                <div class="social-icon-container">
-                    <a href="" target="_blank" class="social-icon"><img src="img/instagram.png"/></a>    
-                </div>
-                <div class="social-icon-container">
-                    <a href="" target="_blank" class="social-icon"><img src="img/twitter.png"/></a>    
-                </div>
-                <div class="social-icon-container">
-                    <a href="" target="_blank" class="social-icon"><img src="img/whatsapp.png"/></a>    
-                </div>
+                <img src="/img/brand-logo.png"/>
             </div>
         </div>
         <div class="copyright">
             Copyright &copy; 2024 SuShoes Co.
         </div>
     </footer>
-    <!-- Footer End -->
+    <!-- Footer End -->    
 </div>

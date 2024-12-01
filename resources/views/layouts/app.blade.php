@@ -23,6 +23,7 @@
     <script src="{{ asset('js/contactController.js') }}"></script>
     <script src="{{ asset('js/registerController.js') }}"></script>
     <script src="{{ asset('js/adminLoginController.js') }}"></script>
+    <script src="{{ asset('js/settingsController.js') }}"></script>
 
     <!-- Icon for title bar -->
     <link rel="icon" href=
