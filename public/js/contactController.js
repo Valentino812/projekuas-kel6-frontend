@@ -115,23 +115,23 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
         message: '',
     };
 
-    $scope.errorMessage = '';
-    $scope.successMessage = '';
+    $scope.errorMessageForm = '';
+    $scope.successMessageForm = '';
 
     $scope.contact = function() {
         $http.post('/api/contact', $scope.contactData)
         .then(function(response) {
-            $scope.successMessage = response.data.message;
-            $scope.errorMessage = '';
+            $scope.successMessageForm = response.data.message;
+            $scope.errorMessageForm = '';
             $scope.contactData = {}; // Reset form fields
         })
         .catch(function(error) {
             if (error.data && error.data.errors) {
-                $scope.errorMessage = error.data.errors; 
+                $scope.errorMessageForm = error.data.errors; 
             } else {
-                $scope.errorMessage = 'An error occurred. Please try again.';
+                $scope.errorMessageForm = 'An error occurred. Please try again.';
             }
-            $scope.successMessage = '';
+            $scope.successMessageForm = '';
         });
     };
 

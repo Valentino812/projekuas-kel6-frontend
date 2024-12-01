@@ -2,12 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AccountUpdateController;
-use App\Http\Controllers\AccountDeleteController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProductController;
 
 // After login routes to web page:
@@ -23,14 +20,14 @@ Route::get('/admin/{id}', function () {
 
 // API Routes (for CRUD operations)
 Route::prefix('api')->group(function () {
-    Route::post('/register', [RegisterController::class, 'create']); 
-    Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/register', [AccountController::class, 'create']); 
+    Route::post('/login', [AccountController::class, 'login']);
     Route::post('/contact', [ContactController::class, 'contact']);
-    Route::get('/account-info/{id}', [LoginController::class, 'getAccountInfo']);
+    Route::get('/account-info/{id}', [AccountController::class, 'getAccountInfo']);
     Route::post('/admin-login', [AdminController::class, 'adminLogin']);
-    Route::patch('/accountInfo-update/{id}', [AccountUpdateController::class, 'updateAccountInfo']);
-    Route::patch('/accountLogin-update/{id}', [AccountUpdateController::class, 'updateAccountLogin']);
-    Route::delete('/accountDelete/{id}', [AccountDeleteController::class, 'deleteAccount']);
+    Route::patch('/accountInfo-update/{id}', [AccountController::class, 'updateAccountInfo']);
+    Route::patch('/accountLogin-update/{id}', [AccountController::class, 'updateAccountLogin']);
+    Route::delete('/accountDelete/{id}', [AccountController::class, 'deleteAccount']);
     Route::post('/product', [ProductController::class, 'addProduct']);
 });
 

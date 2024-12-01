@@ -180,11 +180,11 @@
                 <div class="form-group">
                     <label for="message">Message</label>
                     <textarea id="message" name="message" ng-model="contactData.message" required></textarea>
-                    <div ng-if="errorMessage" class="error-message">
-                        {{ errorMessage }}
+                    <div ng-if="errorMessageForm" class="error-message">
+                        {{ errorMessageForm }}
                     </div>
-                    <div ng-if="successMessage" class="success-message">
-                        {{ successMessage }}
+                    <div ng-if="successMessageForm" class="success-message">
+                        {{ successMessageForm }}
                     </div>
                 </div>
                 <button type="submit">Send ></button>
