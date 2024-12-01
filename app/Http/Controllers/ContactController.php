@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-
       /**
      * Handle the contact request.
      *
@@ -41,4 +40,6 @@ class ContactController extends Controller
       return response()->json(['message' => 'Contact successful!'], 200);
 
     }
+
+    
 }
