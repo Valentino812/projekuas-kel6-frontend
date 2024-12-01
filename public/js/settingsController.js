@@ -40,13 +40,14 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
         console.log($scope.accountData);
     };
 
-     // LOGIN
     // Check if the 'id' is part of the route
     $scope.userId = $routeParams.id;
 
     if($scope.userId){
+        $scope.errorMessage = '';
+        $scope.successMessage = '';
+
         $scope.getAccountInfo = function(userId) {
-            // console.log('Fetching Account Info for User ID:', userId);
         
             $http.get('/api/account-info/' + userId)
                 .then(function(response) {
@@ -58,7 +59,8 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
                         first_name: $scope.accountInfo.first_name || '', 
                         last_name: $scope.accountInfo.last_name || '',
                         email: $scope.accountInfo.email || '',
-                        password: '' // Keep password blank for security reasons
+                        password: '', // Keep password blank for security reasons
+                        new_password: ''
                     };
 
                     $scope.errorMessage = '';
@@ -77,50 +79,53 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
         $scope.getAccountInfo($scope.userId);
     }
 
-    $scope.errorMessage = '';
-    $scope.successMessage = '';
+    $scope.errorMessageInfo = '';
+    $scope.successMessageInfo = '';
 
     // Update Account Info (First Name and Last Name)
     $scope.accountInfoUpdate = function () {
-        const accountInfoData = {
+        // Send only the first_name and last_name properties from accountData
+        $http.patch('/api/accountInfo-update/' + $scope.userId, {
             first_name: $scope.accountData.first_name,
             last_name: $scope.accountData.last_name
-        };
-
-        $http.patch('/api/accountInfo-update/' + $scope.userId, accountInfoData)
+        })
             .then(function (response) {
-                $scope.successMessage = response.data.message || 'Account info updated successfully.';
-                $scope.errorMessage = '';
+                $scope.successMessageInfo = response.data.message || 'Account info updated successfully.';
+                $scope.errorMessageInfo = '';
             })
             .catch(function (error) {
                 if (error.data && error.data.errors) {
-                    $scope.errorMessage = error.data.errors;
+                    $scope.errorMessageInfo = error.data.errors;
                 } else {
-                    $scope.errorMessage = 'An error occurred. Please try again.';
+                    $scope.errorMessageInfo = 'An error occurred. Please try again.';
                 }
-                $scope.successMessage = '';
+                $scope.successMessageInfo = '';
             });
     };
 
+    $scope.errorMessageLogin = '';
+    $scope.successMessageLogin = '';
+
     // Update Login Info (Email and Password)
     $scope.accountLoginUpdate = function () {
-        const accountLoginData = {
+        $http.patch('/api/accountLogin-update/' + $scope.userId, {
             email: $scope.accountData.email,
-            password: $scope.accountData.password
-        };
-
-        $http.put('/api/accountLogin-update/' + $scope.userId, accountLoginData)
+            password: $scope.accountData.password,
+            new_password: $scope.accountData.new_password,
+        })
             .then(function (response) {
-                $scope.successMessage = response.data.message || 'Login info updated successfully.';
-                $scope.errorMessage = '';
+                $scope.successMessageLogin = response.data.message || 'Login info updated successfully.';
+                $scope.errorMessageLogin = '';
+                $scope.accountData.password = '',
+                $scope.accountData.new_password=''
             })
             .catch(function (error) {
                 if (error.data && error.data.errors) {
-                    $scope.errorMessage = error.data.errors;
+                    $scope.errorMessageLogin = error.data.errors;
                 } else {
-                    $scope.errorMessage = 'An error occurred. Please try again.';
+                    $scope.errorMessageLogin = 'An error occurred. Please try again.';
                 }
-                $scope.successMessage = '';
+                $scope.successMessageLogin = '';
             });
     };
 
