@@ -41,5 +41,13 @@ class ContactController extends Controller
 
     }
 
-    
+    // Function to get all contacts
+    public function getAllContacts()
+    {
+        $contacts = Contact::all();
+
+        $contactsArray = $contacts->toArray();
+
+        return response()->json(['contacts' => $contactsArray], 200);
+    }
 }

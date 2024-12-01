@@ -23,6 +23,7 @@ Route::prefix('api')->group(function () {
     Route::post('/register', [AccountController::class, 'create']); 
     Route::post('/login', [AccountController::class, 'login']);
     Route::post('/contact', [ContactController::class, 'contact']);
+    Route::get('/contacts', [ContactController::class, 'getAllContacts']);
     Route::get('/account-info/{id}', [AccountController::class, 'getAccountInfo']);
     Route::post('/admin-login', [AdminController::class, 'adminLogin']);
     Route::patch('/accountInfo-update/{id}', [AccountController::class, 'updateAccountInfo']);

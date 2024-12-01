@@ -52,4 +52,21 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
     $('#content-home').removeClass('hidden');
 
     $scope.adminId = $routeParams.id;
+
+     // Function to fetch all contacts
+     $scope.getAllContacts = function() {
+        $http.get('/api/contacts') // Endpoint to fetch contacts
+            .then(function(response) {
+                // Success: store the fetched contacts in the $scope.contacts array
+                $scope.contacts = response.data.contacts;
+            })
+            .catch(function(error) {
+                // Handle errors
+                console.error('Error fetching contacts:', error);
+                alert('Failed to fetch contacts. Please try again later.');
+            });
+    };
+
+    // Call the function when the controller is initialized
+    $scope.getAllContacts();
 });
