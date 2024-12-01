@@ -10,7 +10,7 @@
     <div class="navbar-menu">
         <div class="close-button" id="close-button">&times;</div>
         <ul>
-            <li><h3>Administration</h3></a></li>
+            <li><h3>New Product</h3></a></li>
         </ul>
         <!-- Mobile Icons -->
         <div class="mobile-icons">
@@ -28,40 +28,120 @@
     </div>
 </nav>
 <!-- Navigation Bar End -->
-
     <div class="container fade-in blur">
-      <div class="left-column">
-        <img
-          alt="Ballyrina Flat In Black Leather Image 1"
-          id="image1"
-          height="400"
-          src="../../assets/ws11.webp"
-          width="600"
-        />
-        <img
-          alt="Ballyrina Flat In Black Leather Image 2"
-          id="image2"
-          height="400"
-          src="../../assets/ws11h.webp"
-          width="600"
-        />
-      </div>
-      <div class="right-column">
-        <h1>Ballyrina Flat In Black Leather</h1>
-        <div class="price">Rp 14.480.000,00 IDR</div>
-        <p>
-          In soft calfskin, this ballerina flat draws inspiration from Mary Janes to combine elegance and versatility. The leather upper is enriched by a gold-tone metal Emblem buckle, a signifier which subtly references Bally heritage.
+        <form name="addProductForm" class="container fade-in blur" id="add-product-form" method="POST" enctype="multipart/form-data" ng-submit="submitForm()">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- First Product Image Upload -->
+                <label for="product-image-upload-1" class="image-upload-label">
+                    <img
+                    alt="Product Image 1"
+                    id="product-image-preview-1"
+                    height="400"
+                    ng-src="{{product.image1 || 'assets/default-placeholder.png'}}"
+                    width="600"
+                    style="cursor: pointer; border: 2px dashed #ccc;"
+                    />
+                </label>
+                <input
+                    type="file"
+                    id="product-image-upload-1"
+                    name="productImage1"
+                    accept="image/*"
+                    style="display: none;"
+                    ng-model="product.image1"
+                    onchange="angular.element(this).scope().updateImagePreview(event, 1)"
+                />
 
-          Gold-tone metal Emblem buckle
-          Leather lining
-          Cemented construction
-          Leather sole
-          Each pair of Ballyrina flats is luxuriously presented with a specially designed box, satin dust bag, and elegant sticker, all featuring a contemporary gold-tone version of the original 1940s Ballyrina logo.
-        </p>
-        <button id="add-to-cart-button" class="add-to-cart">Add Product</button>
-      </div>
+                <!-- Second Product Image Upload -->
+                <label for="product-image-upload-2" class="image-upload-label">
+                    <img
+                    alt="Product Image 2"
+                    id="product-image-preview-2"
+                    height="400"
+                    ng-src="{{product.image2 || 'assets/default-placeholder.png'}}"
+                    width="600"
+                    style="cursor: pointer; border: 2px dashed #ccc;"
+                    />
+                </label>
+                <input
+                    type="file"
+                    id="product-image-upload-2"
+                    name="productImage2"
+                    accept="image/*"
+                    style="display: none;"
+                    ng-model="product.image2"
+                    onchange="angular.element(this).scope().updateImagePreview(event, 2)"
+                />
+            </div>
+        
+            <!-- Right Column -->
+            <div class="right-column">
+              <h1>Add New Product</h1>
+        
+              <!-- Product Name -->
+              <div class="form-group">
+                <label for="product-name">Product Name:</label>
+                <input
+                  type="text"
+                  id="product-name"
+                  name="productName"
+                  ng-model="product.name"
+                  class="form-input"
+                  placeholder="Enter product name"
+                  required
+                />
+              </div>
+        
+              <!-- Product Price -->
+              <div class="form-group">
+                <label for="product-price">Price (IDR):</label>
+                <input
+                  type="number"
+                  id="product-price"
+                  name="productPrice"
+                  ng-model="product.price"
+                  class="form-input"
+                  placeholder="Enter product price"
+                  required
+                />
+              </div>
+        
+              <!-- Product Description -->
+              <div class="form-group">
+                <textarea
+                  id="product-description"
+                  name="productDescription"
+                  ng-model="product.description"
+                  class="form-input"
+                  rows="6"
+                  placeholder="Enter product description"
+                  required
+                ></textarea>
+              </div>
+
+              <!-- Stock Available -->
+            <div class="form-group">
+            <label for="product-stock">Stock Available:</label>
+            <input
+                type="number"
+                id="product-stock"
+                name="productStock"
+                ng-model="product.stock"
+                class="form-input"
+                placeholder="Enter number of products in stock"
+                required
+            />
+            </div>
+        
+              <!-- Submit Button -->
+              <button type="submit" id="add-product-button" class="add-to-cart">
+                Add Product
+              </button>
+            </div>
+          </form>
     </div>
-    
+
     <!-- Footer Start -->
     <footer class="footer fade-in blur">
         <div class="footer-content">

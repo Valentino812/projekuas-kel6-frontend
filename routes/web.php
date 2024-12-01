@@ -8,6 +8,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AccountUpdateController;
 use App\Http\Controllers\AccountDeleteController;
+use App\Http\Controllers\ProductController;
 
 // After login routes to web page:
 Route::get('/{id}', function () {
@@ -30,6 +31,7 @@ Route::prefix('api')->group(function () {
     Route::patch('/accountInfo-update/{id}', [AccountUpdateController::class, 'updateAccountInfo']);
     Route::patch('/accountLogin-update/{id}', [AccountUpdateController::class, 'updateAccountLogin']);
     Route::delete('/accountDelete/{id}', [AccountDeleteController::class, 'deleteAccount']);
+    Route::post('/product', [ProductController::class, 'addProduct']);
 });
 
 // Fallback route for AngularJS
