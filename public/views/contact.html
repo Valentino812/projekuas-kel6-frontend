@@ -14,7 +14,10 @@
         <div class="navbar-menu">
             <div class="close-button" id="close-button">&times;</div>
             <ul>
-                <li><a href="../Products/index.html"><h3>Products</h3></a></li>
+                <li>
+                    <a ng-if="!accountInfo" ng-href="/products"><h3>Products</h3></a>
+                    <a ng-if="accountInfo" ng-href="/products/{{ accountInfo.id }}"><h3>Products</h3></a> 
+                </li>
                 <li><a href="../Products/indexmale.html"><h3>Male</h3></a></li>
                 <li><a href="../Products/indexfemale.html"><h3>Female</h3></a></li>
                 <li>
