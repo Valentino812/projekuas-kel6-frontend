@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Products extends Authenticatable
+class Product extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -14,11 +14,8 @@ class Products extends Authenticatable
         'name',
         'price',
         'description',
-        'image',
-        'size',
-        'color',
-        'weight',
-        'type',
+        'img1',
+        'img2',
         'stock',
     ];
 

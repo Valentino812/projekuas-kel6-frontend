@@ -20,98 +20,83 @@ app.controller('NewProductController', function($scope, $timeout, $routeParams, 
     });
     // Entrance Transition End
 
-    const configSections = document.querySelectorAll('.config-section');
+    // Initialize the product
+    $scope.product = {
+        image1: null,
+        image2: null,
+        name: '',
+        price: '',
+        description: '',
+        stock: ''
+    };
 
-    configSections.forEach(section => {
-        const images = section.querySelectorAll('img');
+    // Handle image preview for both images
+    $scope.updateImagePreview = function(event, imageIndex) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+        if (imageIndex === 1) {
+            $scope.product.image1 = e.target.result;
+        } else if (imageIndex === 2) {
+            $scope.product.image2 = e.target.result;
+        }
+        $scope.$apply(); // Apply the changes to the scope after the file is loaded
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
 
-        images.forEach(image => {
-            image.addEventListener('click', () => {
-                images.forEach(img => img.classList.remove('selected'));
-                image.classList.add('selected');
+    // Handle form submission
+    $scope.submitForm = function() {
+        if ($scope.addProductForm.$valid) {
+            // Form data is valid, let's prepare the data for submission
+            var formData = new FormData();
+            formData.append('name', $scope.product.name);
+            formData.append('price', $scope.product.price);
+            formData.append('description', $scope.product.description);
+            formData.append('stock', $scope.product.stock);
+            
+            // Append the image files to form data (if selected)
+            if ($scope.product.image1) {
+                formData.append('img1', dataURLtoFile($scope.product.image1, 'img1.jpg'));
+            }
+            if ($scope.product.image2) {
+                formData.append('img2', dataURLtoFile($scope.product.image2, 'img2.jpg'));
+            }
+
+            // Send the form data to the server
+            $http.post('/api/product', formData, {
+                headers: { 'Content-Type': undefined }
+            }).then(function(response) {
+                // Handle success
+                alert('Product added successfully!');
+                // Reset form
+                $scope.product = {
+                    image1: null,
+                    image2: null,
+                    name: '',
+                    price: '',
+                    description: '',
+                    stock: ''
+                };
+                $scope.addProductForm.$setPristine();
+            }).catch(function(error) {
+                // Handle error
+                alert('Error adding product!');
+                console.error(error);
             });
-        });
-    });
+        } else {
+        alert('Please fill out all required fields.');
+        }
+    };
 
-    // Menangani perubahan pada select (opsional)
-    const selects = document.querySelectorAll('.config-section select');
-
-    selects.forEach(select => {
-        select.addEventListener('change', (e) => {
-            console.log(`Pilihan diubah menjadi: ${e.target.value}`);
-        });
-    });
-
-    // Menangani toggle burger menu untuk responsivitas (opsional)
-    const burgerMenu = document.getElementById('burger-menu');
-    const navbarMenu = document.querySelector('.navbar-menu');
-    const closeButton = document.getElementById('close-button');
-
-    burgerMenu.addEventListener('click', () => {
-        navbarMenu.classList.toggle('active');
-        closeButton.style.display = 'block';
-    });
-
-    closeButton.addEventListener('click', () => {
-        navbarMenu.classList.remove('active');
-        closeButton.style.display = 'none';
-    });
-
-    // Handler for SHOE LAST
-    const shoeLastImages = document.querySelectorAll('.shoe-last-option');
-    const shoeLastPreview = document.getElementById('shoe-last-preview');
-
-    shoeLastImages.forEach(img => {
-        img.addEventListener('click', () => {
-            shoeLastImages.forEach(image => image.classList.remove('selected'));
-            img.classList.add('selected');
-            const description = img.querySelector('img').getAttribute('data-description');
-            shoeLastPreview.innerHTML = description;
-        });
-
-        img.addEventListener('mouseenter', () => {
-            const src = img.querySelector('img').src.replace('-thumb', '');
-            shoeLastPreview.innerHTML = `<img src="${src}" alt="Shoe Last Preview" />`;
-            shoeLastPreview.style.display = 'block';
-            shoeLastPreview.style.left = `${img.getBoundingClientRect().left}px`;
-            shoeLastPreview.style.top = `${img.getBoundingClientRect().top + img.offsetHeight}px`;
-        });
-
-        img.addEventListener('mouseleave', () => {
-            shoeLastPreview.style.display = 'none';
-        });
-    });
-
-    // Handler for TOE BOX
-    const toeBoxImages = document.querySelectorAll('.toe-box-option img');
-    const toeBoxPreview = document.getElementById('toe-box-preview');
-
-    toeBoxImages.forEach(img => {
-        img.addEventListener('click', () => {
-            toeBoxImages.forEach(image => image.classList.remove('selected'));
-            img.classList.add('selected');
-            const description = img.getAttribute('data-description');
-            toeBoxPreview.innerHTML = description; 
-        });
-
-        img.addEventListener('mouseenter', () => {
-            const src = img.src.replace('-thumb', ''); 
-            toeBoxPreview.innerHTML = `<img src="${src}" alt="Toe Box Preview" />`;
-            toeBoxPreview.style.display = 'block';
-            toeBoxPreview.style.left = `${img.getBoundingClientRect().left}px`; 
-            toeBoxPreview.style.top = `${img.getBoundingClientRect().top + img.offsetHeight}px`; 
-        });
-
-        img.addEventListener('mouseleave', () => {
-            toeBoxPreview.style.display = 'none';
-        });
-    });
-
-    // Handle "Add to Cart" button click
-    const addToCartButton = document.getElementById('add-to-cart-button');
-    addToCartButton.addEventListener('click', () => {
-        alert('Item added to cart!');
-    });
+    // Utility function to convert dataURL to for image
+    function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
+        var bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {type: mime});
+    }
 
     $scope.adminId = $routeParams.id;
 });
