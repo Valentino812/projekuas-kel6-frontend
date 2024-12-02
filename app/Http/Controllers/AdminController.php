@@ -41,4 +41,64 @@ class AdminController extends Controller
         return response()->json(['orders' => $orders], 200);
     }
 
+    public function updateProduct(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'string',
+            'price' => 'integer',
+            'description' => 'string',
+            'type' => 'string',
+            'gender' => 'string',
+            'stock' => 'integer',
+            'img1' => 'image|nullable',
+            'img2' => 'image|nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $product = DB::table('products')->where('id', $id)->first();
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        $updateData = [];
+        
+        // Update text fields if provided
+        foreach(['name', 'price', 'description', 'type', 'gender', 'stock'] as $field) {
+            if ($request->has($field)) {
+                $updateData[$field] = $request->input($field);
+            }
+        }
+
+        // Handle image updates
+        if ($request->hasFile('img1')) {
+            $img1 = $request->file('img1')->store('product_images', 'public');
+            $updateData['img1'] = $img1;
+        }
+
+        if ($request->hasFile('img2')) {
+            $img2 = $request->file('img2')->store('product_images', 'public');
+            $updateData['img2'] = $img2;
+        }
+
+        DB::table('products')->where('id', $id)->update($updateData);
+
+        return response()->json(['message' => 'Product updated successfully'], 200);
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = DB::table('products')->where('id', $id)->first();
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        // Delete the product
+        DB::table('products')->where('id', $id)->delete();
+
+        return response()->json(['message' => 'Product deleted successfully'], 200);
+    }
+
 }

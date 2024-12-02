@@ -97,4 +97,96 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
 
     $scope.getOrders();
 
+    $scope.editProduct = function(product) {
+        product.editing = true;
+        // Store original values in case of cancel
+        product.original = {
+            name: product.name,
+            price: product.price,
+            type: product.type,
+            gender: product.gender,
+            description: product.description,
+            stock: product.stock
+        };
+    };
+
+    $scope.cancelEdit = function(product) {
+        // Restore original values
+        Object.assign(product, product.original);
+        product.editing = false;
+        delete product.original;
+        delete product.newImg1;
+        delete product.newImg2;
+    };
+
+    $scope.updateProduct = function(product) {
+        var formData = new FormData();
+        
+        // Append text data
+        formData.append('name', product.name);
+        formData.append('price', product.price);
+        formData.append('type', product.type);
+        formData.append('gender', product.gender);
+        formData.append('description', product.description);
+        formData.append('stock', product.stock);
+
+        // Append files if new ones were selected
+        if (product.newImg1) {
+            formData.append('img1', product.newImg1);
+        }
+        if (product.newImg2) {
+            formData.append('img2', product.newImg2);
+        }
+
+        $http.post('/api/update-product/' + product.id, formData, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .then(function(response) {
+            alert('Product updated successfully!');
+            product.editing = false;
+            delete product.original;
+            delete product.newImg1;
+            delete product.newImg2;
+            
+            // Refresh the products list
+            $scope.getAllProducts();
+        })
+        .catch(function(error) {
+            console.error('Error updating product:', error);
+            alert('Failed to update product. Please try again.');
+        });
+    };
+
+    $scope.deleteProduct = function(product) {
+        if (confirm('Are you sure you want to delete this product?')) {
+            $http.delete('/api/delete-product/' + product.id)
+                .then(function(response) {
+                    alert('Product deleted successfully!');
+                    // Refresh the products list
+                    $scope.getAllProducts();
+                })
+                .catch(function(error) {
+                    console.error('Error deleting product:', error);
+                    alert('Failed to delete product. Please try again.');
+                });
+        }
+    };
+
 });
+
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            
+            element.bind('change', function() {
+                scope.$apply(function() {
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
