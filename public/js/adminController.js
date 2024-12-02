@@ -67,6 +67,20 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
             });
     };
 
-    // Call the function when the controller is initialized
     $scope.getAllContacts();
+
+    $scope.products = [];
+
+    $scope.getAllProducts = function() {
+        $http.get('/api/products')
+            .then(function(response) {
+                $scope.products = response.data.products;
+            })
+            .catch(function(error) {
+                console.error('Error fetching products:', error);
+            });
+    };
+
+    $scope.getAllProducts();
+
 });

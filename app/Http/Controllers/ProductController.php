@@ -16,6 +16,8 @@ class ProductController extends Controller
             'name' => 'required|string',
             'price' => 'required|integer',
             'description' => 'required|string',
+            'type' => 'required|string',
+            'gender' => 'required|string',
             'stock' => 'required|integer',
             'img1' => 'required|image',
             'img2' => 'required|image',
@@ -42,6 +44,8 @@ class ProductController extends Controller
         $product->name = $request->input('name');
         $product->price = $request->input('price');
         $product->description = $request->input('description');
+        $product->type = $request->input('type');
+        $product->gender = $request->input('gender');
         $product->stock = $request->input('stock');
         $product->img1 = $img1; // Store image path or Base64 string
         $product->img2 = $img2; // Store image path or Base64 string
@@ -49,4 +53,29 @@ class ProductController extends Controller
 
         return response()->json(['success' => 'Product added successfully'], 200);
     }
+
+    public function getAllProducts()
+    {
+        $products = Product::all();
+
+        // Modify the response 
+        $productsArray = $products->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'description' => $product->description,
+                'type' => $product->type,
+                'gender' => $product->gender,
+                'stock' => $product->stock,
+                'img1' => $product->img1 ? asset('storage/' . $product->img1) : null,
+                'img2' => $product->img2 ? asset('storage/' . $product->img2) : null,
+            ];
+        });
+
+        return response()->json(['products' => $productsArray], 200);
+    }
+
+
+
 }

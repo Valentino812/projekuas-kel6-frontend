@@ -27,6 +27,8 @@ app.controller('NewProductController', function($scope, $timeout, $routeParams, 
         name: '',
         price: '',
         description: '',
+        type: '',
+        gender: '',
         stock: ''
     };
 
@@ -52,6 +54,8 @@ app.controller('NewProductController', function($scope, $timeout, $routeParams, 
             formData.append('name', $scope.product.name);
             formData.append('price', $scope.product.price);
             formData.append('description', $scope.product.description);
+            formData.append('type', $scope.product.type);
+            formData.append('gender', $scope.product.gender);
             formData.append('stock', $scope.product.stock);
             
             // Append the image files to form data (if selected)

@@ -14,6 +14,8 @@ class Product extends Authenticatable
         'name',
         'price',
         'description',
+        'type',
+        'gender',
         'img1',
         'img2',
         'stock',
