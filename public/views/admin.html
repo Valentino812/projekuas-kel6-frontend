@@ -57,6 +57,19 @@
       <div class="content-container hidden" id="content-orders">
         <h1>Orders</h1>
         <p>Manage and view orders here.</p>
+        <div ng-if="orders.length === 0">
+            <p>No orders found.</p>
+        </div>
+        <ul ng-if="orders.length > 0">
+            <li ng-repeat="order in orders">
+                <strong>Order ID: {{ order.id }}</strong>
+                <p><strong>Product ID:</strong> {{ order.product_id }}</p>
+                <p><strong>Price:</strong> Rp {{ order.price | number:2 }} IDR</p>
+                <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+                <p><strong>Total Price:</strong> Rp {{ order.total_price | number:2 }} IDR</p>
+                <p><strong>Status:</strong> {{ order.status }}</p>
+            </li>
+        </ul>
       </div>
       <div class="content-container hidden" id="content-products">
         <h1>Products</h1>

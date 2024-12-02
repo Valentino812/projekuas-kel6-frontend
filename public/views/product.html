@@ -50,10 +50,14 @@
                 <h3>SHOPPING CART</h3>
                 <hr class="divider">
                 <ul class="cart-items">
-                    <!-- Will be filled using javascript -->
+                    <li ng-repeat="item in cartItems">
+                        <img ng-src="{{ item.img1 }}" alt="{{ item.name }}" width="50">
+                        <span>{{ item.name }}</span>
+                        <span>Rp {{ item.price | number:2 }} IDR</span>
+                    </li>
                 </ul>
-                <h3 class="cart-total"></h3> 
-                <!-- Will be set using javascript -->    
+                <h3 class="cart-total">Total: Rp {{ cartTotal | number:2 }} IDR</h3>
+                <button ng-click="checkout()">Checkout</button>
             </div>
         </div>
     
@@ -269,7 +273,7 @@
         <div ng-if="product.stock == 0">
             <h3>OUT OF STOCK</h3>
         </div>
-        <button ng-if="product.stock > 0" id="add-to-cart-button" class="add-to-cart">Add to Cart</button>
+        <button ng-if="product.stock > 0" id="add-to-cart-button" class="add-to-cart" ng-click="addToCart(product)">Add to Cart</button>
       </div>
     </div>
     <!-- Footer Start -->

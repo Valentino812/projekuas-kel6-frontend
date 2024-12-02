@@ -76,7 +76,7 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
         img.addEventListener('click', () => {
             toeBoxImages.forEach(image => image.classList.remove('selected'));
             img.classList.add('selected');
-            const description = img.getAttribute('data-description');
+            const description = img.getAttribute('data-description'); 
             toeBoxPreview.innerHTML = description; 
         });
 
@@ -279,5 +279,52 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
                 alert('Item added to cart!');
             });
         }
+
+    // Function to handle product click
+    $scope.addToSidebar = function(product) {
+        // Add product to sidebar
+        $scope.selectedProduct = product;
+
+        // Send product data to server
+        $http.post('/api/add-to-cart', { productId: product.id })
+            .then(function(response) {
+                alert('Product added to cart!');
+            })
+            .catch(function(error) {
+                console.error('Error adding product to cart:', error);
+            });
+    };
+
+    $scope.cartItems = [];
+    $scope.cartTotal = 0;
+
+    $scope.addToCart = function(product) {
+        $scope.cartItems.push(product);
+        $scope.cartTotal += product.price;
+        alert('Item added to cart!');
+    };
+
+    $scope.checkout = function() {
+        const orderData = {
+            items: $scope.cartItems.map(item => ({
+                product_id: item.id,
+                price: item.price,
+                quantity: 1, // Assuming 1 for simplicity, adjust as needed
+                total_price: item.price // Assuming total price is price * quantity
+            })),
+            total: $scope.cartTotal
+        };
+
+        $http.post('/api/checkout', orderData)
+            .then(function(response) {
+                alert('Order placed successfully!');
+                $scope.cartItems = [];
+                $scope.cartTotal = 0;
+            })
+            .catch(function(error) {
+                console.error('Error during checkout:', error);
+                alert('Failed to place order. Please try again.');
+            });
+    };
 
 });

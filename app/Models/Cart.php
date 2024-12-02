@@ -11,8 +11,10 @@ class Cart extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'product_id',
-        'quantity',
+        'items',
+        'total',
+        'created_at',
+        'updated_at',
     ];
 
     protected $table = 'carts';

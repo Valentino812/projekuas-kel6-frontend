@@ -35,6 +35,9 @@ Route::prefix('api')->group(function () {
     Route::post('/product', [ProductController::class, 'addProduct']);
     Route::get('/products', [ProductController::class, 'getAllProducts']);
     Route::get('/product/{id}', [ProductController::class, 'getProduct']);
+    Route::post('/api/add-to-cart', [ProductController::class, 'addToCart']);
+    Route::post('/api/checkout', [ProductController::class, 'checkout']);
+    Route::get('/api/orders', [AdminController::class, 'getOrders']);
 });
 
 // Fallback route for AngularJS

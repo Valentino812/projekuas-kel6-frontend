@@ -60,10 +60,13 @@
             <h3>SHOPPING CART</h3>
             <hr class="divider">
             <ul class="cart-items">
-                <!-- Will be filled using javascript -->
+                <li ng-if="selectedProduct">
+                    <img ng-src="{{ selectedProduct.img1 }}" alt="{{ selectedProduct.name }}" width="50">
+                    <span>{{ selectedProduct.name }}</span>
+                    <span>Rp {{ selectedProduct.price | number:2 }} IDR</span>
+                </li>
             </ul>
             <h3 class="cart-total"></h3> 
-            <!-- Will be set using javascript -->    
         </div>
     </div>
 

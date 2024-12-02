@@ -83,4 +83,18 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
 
     $scope.getAllProducts();
 
+    $scope.orders = [];
+
+    $scope.getOrders = function() {
+        $http.get('/api/orders')
+            .then(function(response) {
+                $scope.orders = response.data.orders;
+            })
+            .catch(function(error) {
+                console.error('Error fetching orders:', error);
+            });
+    };
+
+    $scope.getOrders();
+
 });

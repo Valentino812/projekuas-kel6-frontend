@@ -35,4 +35,10 @@ class AdminController extends Controller
         ], 200);
     }
 
+    public function getOrders()
+    {
+        $orders = DB::table('carts')->get();
+        return response()->json(['orders' => $orders], 200);
+    }
+
 }
