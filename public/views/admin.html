@@ -61,6 +61,16 @@
       <div class="content-container hidden" id="content-products">
         <h1>Products</h1>
         <p>Manage and view products here.</p>
+        <div class="product-item" ng-repeat="product in products">
+          <img ng-src="{{product.img1}}" alt="{{product.name}} Image 1" class="product-image">
+          <img ng-src="{{product.img2}}" alt="{{product.name}} Image 2" class="product-image">
+          <h3>{{product.name}}</h3>
+          <p>Price: IDR {{product.price}}</p>
+          <p>Type: {{product.type}}</p>
+          <p>Gender: {{product.gender}}</p>
+          <p>Description: {{product.description}}</p>
+          <p>Stock: {{product.stock}}</p>
+      </div>
         <a ng-href="/admin/newProduct/{{ adminId }}" class="btn">+ Add new product</a>
       </div>
       <div class="content-container hidden" id="content-rating">
