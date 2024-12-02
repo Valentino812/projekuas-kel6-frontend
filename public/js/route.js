@@ -45,6 +45,15 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }
         })
+        .when('/product', {
+            templateUrl: '/views/product.html',
+            controller: 'ProductController',
+            resolve: {
+                load: function($ocLazyLoad) {
+                    return $ocLazyLoad.load('/js/productController.js');
+                }
+            }            
+        })
         .when('/products', {
             templateUrl: '/views/products.html',
             controller: 'ProductsController',
@@ -99,6 +108,7 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }            
         })
+
         .otherwise({
             redirectTo: '/'
         });
