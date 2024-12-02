@@ -31,6 +31,7 @@ Route::prefix('api')->group(function () {
     Route::delete('/accountDelete/{id}', [AccountController::class, 'deleteAccount']);
     Route::post('/product', [ProductController::class, 'addProduct']);
     Route::get('/products', [ProductController::class, 'getAllProducts']);
+    Route::get('/api/products', [ProductController::class, 'getAllProducts']);
 });
 
 // Fallback route for AngularJS

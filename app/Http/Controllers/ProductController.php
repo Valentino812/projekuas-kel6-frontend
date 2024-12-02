@@ -54,9 +54,26 @@ class ProductController extends Controller
         return response()->json(['success' => 'Product added successfully'], 200);
     }
 
-    public function getAllProducts()
+    public function getAllProducts(Request $request)
     {
-        $products = Product::all();
+        $query = Product::query();
+
+        // Filtering by gender
+        if ($request->has('gender') && $request->gender != '') {
+            $query->where('gender', $request->gender);
+        }
+
+        // Filtering by type
+        if ($request->has('type') && $request->type != '') {
+            $query->where('type', $request->type);
+        }
+
+        // Searching by name
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->get();
 
         // Modify the response 
         $productsArray = $products->map(function ($product) {

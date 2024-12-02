@@ -173,15 +173,44 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
     }
 
     $scope.products = [];
+    $scope.filteredProducts = [];
+    $scope.searchQuery = '';
+    $scope.selectedGender = '';
+    $scope.selectedType = '';
+    $scope.sortCriteria = '';
 
     $scope.getAllProducts = function() {
-        $http.get('/api/products')
+        const params = {
+            search: $scope.searchQuery,
+            gender: $scope.selectedGender,
+            type: $scope.selectedType
+        };
+
+        $http.get('/api/products', { params: params })
             .then(function(response) {
                 $scope.products = response.data.products;
+                $scope.filteredProducts = $scope.products; // Initialize filtered products
+                $scope.sortProducts($scope.sortCriteria); // Apply sorting if any
             })
             .catch(function(error) {
                 console.error('Error fetching products:', error);
             });
+    };
+
+    $scope.filterProducts = function() {
+        $scope.getAllProducts(); // Fetch products with the current filters
+    };
+
+    $scope.sortProducts = function(criteria) {
+        if (criteria === 'price') {
+            $scope.filteredProducts.sort((a, b) => b.price - a.price);
+        } else if (criteria === 'price-low-to-high') {
+            $scope.filteredProducts.sort((a, b) => a.price - b.price);
+        } else if (criteria === 'alphabetical') {
+            $scope.filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (criteria === 'reverse-alphabetical') {
+            $scope.filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+        }
     };
 
     $scope.getAllProducts();
