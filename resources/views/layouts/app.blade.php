@@ -23,6 +23,7 @@
     <script src="{{ asset('js/contactController.js') }}"></script>
     <script src="{{ asset('js/registerController.js') }}"></script>
     <script src="{{ asset('js/adminLoginController.js') }}"></script>
+    <script src="{{ asset('js/productController.js') }}"></script>
     <script src="{{ asset('js/productsController.js') }}"></script>
     <script src="{{ asset('js/adminController.js') }}"></script>
     <script src="{{ asset('js/settingsController.js') }}"></script>
