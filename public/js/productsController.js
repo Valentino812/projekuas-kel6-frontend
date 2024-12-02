@@ -172,4 +172,18 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
         $scope.getAccountInfo($scope.userId);
     }
 
+    $scope.products = [];
+
+    $scope.getAllProducts = function() {
+        $http.get('/api/products')
+            .then(function(response) {
+                $scope.products = response.data.products;
+            })
+            .catch(function(error) {
+                console.error('Error fetching products:', error);
+            });
+    };
+
+    $scope.getAllProducts();
+
 });
