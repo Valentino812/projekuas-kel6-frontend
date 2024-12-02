@@ -271,7 +271,7 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
                 $scope.error = 'An error occurred while fetching the product.';
             }
         });
-
+        
         if ($scope.product.stock > 0) {
             // Handle "Add to Cart" button click
             const addToCartButton = document.getElementById('add-to-cart-button');
@@ -279,4 +279,5 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
                 alert('Item added to cart!');
             });
         }
+
 });
