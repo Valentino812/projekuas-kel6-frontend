@@ -20,8 +20,6 @@ app.controller('HomeController', function($scope, $timeout, $routeParams,  $http
     });
     // 1.Entrance Transition End
 
-
-
     // 2.Navbar and sidebar
     const burgerMenu = document.getElementById('burger-menu');
     const navbarMenu = document.querySelector('.navbar-menu');

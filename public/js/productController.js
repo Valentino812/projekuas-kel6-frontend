@@ -20,7 +20,7 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
     });
     // Entrance Transition End
 
-    
+
     const configSections = document.querySelectorAll('.config-section');
 
     configSections.forEach(section => {
@@ -41,21 +41,6 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
         select.addEventListener('change', (e) => {
             console.log(`Pilihan diubah menjadi: ${e.target.value}`);
         });
-    });
-
-    // Menangani toggle burger menu untuk responsivitas (opsional)
-    const burgerMenu = document.getElementById('burger-menu');
-    const navbarMenu = document.querySelector('.navbar-menu');
-    const closeButton = document.getElementById('close-button');
-
-    burgerMenu.addEventListener('click', () => {
-        navbarMenu.classList.toggle('active');
-        closeButton.style.display = 'block';
-    });
-
-    closeButton.addEventListener('click', () => {
-        navbarMenu.classList.remove('active');
-        closeButton.style.display = 'none';
     });
 
     // Handler for SHOE LAST
@@ -108,21 +93,21 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
         });
     });
 
-    // Handle "Add to Cart" button click
-    const addToCartButton = document.getElementById('add-to-cart-button');
-    addToCartButton.addEventListener('click', () => {
-        alert('Item added to cart!');
-    });
-
      // Sidebars Start
+     const burgerMenu = document.getElementById('burger-menu');
+     const navbarMenu = document.querySelector('.navbar-menu');
+     const closeButton = document.getElementById('close-button');
      const cartButton = document.getElementById('cart-button');
      const cartButtonMobile = document.getElementById('cart-button-mobile');
      const accountButton = document.getElementById('account-button');
      const accountButtonMobile = document.getElementById('account-button-mobile');
+     const forgotButton = document.getElementById('forgot-button');
      const sidebarCart = document.querySelector('.sidebar-cart');
      const sidebarAccount = document.querySelector('.sidebar-account');
+     const sidebarForgot = document.getElementById('sidebar-forgot');
      const closeCartButton = document.getElementById('close-cart');
      const closeAccountButton = document.getElementById('close-account');
+     const closeForgotButton = document.getElementById('close-forgot');
      const blurEffect = document.querySelectorAll('.blur');
  
      // Function to give blur effect
@@ -138,6 +123,18 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
              element.classList.remove('activeblur');
          });
      }
+ 
+     burgerMenu.addEventListener('click', () => {
+         navbarMenu.classList.toggle('active');
+         burgerMenu.classList.toggle('active');
+     });
+ 
+     closeButton.addEventListener('click', () => {
+         navbarMenu.classList.remove('active');
+         burgerMenu.classList.remove('active');
+     });
+ 
+     // 2.Account, cart, and forgot sidebar:
  
      // Button to open sidebar cart (Destkop)
      cartButton.addEventListener('click', () => {
@@ -163,6 +160,11 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
          toggleBlur();
      });
  
+     // Button to open sidebar forgot password 
+     forgotButton.addEventListener('click', () => {
+         sidebarForgot.classList.toggle('active')
+     });
+ 
      // Cart sidebar close button
      closeCartButton.addEventListener('click', () => {
          sidebarCart.classList.remove('active');
@@ -174,7 +176,107 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
          sidebarAccount.classList.remove('active');
          removeBlur();
      });
+ 
+     // Forgot sidebar close button 
+     closeForgotButton.addEventListener('click', () => {
+         sidebarForgot.classList.remove('active');
+     });
      // Sidebars End
 
-    $scope.adminId = $routeParams.id;
+    // 5.Login
+    
+    // Check if the 'id' is part of the route
+    $scope.userId = $routeParams.id;
+
+    // console.log('Account ID:', $scope.userId);
+
+    // Derterment what to show on sidebar account (login form or account info)
+    $scope.showLoginForm = !$scope.userId;
+
+    $scope.errorMessage = '';
+    $scope.successMessage = '';
+
+    $scope.login = function() {
+        const routeName = 'homeLogin'; 
+        $http.post('/api/login', {
+            email: $scope.login.email,
+            password: $scope.login.password,
+            redirect_route: routeName
+        })
+        .then(function(response) {
+            $scope.successMessage = response.data.message;;
+            $scope.errorMessage = '';
+            $scope.login = {};
+
+            // Redirect user to the provided URL
+            if (response.data.redirect_url) {
+                window.location.href = response.data.redirect_url;
+            }
+        })
+        .catch(function(error) {
+            console.error('Error:', error);
+            if (error.data && error.data.errors) {
+                $scope.errorMessage = Object.values(error.data.errors).join(' ');
+            } else if (error.data && error.data.message) {
+                $scope.errorMessage = error.data.message;
+            } else {
+                $scope.errorMessage = 'An error occurred. Please try again.';
+            }
+            $scope.successMessage = '';
+        });
+    }
+
+    if($scope.userId){
+        $scope.getAccountInfo = function(userId) {
+        
+            $http.get('/api/account-info/' + userId)
+                .then(function(response) {
+                    // console.log('Response from API:', response); 
+                    $scope.accountInfo = response.data.account;
+                    // console.log('Account Info:', $scope.accountInfo); 
+                    $scope.errorMessage = '';
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    if (error.data && error.data.message) {
+                        $scope.errorMessage = error.data.message;
+                    } else {
+                        $scope.errorMessage = 'An error occurred. Please try again.';
+                    }
+                });
+        };
+        
+        // Call getAccountInfo 
+        $scope.getAccountInfo($scope.userId);
+    }
+
+    // Initialize product data
+    $scope.product = {};
+    $scope.error = null;
+
+    // Get product ID from route parameters
+    var productId = $routeParams.productid;
+
+    // Fetch product details
+    $http.get('/api/product/' + productId)
+        .then(function(response) {
+            // Success: Assign product data to scope
+            $scope.product = response.data.product;
+        })
+        .catch(function(error) {
+            // Handle errors
+            if (error.status === 404) {
+                $scope.error = 'Product not found.';
+            } else {
+                $scope.error = 'An error occurred while fetching the product.';
+            }
+        });
+
+        if ($scope.product.stock > 0) {
+            // Handle "Add to Cart" button click
+            const addToCartButton = document.getElementById('add-to-cart-button');
+            addToCartButton.addEventListener('click', () => {
+                alert('Item added to cart!');
+            });
+        }
 });

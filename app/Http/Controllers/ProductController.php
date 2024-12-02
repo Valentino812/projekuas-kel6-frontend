@@ -93,6 +93,31 @@ class ProductController extends Controller
         return response()->json(['products' => $productsArray], 200);
     }
 
+    public function getProduct($id)
+    {
+        // Find product by ID
+        $product = Product::find($id);
+
+        // Check if product exists
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        // Format the product response
+        $productData = [
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'description' => $product->description,
+            'type' => $product->type,
+            'gender' => $product->gender,
+            'stock' => $product->stock,
+            'img1' => $product->img1 ? asset('storage/' . $product->img1) : null,
+            'img2' => $product->img2 ? asset('storage/' . $product->img2) : null,
+        ];
+
+        return response()->json(['product' => $productData], 200);
+    }
 
 
 }
