@@ -17,9 +17,9 @@ Route::get('/contact/{id}', function () {
 Route::get('/admin/{id}', function () {
     return view('layouts.app');
 })->name('admin');
-Route::get('/product/{id}', function () {
+Route::get('/products/{id}', function () {
     return view('layouts.app');
-})->name('product');
+})->name('productsLogin');
 
 // API Routes (for CRUD operations)
 Route::prefix('api')->group(function () {
