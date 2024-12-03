@@ -318,6 +318,27 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
         // Update total price
         $scope.cartTotal += product.price * quantity;
         alert(`${quantity} item(s) added to cart!`);
+
+        const data = {
+            userId: $scope.userId, 
+            product_id: product.id,
+            price: product.price,
+            quantity: quantity
+        };
+    
+        // Make POST request to server
+        $http.post('/api/add-to-cart', data)
+            .then(function(response) {
+                // Handle success response
+                alert('Product successfully added to the cart on the server!');
+                console.log('Server response:', response.data);
+            })
+            .catch(function(error) {
+                // Handle error response
+                console.error('Failed to add product to the server cart:', error);
+                alert('Error adding product to the cart. Please try again.');
+            });
+
     };
 
     // Remove product from cart

@@ -121,30 +121,4 @@ class ProductController extends Controller
         return response()->json(['product' => $productData], 200);
     }
 
-    public function addToCart(Request $request)
-    {
-        $productId = $request->input('productId');
-        // Logic to add product to the cart in the database
-        // For example, create a new order or update an existing one
-
-        return response()->json(['success' => 'Product added to cart'], 200);
-    }
-
-    public function checkout(Request $request)
-    {
-        $items = $request->input('items');
-        $total = $request->input('total');
-
-        DB::table('carts')->insert([
-            'items' => json_encode($items), // Store items as JSON
-            'total' => $total,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        return response()->json(['success' => 'Order placed successfully'], 200);
-    }
-
-    
-
 }
