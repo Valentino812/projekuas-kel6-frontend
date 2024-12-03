@@ -9,9 +9,9 @@ class reviev extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'product_id',
-        'user_id',
-        'review',
+        'img1',
+        'img2',
+        'comment',
     ];
 
     protected $table = 'reviews';

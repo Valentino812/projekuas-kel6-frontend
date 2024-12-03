@@ -149,6 +149,50 @@
       <div class="content-container hidden" id="content-rating">
         <h1>Ratings</h1>
         <p>Check product reviews and ratings here.</p>
+
+        <div ng-if="reviews.length === 0">
+            <p>No reviews found.</p>
+        </div>
+        <div class="product-item-container" ng-repeat="review in reviews">
+            <!-- Review display section -->
+            <div ng-if="!review.editing">
+                <div class="product-images">
+                    <img ng-src="{{review.img1}}" alt="{{review.name}} Image 1" class="product-image">
+                    <img ng-src="{{review.img2}}" alt="{{review.name}} Image 2" class="product-image">
+                </div>
+                <div class="product-details">
+                    <p><strong>Comment:</strong> {{review.comment}}</p>
+                    <div class="button-group">
+                        <button class="btn edit-btn" ng-click="editReview(review)">Edit Review</button>
+                        <button class="btn delete-btn" ng-click="deleteReview(review)">Delete Review</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Edit form section -->
+            <div ng-if="review.editing" class="edit-form">
+                <form ng-submit="updateReview(review)">
+                    <div class="form-group">
+                        <label>Comment:</label>
+                        <textarea ng-model="review.comment" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Image 1:</label>
+                        <input type="file" file-model="review.newImg1">
+                    </div>
+                    <div class="form-group">
+                        <label>Image 2:</label>
+                        <input type="file" file-model="review.newImg2">
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="btn save-btn">Save Changes</button>
+                        <button type="button" class="btn cancel-btn" ng-click="cancelEdit(review)">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </div>
+
       </div>
       <div class="content-container hidden" id="content-accounts">
         <h1>Accounts</h1>
