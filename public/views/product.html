@@ -1,5 +1,6 @@
 <div>
     <link rel="stylesheet" href="/css/product.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> 
        <!-- Navigation Bar Start-->
        <nav class="navbar fade-in blur">
         <div class="navbar-logo">
@@ -59,7 +60,9 @@
                     <li ng-repeat="item in cartItems">
                         <img ng-src="{{ item.img1 }}" alt="{{ item.name }}" width="50">
                         <span>{{ item.name }}</span>
-                        <span>Rp {{ item.price | number:2 }} IDR</span>
+                        <span>Quantity: {{ item.quantity }}</span>
+                        <span>Subtotal: Rp {{ (item.price * item.quantity) | number:2 }} IDR</span>
+                        <button ng-click="removeFromCart(item)">Remove</button>
                     </li>
                 </ul>
                 <h3 class="cart-total">Total: Rp {{ cartTotal | number:2 }} IDR</h3>
@@ -279,8 +282,33 @@
         <div ng-if="product.stock == 0">
             <h3>OUT OF STOCK</h3>
         </div>
-        <button ng-if="product.stock > 0" id="add-to-cart-button" class="add-to-cart" ng-click="addToCart(product)">Add to Cart</button>
+        <div ng-if="product.stock > 0">
+            <label for="quantity">Quantity:</label>
+            <input 
+                type="number" 
+                id="quantity" 
+                ng-model="quantity" 
+                min="1" 
+                max="{{ product.stock }}" 
+                value="1" 
+                required />
+            <button 
+                ng-if="accountInfo"
+                id="add-to-cart-button" 
+                class="add-to-cart" 
+                ng-click="addToCart(product, quantity)">
+                Add to Cart
+            </button>
+            <button 
+                ng-if="!accountInfo"
+                id="add-to-cart-button" 
+                class="add-to-cart" 
+                ng-click="addCartFail()">
+                Add to Cart
+            </button>
       </div>
+        </div>
+        
     </div>
     <!-- Footer Start -->
     <footer class="footer fade-in blur">

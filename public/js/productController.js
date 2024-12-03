@@ -197,7 +197,7 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
     $scope.successMessage = '';
 
     $scope.login = function() {
-        const routeName = 'homeLogin'; 
+        const routeName = 'productsLogin'; 
         $http.post('/api/login', {
             email: $scope.login.email,
             password: $scope.login.password,
@@ -298,26 +298,61 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
     $scope.cartItems = [];
     $scope.cartTotal = 0;
 
-    $scope.addToCart = function(product) {
-        $scope.cartItems.push(product);
-        $scope.cartTotal += product.price;
-        alert('Item added to cart!');
+    // Adding product to cart
+    $scope.addToCart = function(product, quantity) {
+        const existingItem = $scope.cartItems.find(item => item.id === product.id);
+        if (existingItem) {
+            // If exist, then add to existing instead
+            existingItem.quantity += quantity;
+        } else {
+            // Create new if not
+            $scope.cartItems.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                img1: product.img1,
+                quantity: quantity
+            });
+        }
+
+        // Update total price
+        $scope.cartTotal += product.price * quantity;
+        alert(`${quantity} item(s) added to cart!`);
+    };
+
+    // Remove product from cart
+    $scope.removeFromCart = function(product) {
+        const index = $scope.cartItems.findIndex(item => item.id === product.id);
+        if (index !== -1) {
+            $scope.cartTotal -= $scope.cartItems[index].price * $scope.cartItems[index].quantity;
+            $scope.cartItems.splice(index, 1);
+        }
+    };
+
+    $scope.addCartFail = function() {
+        alert('Please login to shop our products');
     };
 
     $scope.checkout = function() {
+        if ($scope.cartItems.length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
+    
         const orderData = {
             items: $scope.cartItems.map(item => ({
                 product_id: item.id,
                 price: item.price,
-                quantity: 1, // Assuming 1 for simplicity, adjust as needed
-                total_price: item.price // Assuming total price is price * quantity
+                quantity: item.quantity, 
+                total_price: item.price * item.quantity 
             })),
-            total: $scope.cartTotal
+            total: $scope.cartTotal 
         };
-
+    
         $http.post('/api/checkout', orderData)
             .then(function(response) {
                 alert('Order placed successfully!');
+                // Clear the cart after successful checkout
                 $scope.cartItems = [];
                 $scope.cartTotal = 0;
             })
@@ -326,5 +361,6 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
                 alert('Failed to place order. Please try again.');
             });
     };
+    
 
 });
