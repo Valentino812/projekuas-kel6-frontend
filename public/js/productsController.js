@@ -180,10 +180,16 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
     $scope.sortCriteria = '';
 
     $scope.getAllProducts = function() {
-        $http.get('/api/products')
+        const params = {
+            search: $scope.searchQuery,
+            gender: $scope.selectedGender,
+            type: $scope.selectedType
+        };
+        $http.get('/api/products', { params: params })
             .then(function(response) {
                 $scope.products = response.data.products;
                 $scope.filteredProducts = $scope.products; // Initialize filtered products
+                $scope.sortProducts($scope.sortCriteria); 
             })
             .catch(function(error) {
                 console.error('Error fetching products:', error);
@@ -191,12 +197,7 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
     };
 
     $scope.filterProducts = function() {
-        $scope.filteredProducts = $scope.products.filter(function(product) {
-            const matchesSearch = product.name.toLowerCase().includes($scope.searchQuery.toLowerCase());
-            const matchesGender = !$scope.selectedGender || product.gender === $scope.selectedGender;
-            const matchesType = !$scope.selectedType || product.type === $scope.selectedType;
-            return matchesSearch && matchesGender && matchesType;
-        });
+        $scope.getAllProducts(); // Fetch products with the current filters
     };
 
     $scope.sortProducts = function(criteria) {
