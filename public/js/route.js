@@ -81,6 +81,24 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }
         })
+        .when('/products/gender/:gender', {
+            templateUrl: '/views/products.html',
+            controller: 'ProductsController',
+            resolve: {
+                load: function($ocLazyLoad) {
+                    return $ocLazyLoad.load('/js/productsController.js');
+                }
+            }
+        })
+        .when('/products/gender/:gender/:id', {
+            templateUrl: '/views/products.html',
+            controller: 'ProductsController',
+            resolve: {
+                load: function($ocLazyLoad) {
+                    return $ocLazyLoad.load('/js/productsController.js');
+                }
+            }
+        })
         .when('/:id', {
             templateUrl: '/views/home.html',
             controller: 'HomeController',

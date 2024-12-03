@@ -179,6 +179,10 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
     $scope.selectedType = '';
     $scope.sortCriteria = '';
 
+    if($routeParams.gender){
+        $scope.selectedGender = $routeParams.gender;
+    }
+
     $scope.getAllProducts = function() {
         const params = {
             search: $scope.searchQuery,
