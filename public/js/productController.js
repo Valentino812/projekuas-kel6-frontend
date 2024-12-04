@@ -298,46 +298,86 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
     $scope.cartItems = [];
     $scope.cartTotal = 0;
 
-    // Adding product to cart
-    $scope.addToCart = function(product, quantity) {
-        const existingItem = $scope.cartItems.find(item => item.id === product.id);
-        if (existingItem) {
-            // If exist, then add to existing instead
-            existingItem.quantity += quantity;
-        } else {
-            // Create new if not
-            $scope.cartItems.push({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                img1: product.img1,
-                quantity: quantity
-            });
-        }
-
-        // Update total price
-        $scope.cartTotal += product.price * quantity;
-        alert(`${quantity} item(s) added to cart!`);
-
+    // Getting cartItems from the database
+    $scope.getCartItems = function() {
         const data = {
-            userId: $scope.userId, 
-            product_id: product.id,
-            price: product.price,
-            quantity: quantity
+            userId: $scope.userId
         };
-    
-        // Make POST request to server
-        $http.post('/api/add-to-cart', data)
+
+        $http.post('/api/get-cart-items', data)
             .then(function(response) {
-                // Handle success response
-                alert('Product successfully added to the cart on the server!');
-                console.log('Server response:', response.data);
+                if (response.data.items && response.data.items.length > 0) {
+                    // Map database items to the format used in the frontend
+                    $scope.cartItems = response.data.items.map(item => ({
+                        id: item.product_id,
+                        name: item.name || 'Unknown Product', // Handle missing name gracefully
+                        price: item.price,
+                        img1: item.img1 || '', // Handle missing image gracefully
+                        quantity: item.quantity
+                    }));
+
+                    // Calculate total
+                    $scope.cartTotal = $scope.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+                } else {
+                    // If no items, initialize cartItems as empty and set total to 0
+                    $scope.cartItems = [];
+                    $scope.cartTotal = 0;
+                }
             })
             .catch(function(error) {
-                // Handle error response
-                console.error('Failed to add product to the server cart:', error);
-                alert('Error adding product to the cart. Please try again.');
+                console.error('Error fetching cart items:', error);
+                alert('Failed to fetch cart items. Please try again later.');
             });
+    };
+
+    // Fetch cart items on load
+    $scope.getCartItems();
+
+    // Adding product to cart
+    $scope.addToCart = function(product, quantity) {
+        if(!quantity || quantity!=0){
+            const existingItem = $scope.cartItems.find(item => item.id === product.id);
+            if (existingItem) {
+                // If exist, then add to existing instead
+                existingItem.quantity += quantity;
+            } else {
+                // Create new if not
+                $scope.cartItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    img1: product.img1,
+                    quantity: quantity
+                });
+            }
+
+            // Update total price
+            $scope.cartTotal += product.price * quantity;
+            alert(`${quantity} item(s) added to cart!`);
+
+            const data = {
+                userId: $scope.userId, 
+                product_id: product.id,
+                price: product.price,
+                quantity: quantity
+            };
+        
+            // Make POST request to server
+            $http.post('/api/add-to-cart', data)
+                .then(function(response) {
+                    // Handle success response
+                    alert('Product successfully added to the cart on the server!');
+                    console.log('Server response:', response.data);
+                })
+                .catch(function(error) {
+                    // Handle error response
+                    console.error('Failed to add product to the server cart:', error);
+                    alert('Error adding product to the cart. Please try again.');
+                });
+        } else {
+            alert("Please set the quantity");
+        }
+        
 
     };
 
