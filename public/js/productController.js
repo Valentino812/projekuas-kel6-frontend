@@ -446,13 +446,7 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
         }
     
         const orderData = {
-            items: $scope.cartItems.map(item => ({
-                product_id: item.id,
-                price: item.price,
-                quantity: item.quantity, 
-                total_price: item.price * item.quantity 
-            })),
-            total: $scope.cartTotal 
+            userId: $scope.userId,
         };
     
         $http.post('/api/checkout', orderData)
