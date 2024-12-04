@@ -281,19 +281,19 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
         }
 
     // Function to handle product click
-    $scope.addToSidebar = function(product) {
-        // Add product to sidebar
-        $scope.selectedProduct = product;
+    // $scope.addToSidebar = function(product) {
+    //     // Add product to sidebar
+    //     $scope.selectedProduct = product;
 
-        // Send product data to server
-        $http.post('/api/add-to-cart', { productId: product.id })
-            .then(function(response) {
-                alert('Product added to cart!');
-            })
-            .catch(function(error) {
-                console.error('Error adding product to cart:', error);
-            });
-    };
+    //     // Send product data to server
+    //     $http.post('/api/add-to-cart', { productId: product.id })
+    //         .then(function(response) {
+    //             alert('Product added to cart!');
+    //         })
+    //         .catch(function(error) {
+    //             console.error('Error adding product to cart:', error);
+    //         });
+    // };
 
     $scope.cartItems = [];
     $scope.cartTotal = 0;
@@ -330,8 +330,11 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
             });
     };
 
-    // Fetch cart items on load
-    $scope.getCartItems();
+    // Get cart items is user has login
+    if($scope.userId){
+        // Fetch cart items on load
+        $scope.getCartItems();  
+    }
 
     // Adding product to cart
     $scope.addToCart = function(product, quantity) {
@@ -377,8 +380,22 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
         } else {
             alert("Please set the quantity");
         }
-        
+    };
 
+    // Increasing the quantity of the product
+    $scope.increaseQuantity = function(item) {
+        item.quantity++;
+        $scope.cartTotal += +item.price;
+    };
+    
+    // Decreasing the quantity of the product
+    $scope.decreaseQuantity = function(item) {
+        if (item.quantity > 1) {
+            item.quantity--;
+            $scope.cartTotal -= +item.price;
+        } else {
+            alert("Minimum quantity is 1");
+        }
     };
 
     // Remove product from cart
