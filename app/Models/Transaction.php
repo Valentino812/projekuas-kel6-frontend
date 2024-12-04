@@ -6,18 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class TransactionHistory extends Model
+class Transaction extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'product_id',
-        'size',
-        'weight',
-        'price',
-        'quantity',
-        'total_price',
+        'userId',
+        'items',
+        'total',
         'status',
+        'datetime',
     ];
 
     protected $table = 'transactions';
