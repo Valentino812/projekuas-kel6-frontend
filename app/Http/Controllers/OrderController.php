@@ -79,8 +79,56 @@ class OrderController extends Controller
             'cart' => $cart,
         ]);
     }
-    
 
+    // Get card items with product info
+    public function getCartItems(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'userId' => 'required|string',
+        ]);
+    
+        $userId = $request->userId;
+    
+        // Search for cart with the same user ID and undone status
+        $cart = Cart::where('userId', $userId)->where('status', 'undone')->first();
+    
+        if (!$cart) {
+            // Return an empty items array with a 200 status
+            return response()->json([
+                'message' => 'No active cart found for the user.',
+                'items' => [],
+            ], 200);
+        }
+    
+        // Decode items JSON to array
+        $items = json_decode($cart->items, true);
+    
+    // Fetch product details and combine with cart items
+    $enhancedItems = [];
+    foreach ($items as $item) {
+        $product = Product::find($item['product_id']);
+        if ($product) {
+            $enhancedItems[] = [
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'img1' => $product->img1 ? asset('storage/' . $product->img1) : null,
+                'quantity' => $item['quantity'],
+                'total_price' => $item['total_price'],
+            ];
+        } else {
+            // Handle missing product gracefully if needed
+            Log::warning("Product with ID {$item['product_id']} not found.");
+        }
+    }
+
+    return response()->json([
+        'message' => 'Cart items retrieved successfully!',
+        'items' => $enhancedItems,
+    ]);
+    }
+    
     public function checkout(Request $request)
     {
         $items = $request->input('items');

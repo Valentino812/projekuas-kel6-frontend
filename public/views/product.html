@@ -56,17 +56,23 @@
                 <button class="close-sidebar" id="close-cart">&times;</button> 
                 <h3>SHOPPING CART</h3>
                 <hr class="divider">
-                <ul class="cart-items">
-                    <li ng-repeat="item in cartItems">
-                        <img ng-src="{{ item.img1 }}" alt="{{ item.name }}" width="50">
-                        <span>{{ item.name }}</span>
-                        <span>Quantity: {{ item.quantity }}</span>
-                        <span>Subtotal: Rp {{ (item.price * item.quantity) | number:2 }} IDR</span>
-                        <button ng-click="removeFromCart(item)">Remove</button>
-                    </li>
-                </ul>
-                <h3 class="cart-total">Total: Rp {{ cartTotal | number:2 }} IDR</h3>
-                <button ng-click="checkout()">Checkout</button>
+                <div ng-if="!accountInfo">
+                    <h4>Please login to use our shopping feature</h4>
+                </div>
+                <div ng-if="accountInfo">
+                    <ul class="cart-items">
+                        <li ng-repeat="item in cartItems">
+                            <img ng-src="{{ item.img1 }}" alt="{{ item.name }}" width="50">
+                            <span>{{ item.name }}</span>
+                            <span>Quantity: {{ item.quantity }}</span>
+                            <span>Subtotal: Rp {{ (item.price * item.quantity) | number:2 }} IDR</span>
+                            <button ng-click="removeFromCart(item)">Remove</button>
+                        </li>
+                    </ul>
+                    <h3 class="cart-total">Total: Rp {{ cartTotal | number:2 }} IDR</h3>
+                    <button ng-click="checkout()">Checkout</button>
+                </div>
+
             </div>
         </div>
     
@@ -288,6 +294,8 @@
                 type="number" 
                 id="quantity" 
                 ng-model="quantity" 
+                ng-init="quantity=1" 
+                ng-blur="quantity = quantity || 1"
                 min="1" 
                 max="{{ product.stock }}" 
                 value="1" 

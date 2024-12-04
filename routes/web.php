@@ -38,6 +38,7 @@ Route::prefix('api')->group(function () {
     Route::get('/product/{id}', [ProductController::class, 'getProduct']);
     Route::post('/add-to-cart', [OrderController::class, 'addToCart']);
     Route::post('/checkout', [OrderController::class, 'checkout']);
+    Route::post('/get-cart-items', [OrderController::class, 'getCartItems']); 
     Route::get('/api/orders', [AdminController::class, 'getOrders']);
     Route::post('/update-product/{id}', [AdminController::class, 'updateProduct']);
     Route::delete('/delete-product/{id}', [AdminController::class, 'deleteProduct']);
