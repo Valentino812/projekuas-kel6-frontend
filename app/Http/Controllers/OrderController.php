@@ -9,6 +9,7 @@ use App\Models\Cart;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\Transaction;
 
 class OrderController extends Controller
 {
@@ -298,6 +299,96 @@ class OrderController extends Controller
             ], 404);
         }
 
+    }
+
+    public function moveToTransaction(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'userId' => 'required|string',
+        ]);
+
+        $userId = $request->userId;
+
+        // Cari cart dengan status 'done'
+        $cart = Cart::where('userId', $userId)->where('status', 'done')->first();
+
+        if (!$cart) {
+            return response()->json(['error' => 'No completed cart found for the user'], 404);
+        }
+
+        // Pindahkan data ke Transaction
+        $transaction = Transaction::create([
+            'userId' => $userId,
+            'items' => $cart->items,
+            'total' => $cart->total,
+            'status' => 'completed',
+            'datetime' => now(),
+        ]);
+
+        // Hapus cart setelah dipindahkan
+        $cart->delete();
+
+        return response()->json([
+            'message' => 'Cart moved to transaction successfully!',
+            'transaction' => $transaction,
+        ]);
+    }
+
+    public function moveCartToTransaction(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'cartId' => 'required|string',
+        ]);
+
+        $cartId = $request->cartId;
+
+        // Find the cart with the given ID
+        $cart = Cart::find($cartId);
+
+        if (!$cart || $cart->status !== 'done') {
+            return response()->json(['error' => 'Cart not found or not completed'], 404);
+        }
+
+        // Move data to Transaction
+        $transaction = Transaction::create([
+            'userId' => $cart->userId,
+            'items' => $cart->items,
+            'total' => $cart->total,
+            'status' => 'completed',
+            'datetime' => now(),
+        ]);
+
+        // Delete the cart after moving
+        $cart->delete();
+
+        return response()->json([
+            'message' => 'Cart moved to transaction successfully!',
+            'transaction' => $transaction,
+        ]);
+    }
+
+    public function getAllDoneCarts()
+    {
+        $carts = Cart::where('status', 'done')->get();
+
+        return response()->json([
+            'carts' => $carts,
+        ]);
+    }
+
+    public function deleteOrder($id)
+    {
+        $cart = Cart::find($id);
+
+        if (!$cart) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        $cart->delete();
+
+        return response()->json(['message' => 'Order deleted successfully!']);
     }
 }
 

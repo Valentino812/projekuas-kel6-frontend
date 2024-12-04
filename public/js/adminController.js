@@ -173,6 +173,76 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
         }
     };
 
+    $scope.transactions = [];
+
+    $scope.getAllTransactions = function() {
+        $http.get('/api/transactions')
+            .then(function(response) {
+                $scope.transactions = response.data.transactions;
+            })
+            .catch(function(error) {
+                console.error('Error fetching transactions:', error);
+            });
+    };
+
+    $scope.getAllTransactions(); // Call this function to load transactions on page load
+
+    $scope.moveToTransaction = function(cartId) {
+        $http.post('/api/move-cart-to-transaction', { cartId: cartId })
+            .then(function(response) {
+                alert('Cart moved to transaction successfully!');
+                // Refresh the orders and transactions list
+                $scope.getOrders();
+                $scope.getAllTransactions();
+            })
+            .catch(function(error) {
+                console.error('Error moving cart to transaction:', error);
+                alert('Failed to move cart to transaction. Please try again.');
+            });
+    };
+
+    $scope.doneCarts = [];
+
+    $scope.getAllDoneCarts = function() {
+        $http.get('/api/done-carts')
+            .then(function(response) {
+                $scope.doneCarts = response.data.carts;
+            })
+            .catch(function(error) {
+                console.error('Error fetching done carts:', error);
+            });
+    };
+
+    $scope.getAllDoneCarts(); // Call this function to load done carts on page load
+
+    $scope.deleteOrder = function(cartId) {
+        if (confirm('Are you sure you want to delete this order?')) {
+            $http.delete('/api/order/' + cartId)
+                .then(function(response) {
+                    alert('Order deleted successfully!');
+                    // Refresh the done carts list
+                    $scope.getAllDoneCarts();
+                })
+                .catch(function(error) {
+                    console.error('Error deleting order:', error);
+                    alert('Failed to delete order. Please try again.');
+                });
+        }
+    };
+
+    // Panggil fungsi untuk mengambil data saat controller diinisialisasi
+    $scope.getOrders();
+    $scope.getAllTransactions();
+
+    // Function to parse JSON items
+    $scope.parseItems = function(itemsJson) {
+        try {
+            return JSON.parse(itemsJson);
+        } catch (e) {
+            console.error('Error parsing items JSON:', e);
+            return [];
+        }
+    };
 });
 
 app.directive('fileModel', ['$parse', function ($parse) {

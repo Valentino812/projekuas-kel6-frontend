@@ -57,17 +57,30 @@
       <div class="content-container hidden" id="content-orders">
         <h1>Orders</h1>
         <p>Manage and view orders here.</p>
-        <div ng-if="orders.length === 0">
-            <p>No orders found.</p>
+        <!-- Display done carts -->
+        <div ng-if="doneCarts.length === 0" class="no-orders">
+            <p>No completed carts found.</p>
         </div>
-        <ul ng-if="orders.length > 0">
-            <li ng-repeat="order in orders">
-                <strong>Order ID: {{ order.id }}</strong>
-                <p><strong>Product ID:</strong> {{ order.product_id }}</p>
-                <p><strong>Price:</strong> Rp {{ order.price | number:2 }} IDR</p>
-                <p><strong>Quantity:</strong> {{ order.quantity }}</p>
-                <p><strong>Total Price:</strong> Rp {{ order.total_price | number:2 }} IDR</p>
-                <p><strong>Status:</strong> {{ order.status }}</p>
+        <ul ng-if="doneCarts.length > 0" class="order-list">
+            <li ng-repeat="cart in doneCarts" class="order-item">
+                <div class="order-header">
+                    <strong>Cart ID: {{ cart.id }}</strong>
+                    <span class="order-status">{{ cart.status }}</span>
+                    <button class="btn delete-btn" ng-click="deleteOrder(cart.id)">Delete Order</button>
+                </div>
+                <div class="order-details">
+                    <p><strong>User ID:</strong> {{ cart.userId }}</p>
+                    <p><strong>Total:</strong> Rp {{ cart.total | number:2 }} IDR</p>
+                    <p><strong>Items:</strong></p>
+                    <ul>
+                        <li ng-repeat="item in parseItems(cart.items)">
+                            <p><strong>Product ID:</strong> {{ item.product_id }}</p>
+                            <p><strong>Price:</strong> Rp {{ item.price | number:2 }} IDR</p>
+                            <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                            <p><strong>Total Price:</strong> Rp {{ item.total_price | number:2 }} IDR</p>
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ul>
       </div>
@@ -200,6 +213,18 @@
       <div class="content-container hidden" id="content-transactions">
         <h1>Transactions</h1>
         <p>View transaction history here.</p>
+        <div ng-if="transactions.length === 0">
+            <p>No transactions found.</p>
+        </div>
+        <ul ng-if="transactions.length > 0">
+            <li ng-repeat="transaction in transactions">
+                <strong>Transaction ID: {{ transaction.id }}</strong>
+                <p><strong>User ID:</strong> {{ transaction.userId }}</p>
+                <p><strong>Total:</strong> Rp {{ transaction.total | number:2 }} IDR</p>
+                <p><strong>Status:</strong> {{ transaction.status }}</p>
+                <p><strong>Items:</strong> {{ transaction.items }}</p>
+            </li>
+        </ul>
       </div>
       <div class="content-container hidden" id="content-contacts">
         <h1>Contacts</h1>

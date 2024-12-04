@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TransactionController;
 
 // After login routes to web page:
 Route::get('/{id}', function () {
@@ -44,6 +45,11 @@ Route::prefix('api')->group(function () {
     Route::get('/api/orders', [AdminController::class, 'getOrders']);
     Route::post('/update-product/{id}', [AdminController::class, 'updateProduct']);
     Route::delete('/delete-product/{id}', [AdminController::class, 'deleteProduct']);
+    Route::post('/move-to-transaction', [OrderController::class, 'moveToTransaction']);
+    Route::get('/api/transactions', [TransactionController::class, 'getAllTransactions']);
+    Route::post('/move-cart-to-transaction', [OrderController::class, 'moveCartToTransaction']);
+    Route::get('/done-carts', [OrderController::class, 'getAllDoneCarts']);
+    Route::delete('/order/{id}', [OrderController::class, 'deleteOrder']);
 });
 
 // Fallback route for AngularJS
