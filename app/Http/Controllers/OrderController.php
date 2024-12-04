@@ -142,6 +142,133 @@ class OrderController extends Controller
         'items' => $enhancedItems,
     ]);
     }
+
+    public function increaseQuantity(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'productId' => 'required|string',
+            'quantity' => 'required|integer',
+        ]);
+
+        $productId = $request->productId;
+        $quantityToAdd = $request->quantity;
+
+        // Find the product in the database
+        $product = Product::find($productId);
+
+        // Check if the product exists
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        // Check if enough stock is available
+        if ($product->stock < $quantityToAdd) {
+            return response()->json([
+                'error' => 'Not enough stock available.',
+                'available_stock' => $product->stock
+            ], 400);
+        }
+
+        // Update the product quantity in the cart
+        $cart = Cart::where('userId', $request->userId)->where('status', 'undone')->first();
+
+        if ($cart) {
+            $items = json_decode($cart->items, true);
+            $itemIndex = null;
+
+            // Find the item in the cart
+            foreach ($items as $index => $item) {
+                if ($item['product_id'] == $productId) {
+                    $itemIndex = $index;
+                    break;
+                }
+            }
+
+            if ($itemIndex !== null) {
+                // Increase quantity in cart
+                $items[$itemIndex]['quantity'] += $quantityToAdd;
+                $cart->total += $product->price * $quantityToAdd;
+
+                // Reduce stock in the product model
+                $product->stock -= $quantityToAdd;
+                $product->save();
+            }
+
+            // Save the cart and update the total
+            $cart->items = json_encode($items);
+            $cart->save();
+
+            return response()->json([
+                'message' => 'Product quantity increased successfully!',
+                'cart' => $cart,
+            ]);
+        }
+
+        return response()->json(['error' => 'Cart not found'], 404);
+    }
+
+    public function decreaseQuantity(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'productId' => 'required|string',
+            'quantity' => 'required|integer',
+        ]);
+
+        $productId = $request->productId;
+        $quantityToRemove = $request->quantity;
+
+        // Find the product in the database
+        $product = Product::find($productId);
+
+        // Check if the product exists
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        // Update the product quantity in the cart
+        $cart = Cart::where('userId', $request->userId)->where('status', 'undone')->first();
+
+        if ($cart) {
+            $items = json_decode($cart->items, true);
+            $itemIndex = null;
+
+            // Find the item in the cart
+            foreach ($items as $index => $item) {
+                if ($item['product_id'] == $productId) {
+                    $itemIndex = $index;
+                    break;
+                }
+            }
+
+            if ($itemIndex !== null) {
+                if ($items[$itemIndex]['quantity'] > $quantityToRemove) {
+                    // Decrease the quantity and total price
+                    $items[$itemIndex]['quantity'] -= $quantityToRemove;
+                    $cart->total -= $product->price * $quantityToRemove;
+
+                    // Increase stock in the product model
+                    $product->stock += $quantityToRemove;
+                    $product->save();
+                } else {
+                    return response()->json(['error' => 'Cannot decrease quantity below 1'], 400);
+                }
+            }
+
+            // Save the updated cart
+            $cart->items = json_encode($items);
+            $cart->save();
+
+            return response()->json([
+                'message' => 'Product quantity decreased successfully!',
+                'cart' => $cart,
+            ]);
+        }
+
+        return response()->json(['error' => 'Cart not found'], 404);
+    }
+
     
     public function checkout(Request $request)
     {

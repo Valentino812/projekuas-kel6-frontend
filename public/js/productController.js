@@ -384,19 +384,47 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
 
     // Increasing the quantity of the product
     $scope.increaseQuantity = function(item) {
-        item.quantity++;
-        $scope.cartTotal += +item.price;
+        $http.post('/api/increase-quantity', {
+            productId: item.id,
+            quantity: 1,
+            userId: $scope.userId
+        })
+        .then(function(response) {
+            if (response.data.message) {
+                item.quantity += 1;
+                $scope.cartTotal += +item.price;
+            } else {
+                alert(response.data.error);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error increasing quantity:', error);
+        });
     };
+    
     
     // Decreasing the quantity of the product
     $scope.decreaseQuantity = function(item) {
         if (item.quantity > 1) {
-            item.quantity--;
-            $scope.cartTotal -= +item.price;
+            $http.post('/api/decrease-quantity', {
+                productId: item.id,
+                quantity: 1,
+                userId: $scope.userId
+            })
+            .then(function(response) {
+                if (response.data.message) {
+                    item.quantity -= 1;
+                    $scope.cartTotal -= +item.price;
+                }
+            })
+            .catch(function(error) {
+                console.error('Error decreasing quantity:', error);
+            });
         } else {
-            alert("Minimum quantity is 1");
+            alert('Cannot decrease quantity below 1');
         }
     };
+    
 
     // Remove product from cart
     $scope.removeFromCart = function(product) {
