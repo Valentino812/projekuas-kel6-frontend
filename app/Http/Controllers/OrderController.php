@@ -272,17 +272,32 @@ class OrderController extends Controller
     
     public function checkout(Request $request)
     {
-        $items = $request->input('items');
-        $total = $request->input('total');
-
-        DB::table('carts')->insert([
-            'items' => json_encode($items), // Store items as JSON
-            'total' => $total,
-            'created_at' => now(),
-            'updated_at' => now(),
+        // Validasi input
+        $request->validate([
+            'userId' => 'required|string',
         ]);
+    
+        $userId = $request->userId;
+    
+        // Search cart with same userId and undone status
+        $cart = Cart::where('userId', $userId)->where('status', 'undone')->first();
 
-        return response()->json(['success' => 'Order placed successfully'], 200);
+        if ($cart) {
+            // Update the status to 'done'
+            $cart->status = 'done';
+            
+            // Save the updated cart
+            $cart->save();
+            
+            return response()->json([
+                'message' => 'Cart status updated to done".',
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'No cart found for the user',
+            ], 404);
+        }
+
     }
 }
 
