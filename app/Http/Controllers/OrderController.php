@@ -68,12 +68,26 @@ class OrderController extends Controller
             ];
         }
     
-        // Update cart dengan items yang baru
+        // Update cart with the new item
         $cart->items = json_encode($items);
         $cart->total += $totalPrice;
         $cart->updated_at = now();
         $cart->save();
-    
+
+        // Reduce the number of product stock
+        $product = Product::find($productId);
+
+        // Check if the product exists
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        // Reduce the stock
+        $product->stock -= $quantity;
+
+        // Save the updated stock to the database
+        $product->save();
+
         return response()->json([
             'message' => 'Product added to cart successfully!',
             'cart' => $cart,

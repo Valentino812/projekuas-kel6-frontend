@@ -59,20 +59,25 @@
                 <div ng-if="!accountInfo">
                     <h4>Please login to use our shopping feature</h4>
                 </div>
-                <div ng-if="accountInfo">
+                <div ng-if="accountInfo" class="cart-contents">
                     <ul class="cart-items">
-                        <li ng-repeat="item in cartItems">
-                            <img ng-src="{{ item.img1 }}" alt="{{ item.name }}" width="50">
-                            <span>{{ item.name }}</span>
-                            <span>Quantity: {{ item.quantity }}</span>
-                            <span>Subtotal: Rp {{ (item.price * item.quantity) | number:2 }} IDR</span>
-                            <button ng-click="removeFromCart(item)">Remove</button>
+                        <li ng-repeat="item in cartItems" class="cart-item">
+                            <img ng-src="{{ item.img1 }}" alt="{{ item.name }}" class="cart-item-img">
+                            <div class="cart-item-details">
+                                <span class="cart-item-name">{{ item.name }}</span>
+                                <span class="cart-item-quantity">Quantity: {{ item.quantity }}</span>
+                                <span class="cart-item-subtotal">Subtotal: Rp {{ (item.price * item.quantity) | number:2 }} IDR</span>
+                                <div class="cart-item-actions">
+                                    <button ng-click="decreaseQuantity(item)" class="cart-quantity-btn">-</button>
+                                    <button ng-click="increaseQuantity(item)" class="cart-quantity-btn">+</button>
+                                    <button ng-click="removeFromCart(item)" class="cart-remove-btn">Remove</button>
+                                </div>
+                            </div>
                         </li>
                     </ul>
-                    <h3 class="cart-total">Total: Rp {{ cartTotal | number:2 }} IDR</h3>
-                    <button ng-click="checkout()">Checkout</button>
+                        <h3 class="cart-total">Total: Rp {{ cartTotal | number:2 }} IDR</h3>
+                        <button ng-click="checkout()" class="checkout-btn">Checkout</button>
                 </div>
-
             </div>
         </div>
     
