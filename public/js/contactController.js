@@ -255,7 +255,6 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
             if (response.data.message) {
                 item.quantity += 1;
                 $scope.cartTotal += +item.price;
-                $scope.getProductInfo();
             } else {
                 alert(response.data.error);
             }
@@ -279,7 +278,6 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
                 if (response.data.message) {
                     item.quantity -= 1;
                     $scope.cartTotal -= +item.price;
-                    $scope.getProductInfo();
                 }
             })
             .catch(function(error) {
