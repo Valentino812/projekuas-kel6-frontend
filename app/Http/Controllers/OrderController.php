@@ -95,6 +95,78 @@ class OrderController extends Controller
         ]);
     }
 
+    // Remove product from cart
+    public function deleteFromCart(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'userId' => 'required|string',
+            'product_id' => 'required|string',
+        ]);
+
+        $userId = $request->userId;
+        $productId = $request->product_id;
+
+        // Search for the cart with the same userId and undone status
+        $cart = Cart::where('userId', $userId)->where('status', 'undone')->first();
+
+        if (!$cart) {
+            return response()->json([
+                'error' => 'No active cart found for the user.',
+            ], 404);
+        }
+
+        // Decode the items from the cart
+        $items = json_decode($cart->items, true);
+
+        // Find the item in the cart
+        $itemIndex = null;
+        foreach ($items as $index => $item) {
+            if ($item['product_id'] === $productId) {
+                $itemIndex = $index;
+                break;
+            }
+        }
+
+        if ($itemIndex === null) {
+            return response()->json([
+                'error' => 'Product not found in the cart.',
+            ], 404);
+        }
+
+        // Get the quantity of the product that is removed
+        $quantityToRemove = $items[$itemIndex]['quantity'];
+
+        // Get the quantity of the product being removed
+        $quantity = $items[$itemIndex]['quantity'];
+        $totalPrice = $items[$itemIndex]['total_price'];
+
+        // Remove the product from the cart items
+        unset($items[$itemIndex]);
+        $items = array_values($items); // Re-index the array
+
+        // Update the cart
+        $cart->items = json_encode($items);
+        $cart->total -= $totalPrice;
+        $cart->updated_at = now();
+        $cart->save();
+
+        // Find product
+        $product = Product::find($productId);
+
+        // Adding the product stock
+        if ($product) {
+            $product->stock += $quantity;
+            $product->save();
+        }
+
+        return response()->json([
+            'message' => 'Product removed from cart successfully!',
+            'cart' => $cart,
+        ]);
+    }
+
+
     // Get card items with product info
     public function getCartItems(Request $request)
     {

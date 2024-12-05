@@ -199,4 +199,152 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
         // Call getAccountInfo 
         $scope.getAccountInfo($scope.userId);
     }
+
+    // SIDEBAR CART START
+
+    $scope.cartItems = [];
+    $scope.cartTotal = 0;
+
+    // Getting cartItems from the database
+    $scope.getCartItems = function() {
+        const data = {
+            userId: $scope.userId
+        };
+
+        $http.post('/api/get-cart-items', data)
+            .then(function(response) {
+                if (response.data.items && response.data.items.length > 0) {
+                    // Map database items to the format used in the frontend
+                    $scope.cartItems = response.data.items.map(item => ({
+                        id: item.product_id,
+                        name: item.name , 
+                        price: item.price,
+                        img1: item.img1, 
+                        quantity: item.quantity
+                    }));
+
+                    // Calculate total
+                    $scope.cartTotal = $scope.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+                } else {
+                    // If no items, initialize cartItems as empty and set total to 0
+                    $scope.cartItems = [];
+                    $scope.cartTotal = 0;
+                }
+            })
+            .catch(function(error) {
+                console.error('Error fetching cart items:', error);
+                alert('Failed to fetch cart items. Please try again later.');
+            });
+    };
+
+    // Get cart items is user has login
+    if($scope.userId){
+        // Fetch cart items on load
+        $scope.getCartItems();  
+    }
+
+    
+    // Increasing the quantity of the product
+    $scope.increaseQuantity = function(item) {
+        $http.post('/api/increase-quantity', {
+            productId: item.id,
+            quantity: 1,
+            userId: $scope.userId
+        })
+        .then(function(response) {
+            if (response.data.message) {
+                item.quantity += 1;
+                $scope.cartTotal += +item.price;
+                $scope.getProductInfo();
+            } else {
+                alert(response.data.error);
+            }
+        })
+        .catch(function(error) {
+            console.error('Error increasing quantity:', error);
+            alert("The stock is unavailable")
+        });
+    };
+    
+    
+    // Decreasing the quantity of the product
+    $scope.decreaseQuantity = function(item) {
+        if (item.quantity > 1) {
+            $http.post('/api/decrease-quantity', {
+                productId: item.id,
+                quantity: 1,
+                userId: $scope.userId
+            })
+            .then(function(response) {
+                if (response.data.message) {
+                    item.quantity -= 1;
+                    $scope.cartTotal -= +item.price;
+                    $scope.getProductInfo();
+                }
+            })
+            .catch(function(error) {
+                console.error('Error decreasing quantity:', error);
+            });
+        } else {
+            alert('Cannot decrease quantity below 1');
+        }
+    };
+    
+    // Remove product from cart
+    $scope.removeFromCart = function(product) {
+        const data = {
+            userId: $scope.userId,
+            product_id: product.id
+        };
+
+        // Make a POST request to remove from cart
+        $http.post('/api/remove-from-cart', data)
+            .then(function(response) {
+                // Success
+                const index = $scope.cartItems.findIndex(item => item.id === product.id);
+                if (index !== -1) {
+                    $scope.cartTotal -= $scope.cartItems[index].price * $scope.cartItems[index].quantity;
+                    $scope.cartItems.splice(index, 1);
+                }
+                alert('Product removed from cart');
+            })
+            .catch(function(error) {
+                // Handle errors
+                console.error('Error removing product from cart:', error);
+                if (error.status === 404) {
+                    alert('Product not found in the cart.');
+                } else {
+                    alert('Failed to remove product from the cart. Please try again.');
+                }
+            });
+    };
+
+    $scope.addCartFail = function() {
+        alert('Please login to shop our products');
+    };
+
+    $scope.checkout = function() {
+        if ($scope.cartItems.length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
+    
+        const orderData = {
+            userId: $scope.userId,
+        };
+    
+        $http.post('/api/checkout', orderData)
+            .then(function(response) {
+                alert('Order placed successfully!');
+                // Clear the cart after successful checkout
+                $scope.cartItems = [];
+                $scope.cartTotal = 0;
+            })
+            .catch(function(error) {
+                console.error('Error during checkout:', error);
+                alert('Failed to place order. Please try again.');
+            });
+    };
+
+    // SIDEBAR CART END
 });
