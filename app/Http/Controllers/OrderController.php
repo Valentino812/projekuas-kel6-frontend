@@ -394,7 +394,7 @@ class OrderController extends Controller
             'userId' => $userId,
             'items' => $cart->items,
             'total' => $cart->total,
-            'status' => 'pending',
+            'status' => 'completed',
             'datetime' => now(),
         ]);
 
