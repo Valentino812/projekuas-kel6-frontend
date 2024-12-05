@@ -286,6 +286,52 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
 
     // SIDEBAR CART START
 
+    // Adding product to cart
+    $scope.addToCart = function(product, quantity) {
+        if(!quantity || quantity!=0){
+            const existingItem = $scope.cartItems.find(item => item.id === product.id);
+            if (existingItem) {
+                // If exist, then add to existing instead
+                existingItem.quantity += quantity;
+            } else {
+                // Create new if not
+                $scope.cartItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    img1: product.img1,
+                    quantity: quantity
+                });
+            }
+            // Update total price
+            $scope.cartTotal += product.price * quantity;
+            alert(`${quantity} item(s) added to cart!`);
+
+            const data = {
+                userId: $scope.userId, 
+                product_id: product.id,
+                price: product.price,
+                quantity: quantity
+            };
+        
+            // Make POST request to server
+            $http.post('/api/add-to-cart', data)
+                .then(function(response) {
+                    // Handle success response
+                    alert('Product successfully added to the cart on the server!');
+                    console.log('Server response:', response.data);
+                    $scope.getProductInfo();
+                })
+                .catch(function(error) {
+                    // Handle error response
+                    console.error('Failed to add product to the server cart:', error);
+                    alert('Error adding product to the cart. Please try again.');
+                });
+        } else {
+            alert("Please set the quantity");
+        }
+    };
+    
     $scope.cartItems = [];
     $scope.cartTotal = 0;
 
