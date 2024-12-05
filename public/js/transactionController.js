@@ -23,40 +23,25 @@ app.controller('TransactionController', function($scope, $http, $routeParams, $t
 
     // VIEWS END
 
-
-    // CRUD METHODS START
-
-    // Data needed for register
-    $scope.user = {
-        first_name: '',
-        last_name: '',
-        email: '',
-        password: ''
-    };
-
-    // Error and sucess message
-    $scope.errorMessage = '';
-    $scope.successMessage = '';
-
-    // Function to register new account
-    $scope.register = function() {
-        // Sending data to API with POST request
-        $http.post('/api/register', $scope.user)
+    // Fetching transactions for a specific user from the server
+    $scope.getUserTransactions = function(userId) {
+        $http.get('/api/user-transactions/' + userId)
             .then(function(response) {
-                // If successful
-                $scope.successMessage = response.data.message;
-                $scope.errorMessage = '';
-                $scope.user = {}; 
+                $scope.transactions = response.data;
+                console.log('User Transactions:', $scope.transactions); // Log the transactions to the console
             })
             .catch(function(error) {
-                // if failed
-                if (error.data && error.data.message) {
-                    $scope.errorMessage = error.data.message;
-                } else {
-                    $scope.errorMessage = 'An error occurred. Please try again.';
-                }
-                $scope.successMessage = '';
+                console.error('Error fetching user transactions:', error);
             });
     };
+
+    // Call getUserTransactions with the userId from the URL
+    $scope.getUserTransactions($routeParams.id);
+
+    // Ensure items are displayed
+    $scope.parseItems = function(items) {
+        return items || []; // Return items or an empty array if undefined
+    };
+
     // CRUD METHODS END
 });

@@ -51,9 +51,30 @@
         <div class="modal-content">
             <h2>Transaction History</h2>
             <p>View your transaction history</p>
- 
+
+            <!-- Display Transaction Data Start -->
+            <div class="transaction-data">
+                <h2>Your Transactions</h2>
+                <ul>
+                    <li ng-repeat="transaction in transactions">
+                        <p>Transaction ID: {{ transaction.id }}</p>
+                        <p>Total: {{ transaction.total }}</p>
+                        <p>Status: {{ transaction.status }}</p>
+                        <p>Date: {{ transaction.datetime | date:'medium' }}</p>
+                        <ul>
+                            <li ng-repeat="item in transaction.items">
+                                <p>Item: {{ item.name }}</p>
+                                <p>Quantity: {{ item.quantity }}</p>
+                                <p>Price: {{ item.price }}</p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- Display Transaction Data End -->
         </div>
     </div>
+    <!-- Contact Form End -->
 
     <footer class="footer fade-in blur">
         <div class="footer-content">

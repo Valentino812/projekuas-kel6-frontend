@@ -188,17 +188,19 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
     $scope.getAllTransactions = function() {
         $http.get('/api/transactions')
             .then(function(response) {
-                $scope.transactions = response.data.transactions;
+                $scope.transactions = response.data.transactions; // Store the transactions in the scope
             })
             .catch(function(error) {
                 console.error('Error fetching transactions:', error);
+                alert('Failed to fetch transactions. Please try again.');
             });
     };
 
-    $scope.getAllTransactions(); // Call this function to load transactions on page load
+    // Call this function to load transactions on page load or as needed
+    $scope.getAllTransactions();
 
-    $scope.moveToTransaction = function(cartId) {
-        $http.post('/api/move-cart-to-transaction', { cartId: cartId })
+    $scope.moveToTransaction = function(userId) {
+        $http.post('/api/move-to-transaction', { userId: userId })
             .then(function(response) {
                 alert('Cart moved to transaction successfully!');
                 // Refresh the orders and transactions list

@@ -394,45 +394,11 @@ class OrderController extends Controller
             'userId' => $userId,
             'items' => $cart->items,
             'total' => $cart->total,
-            'status' => 'completed',
+            'status' => 'pending',
             'datetime' => now(),
         ]);
 
         // Hapus cart setelah dipindahkan
-        $cart->delete();
-
-        return response()->json([
-            'message' => 'Cart moved to transaction successfully!',
-            'transaction' => $transaction,
-        ]);
-    }
-
-    public function moveCartToTransaction(Request $request)
-    {
-        // Validate input
-        $request->validate([
-            'cartId' => 'required|string',
-        ]);
-
-        $cartId = $request->cartId;
-
-        // Find the cart with the given ID
-        $cart = Cart::find($cartId);
-
-        if (!$cart || $cart->status !== 'done') {
-            return response()->json(['error' => 'Cart not found or not completed'], 404);
-        }
-
-        // Move data to Transaction
-        $transaction = Transaction::create([
-            'userId' => $cart->userId,
-            'items' => $cart->items,
-            'total' => $cart->total,
-            'status' => 'completed',
-            'datetime' => now(),
-        ]);
-
-        // Delete the cart after moving
         $cart->delete();
 
         return response()->json([
