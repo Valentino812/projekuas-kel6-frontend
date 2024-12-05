@@ -188,8 +188,7 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
     $scope.getAllTransactions = function() {
         $http.get('/api/transactions')
             .then(function(response) {
-                $scope.transactions = response.data; // Store the transactions in the scope
-                console.log('Transactions:', $scope.transactions); // Log the transactions to the console
+                $scope.transactions = response.data.transactions; // Store the transactions in the scope
             })
             .catch(function(error) {
                 console.error('Error fetching transactions:', error);

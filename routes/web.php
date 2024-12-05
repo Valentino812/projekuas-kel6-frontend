@@ -48,6 +48,7 @@ Route::prefix('api')->group(function () {
     Route::delete('/delete-product/{id}', [AdminController::class, 'deleteProduct']);
     Route::post('/move-to-transaction', [OrderController::class, 'moveToTransaction']);
     Route::get('/transactions', [TransactionController::class, 'getAllTransactions']);
+    Route::get('/user-transactions/{id}', [TransactionController::class, 'getTransactions']);
     Route::post('/move-cart-to-transaction', [OrderController::class, 'moveCartToTransaction']);
     Route::get('/done-carts', [OrderController::class, 'getAllDoneCarts']);
     Route::delete('/order/{id}', [OrderController::class, 'deleteOrder']);

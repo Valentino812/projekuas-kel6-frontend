@@ -18,6 +18,8 @@ class TransactionController extends Controller
     {
         $transactions = Transaction::all(); // Fetch all transactions
 
-        return response()->json($transactions); // Return the transactions as a JSON response
+        return response()->json([
+            'transactions' => $transactions,
+        ]);
     }
 }

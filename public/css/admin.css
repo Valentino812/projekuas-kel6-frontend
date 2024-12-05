@@ -594,3 +594,65 @@ html, body {
 .edit-form .btn:hover {
     opacity: 0.9; /* Slightly transparent on hover */
 }
+
+/* Transactions Section Styles */
+.transaction-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.transaction-item {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.transaction-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.transaction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    color: #333;
+    font-weight: bold;
+}
+
+.transaction-details {
+    margin-top: 10px;
+    font-size: 0.95em;
+    color: #555;
+}
+
+.transaction-details p {
+    margin: 5px 0;
+}
+
+.item-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.item {
+    border-top: 1px solid #eee;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-details {
+    flex-grow: 1;
+    font-size: 0.9em;
+    color: #666;
+}
