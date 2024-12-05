@@ -557,7 +557,7 @@ html, body {
 }
 
 .edit-form input[type="text"],
-.edit-form input[type="number"],
+.edit-form input[type="integer"],
 .edit-form textarea,
 .edit-form select {
     width: 100%; /* Full width inputs */

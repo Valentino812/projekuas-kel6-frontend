@@ -120,7 +120,7 @@
                                         <i class="bi bi-gear"></i>
                                         <h3>Settings ></h3>
                                     </a>
-                                    <a ng-href="/settings/{{ accountInfo.id }}" class="account-button">
+                                    <a ng-href="/transaction/{{ accountInfo.id }}" class="account-button">
                                         <i class="bi bi-wallet2"></i>
                                         <h3>Transactions ></h3>
                                     </a>   
@@ -322,19 +322,21 @@
             </div>
         </div>
     </div>
+    
 
-        <form name="addReviewForm" class="container fade-in blur" id="add-product-form" enctype="multipart/form-data" ng-submit="submitForm()">
+    <div class="blur" ng-if="accountInfo">
+        <form name="addReviewForm" id="add-product-form" enctype="multipart/form-data" ng-submit="submitForm()">
             <div class="config-section">
                 <label>REVIEW:</label>
                 <input ng-model="review.comment" type="text" required>
             </div>
-                <!-- Submit Button -->
-                <button type="submit" id="add-product-button" class="add-to-cart">
-                    Add Review
-                </button>
-            </div>
+            <!-- Submit Button -->
+            <button type="submit" id="add-product-button" class="add-to-cart">
+                Add Review
+            </button>
         </form>
-   
+    </div>
+
 
     <!-- Footer Start -->
     <footer class="footer fade-in blur">
@@ -343,9 +345,12 @@
                 <img src="/img/brand-logo.png"/>
             </div>
             <div class="footer-menu">
-                <a href="Products/index.html" class="footer-link">Products</a>
-                <a href="/Products/indexmale.html" class="footer-link">Male</a>
-                <a href="/Products/indexfemale.html" class="footer-link">Female</a>
+                <a ng-if="!accountInfo" ng-href="/products" class="footer-link">Products</a>
+                <a ng-if="accountInfo" ng-href="/products/{{ accountInfo.id }}" class="footer-link">Products</a>
+                <a ng-if="!accountInfo" ng-href="/products/gender/male" class="footer-link">Male</a>
+                <a ng-if="accountInfo" ng-href="/products/gender/male/{{ accountInfo.id }}" class="footer-link">Male</a>
+                <a ng-if="!accountInfo" ng-href="/products/gender/female" class="footer-link">Female</a>
+                <a ng-if="accountInfo" ng-href="/products/gender/female/{{ accountInfo.id }}" class="footer-link">Female</a>
                 <a ng-if="!accountInfo" ng-href="/contact" class="footer-link">Contact</a>
                 <a ng-if="accountInfo" ng-href="/contact/{{ accountInfo.id }}" class="footer-link">Contact</a>
             </div>
