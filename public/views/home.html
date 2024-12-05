@@ -215,27 +215,51 @@
                 <span>Our Latest Product</span>    
             </div>
             <div class="products-container">
-                <div class="product">
-                    <a href ="Products/officer-shoe/produk11.html">
+                <div class="product" ng-if="!accountInfo">
+                    <a ng-href ="/products">
                         <img class="featured-img" src="/img/img1featured.jpg">    
                     </a>
-                    <a href="Products/officer-shoe/produk11.html">
+                    <a ng-href="/products">
                         <h4>Officer Shoes - Black</h4>    
                     </a>
                 </div>
-                <div class="product">
-                    <a href="Products/legetant/produk7.html">
+                <div class="product" ng-if="accountInfo">
+                    <a ng-href ="/products/{{ accountInfo.id }}">
+                        <img class="featured-img" src="/img/img1featured.jpg">    
+                    </a>
+                    <a ng-href="/products/{{ accountInfo.id }}">
+                        <h4>Officer Shoes - Black</h4>    
+                    </a>
+                </div>
+                <div class="product" ng-if="!accountInfo">
+                    <a ng-href="/products">
                         <img class="featured-img" src="/img/img2featured.jpg">    
                     </a>
-                    <a href="Products/legetant/produk7.html">
+                    <a ng-href="/products">
                         <h4>Legatant - Waxed</h4>    
                     </a>
                 </div>
-                <div class="product">
-                    <a href="Products/Marine-dress-boots/produk9.html">
+                <div class="product" ng-if="accountInfo">
+                    <a ng-href="/products/{{ accountInfo.id }}">
+                        <img class="featured-img" src="/img/img2featured.jpg">    
+                    </a>
+                    <a ng-href="/products/{{ accountInfo.id }}">
+                        <h4>Legatant - Waxed</h4>    
+                    </a>
+                </div>
+                <div class="product" ng-if="!accountInfo">
+                    <a ng-href="/products">
                         <img class="featured-img" src="/img/img3featured.jpg">    
                     </a>
-                    <a href="Products/Marine-dress-boots/produk9.html">
+                    <a ng-href="/products">
+                        <h4>Marine Dress Shoe - Shell</h4>    
+                    </a>
+                </div>
+                <div class="product" ng-if="accountInfo">
+                    <a ng-href="/products/{{ accountInfo.id }}">
+                        <img class="featured-img" src="/img/img3featured.jpg">    
+                    </a>
+                    <a ng-href="/products/{{ accountInfo.id }}">
                         <h4>Marine Dress Shoe - Shell</h4>    
                     </a>
                 </div>
