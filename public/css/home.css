@@ -204,6 +204,123 @@ html, body {
     list-style: none;
 }
 
+.cart-contents {
+    box-sizing: border-box; 
+    max-height: 60vh; 
+    overflow-y: auto; 
+    overflow-x: hidden; 
+}
+
+.cart-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    flex-grow: 1; /* Allows the item list to expand and use available space */
+    overflow-y: auto; /* Scrolls independently within the sidebar */
+    margin-bottom: 20px; /* Adds space between the list and the total/checkout section */
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-name {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 19px;
+}
+
+.cart-item-quantity {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.cart-item-subtotal {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+
+.cart-item-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.cart-quantity-btn,
+.cart-remove-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cart-quantity-btn:hover {
+    background-color: #0056b3;
+}
+
+.cart-remove-btn {
+    background-color: #dc3545;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.cart-remove-btn:hover {
+    background-color: #a71d2a;
+}
+
+.cart-total {
+    margin-top: 0px; 
+    font-size: 18px !important;
+    font-weight: bold;
+    text-align: center;
+}
+
+.checkout-btn {
+    display: block;
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 0px;
+}
+
+.checkout-btn:hover {
+    background-color: #218838;
+}
+
 .sidebar-account {
     width: 300px;
     height: 100%;
