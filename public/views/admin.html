@@ -66,7 +66,7 @@
                     <strong>Cart ID: {{ cart.id }}</strong>
                     <span class="order-status">{{ cart.status }}</span>
                     <button class="btn delete-btn" ng-click="deleteOrder(cart.id)">Delete Order</button>
-                    <button class="btn move-btn" ng-click="moveToTransaction(cart.userId)">Make as Transaction</button>
+                    <button class="btn move-btn" ng-click="moveToTransaction(cart.userId)">Mark as completed</button>
                 </div>
                 <div class="order-details">
                     <p><strong>User ID:</strong> {{ cart.userId }}</p>
