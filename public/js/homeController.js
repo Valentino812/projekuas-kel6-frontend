@@ -228,6 +228,8 @@ app.controller('HomeController', function($scope, $timeout, $routeParams,  $http
     }
     // 4.Product Carousel End
 
+
+    // SIDEBAR ACCOUNT START
     // 5.Login
     
     // Check if the 'id' is part of the route
@@ -296,6 +298,8 @@ app.controller('HomeController', function($scope, $timeout, $routeParams,  $http
         $scope.getAccountInfo($scope.userId);
     }
 
+    // SIDEBAR ACCOUNT END
+
     // SIDEBAR CART START
 
     $scope.cartItems = [];
@@ -351,7 +355,6 @@ app.controller('HomeController', function($scope, $timeout, $routeParams,  $http
             if (response.data.message) {
                 item.quantity += 1;
                 $scope.cartTotal += +item.price;
-                $scope.getProductInfo();
             } else {
                 alert(response.data.error);
             }
@@ -375,7 +378,6 @@ app.controller('HomeController', function($scope, $timeout, $routeParams,  $http
                 if (response.data.message) {
                     item.quantity -= 1;
                     $scope.cartTotal -= +item.price;
-                    $scope.getProductInfo();
                 }
             })
             .catch(function(error) {

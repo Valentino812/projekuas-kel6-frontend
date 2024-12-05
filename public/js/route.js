@@ -18,6 +18,15 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }
         })
+        .when('/transaction/:id', {
+            templateUrl: '/views/transaction.html',
+            controller: 'TransactionController',
+            resolve: {
+                load: function($ocLazyLoad) {
+                    return $ocLazyLoad.load('/js/transactionController.js');
+                }
+            }
+        })
         .when('/', {
             templateUrl: '/views/home.html',
             controller: 'HomeController',

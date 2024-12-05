@@ -390,6 +390,7 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
                     $scope.cartTotal -= $scope.cartItems[index].price * $scope.cartItems[index].quantity;
                     $scope.cartItems.splice(index, 1);
                 }
+                $scope.getProductInfo();
                 alert('Product removed from cart');
             })
             .catch(function(error) {
