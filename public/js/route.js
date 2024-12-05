@@ -144,16 +144,6 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }            
         })
-        .when('/review/:id', {
-            templateUrl: '/views/review.html',
-            controller: 'RatingController',
-            resolve: {
-                load: function($ocLazyLoad) {
-                    return $ocLazyLoad.load('/js/addReviewController.js');
-                }
-            }            
-        })
-
         .otherwise({
             redirectTo: '/'
         });

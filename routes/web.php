@@ -8,6 +8,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ReviewController;
 
 // After login routes to web page:
 Route::get('/{id}', function () {
@@ -37,6 +38,7 @@ Route::prefix('api')->group(function () {
     Route::post('/product', [ProductController::class, 'addProduct']);
     Route::get('/products', [ProductController::class, 'getAllProducts']);
     Route::get('/product/{id}', [ProductController::class, 'getProduct']);
+    Route::post('/review', [ReviewController::class, 'addReview']);
     Route::post('/add-to-cart', [OrderController::class, 'addToCart']);
     Route::post('/remove-from-cart', [OrderController::class, 'deleteFromCart']);
     Route::post('/increase-quantity', [OrderController::class, 'increaseQuantity']);

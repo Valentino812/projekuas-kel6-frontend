@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->string('img1'); 
-            $table->string('img2'); 
-            $table->integer('comment');
+            $table->string('productId'); 
+            $table->string('userId'); 
+            $table->string('comment');
             $table->timestamps();
         });
     }
