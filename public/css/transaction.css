@@ -1,0 +1,525 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%; /* Ganti dari 100vw ke 100% */
+    overflow-x: hidden;
+    background-color: #F0F0F0; /* Lighter background */
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    scroll-behavior: smooth;
+}
+
+/* Navbar Start */
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; /* Center items vertically */
+    background-color: #FFFFFF; /* Pure white background */
+    padding: 20px 40px; /* Increased padding for more space */
+    color: #333333; /* Darker text color */
+    position: relative; 
+    z-index: 1100;
+}
+
+#navbar-logo {
+    width: 55px;
+    height: 55px;
+}
+
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    padding-left: 50px;
+    gap: 20px;
+}
+
+.navbar-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; 
+    gap: 30px;
+}
+
+.navbar-menu li a {
+    text-decoration: none; 
+}
+
+.navbar-menu li h3 {
+    font-size: 22px;
+    transition: color 0.3s ease, transform 0.3s ease;
+    color: #393343;
+    font-weight: 500;
+    text-decoration: none; 
+}
+
+.navbar li h3:hover {
+    color: #FF9900; /* Brighter hover color */
+}
+
+.icons {
+    display: flex;
+    align-items: center; /* Center icons vertically */
+    gap: 12px;
+}
+
+.mobile-icons {
+    display: none; /* Hiding mobile icons */
+}
+
+.icon-container {
+    background-color: #FFFFFF; /* Pure white background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%; 
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.icon-container:hover {
+    background-color: #FF9900; /* Brighter hover color */
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.burger-menu .line {
+    width: 100%;
+    height: 3px;
+    background-color: #333;
+}
+/* Navbar End */
+
+/* Entrance Animation and Filter Start */
+.fade-in {
+    opacity: 0 !important;
+    transform: translateY(20px) !important; 
+    transition: opacity 1s ease-out, transform 1s ease-out !important;
+    will-change: opacity, transform !important;
+}
+
+/* Active state for fade-in after transition (used in the javascript for entrance animation) */
+.fade-in.active {
+    opacity: 1 !important;
+    transform: translateY(0) !important; 
+}
+
+.blur {
+    filter: none;
+    transition: filter 0.3s ease; 
+}
+
+.blur.activeblur {
+    filter: blur(1px);
+}
+/* Entrance Animation and Filter End */
+
+/* Register Section Start */
+
+.modal {
+    background-color: #FFFFFF; 
+    position: relative; 
+    width: 100%; 
+    height: auto; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 40px; 
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../img/regis-contact-bg.jpg') center center/cover no-repeat;
+    z-index: 0; 
+}
+
+.modal-content {
+    background-color: #FFFFFF; 
+    padding: 34px;
+    border-radius: 10px; 
+    width: 100%; 
+    max-width: 600px; 
+    margin: 20px auto; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+    position: relative;
+    overflow: hidden; 
+}
+
+.modal-content h2 {
+    margin-top: 0; 
+    font-size: 1.8em; 
+    color: #333; 
+    text-align: left;
+}
+
+.modal-content p {
+    font-size: 1em;
+    color: #666; 
+    text-align: justify;
+    margin-bottom: 20px; 
+}
+
+.form-group-inline {
+    display: flex;
+    gap: 15px; 
+    flex-wrap: wrap; 
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1; 
+    margin-bottom: 15px;
+    margin-top: 10px; 
+}
+
+label {
+    font-size: 0.9em; 
+    color: #333; 
+    margin-bottom: 5px; 
+    display: block;
+}
+
+input, 
+textarea {
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    padding: 10px;
+    font-size: 1em;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+input:focus, 
+textarea:focus {
+    border-color: #007bff; 
+    outline: none; 
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+}
+
+textarea {
+    min-height: 100px; 
+    height: 100px;
+    resize: none; 
+}
+
+button[type="submit"] {
+    background-color: #FF9900; 
+    color: #fff; 
+    border: none;
+    padding: 12px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; 
+    max-width: 200px; 
+    display: block;
+    transition: background-color 0.3s ease; 
+}
+
+button[type="submit"]:hover {
+    background-color: #CC7A00; /
+}
+
+button[type="submit"]:active {
+    background-color: #A65E00; 
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group-inline {
+    display: flex;
+    gap: 15px; 
+}
+
+.form-group-inline .form-group {
+    flex: 1;
+}
+
+/* Register Section End */
+
+/* Close button for navbar mobile view */
+.close-button { 
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /* Navbar Start */
+    .navbar {
+        flex-direction: column; 
+        padding: 10px; 
+        align-items: flex-start; /* Align items to the start */
+    }
+
+    .navbar-logo {
+        order: 1; 
+        padding-top: 30px;
+        padding-left: 30px;
+        margin-bottom: -40px; 
+        margin-top: 28px;
+    }
+
+    .icons {
+        display: none; /* Hiding destkop icons */
+    }
+
+    .mobile-icons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        padding: 10px 0;
+    }
+
+    .burger-menu {
+        order: 2; 
+        align-self: flex-end;
+        padding-right: 35px; 
+        margin-bottom: 20px;
+    }
+
+    .navbar-menu {
+        visibility: hidden;
+        opacity: 0;
+        flex-direction: column;
+        width: 100%;
+        background-color: #FFFFFF;
+        position: absolute;
+        padding: 20px 0;
+        order: 3; 
+        z-index: 1100;
+        border-radius: 8px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        transition: all 0.3s ease-in-out; 
+        max-height: 0; 
+        overflow: hidden; 
+    }
+
+    .navbar-menu ul {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px 20px; 
+    }
+
+    .navbar-menu li a {
+        padding: 10px 15px; 
+        border-radius: 4px;
+        transition: background-color 0.3s ease; 
+    }
+
+    .navbar-menu.active {
+        display: flex; 
+        max-height: 700px; 
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .burger-menu {
+        display: flex; 
+    }
+    /* Navbar End */
+
+    /* Contact Section Start */
+    .modal {
+        padding: 20px;
+    }
+
+    .modal-content {
+        padding: 15px;
+        width: 90%;
+        max-width: 100%;
+    }
+
+    .form-group-inline {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        width: auto;
+        font-size: 14px;
+    }
+    /* Contact Section End */
+
+    /* Tambahkan aturan untuk memastikan elemen responsif */
+    .navbar {
+        flex-direction: column; 
+        padding: 10px; 
+    }
+
+    .modal {
+        width: 95%; 
+
+    .form-group-inline {
+        flex-direction: column;
+    }
+}
+}
+
+.navbar-menu .close-button {
+    display: none;
+    font-size: 30px;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.navbar-menu.active .close-button {
+    display: block;
+}
+
+/* Footer Start */
+.footer {
+    background-color:  #17252A;
+    color: white; 
+    padding-top: 40px;
+    padding-bottom: 20px;
+    padding-left:  40px;
+    padding-right:  40px;
+    text-align: center; 
+}
+
+.footer-content {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.logo img {
+    width: 75px; 
+    height: 75px;
+}
+
+.social {
+    display: flex; 
+    flex-direction: row;
+    padding-right: 30px;
+    gap: 6px;
+}
+
+.social-icon-container {
+    background-color: #393343;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%; 
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.social-icon-container:hover {
+    background-color: #F3B552;
+}
+
+.social-icon img {
+    width: 28px;
+    height: 28px;
+}
+
+.footer-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-left: 130px;
+    gap: 70px;
+}
+
+.footer-link {
+    color: #FEFFFF; 
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600; 
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color:#F3B552;
+}
+
+.copyright {
+    font-size: 17px;
+    margin-top: 60px; 
+    color: #666;
+}
+/* Footer End */
+
+/* Adjustments For Smartphone */
+@media only screen and (max-width: 600px) {
+    .modal-content {
+        padding: 44px;
+    }
+
+    /* Footer Start */
+    .footer-content {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .social {
+        padding-right: 0px;
+    }
+
+    .footer-menu {
+        flex-direction: column;
+        padding-left: 0px;
+        gap: 10px;
+    }
+    /* Footer End */
+}
+
+/* Adjustments For Tablet */
+@media only screen and (max-width: 992px) and (min-width: 600px)
+{
+    .modal-content {
+        padding: 42px;
+    }
+
+    /* Footer Start */
+    .footer-content {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .social {
+        padding-right: 0px;
+    }
+
+    .footer-menu {
+        gap: 50px;
+        padding-left: 0px;
+    }
+    /* Footer End */
+}

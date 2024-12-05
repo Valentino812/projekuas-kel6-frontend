@@ -273,7 +273,6 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
             if (response.data.message) {
                 item.quantity += 1;
                 $scope.cartTotal += +item.price;
-                $scope.getProductInfo();
             } else {
                 alert(response.data.error);
             }
@@ -283,7 +282,6 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
             alert("The stock is unavailable")
         });
     };
-    
     
     // Decreasing the quantity of the product
     $scope.decreaseQuantity = function(item) {
@@ -297,7 +295,6 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
                 if (response.data.message) {
                     item.quantity -= 1;
                     $scope.cartTotal -= +item.price;
-                    $scope.getProductInfo();
                 }
             })
             .catch(function(error) {
