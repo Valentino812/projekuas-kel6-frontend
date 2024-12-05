@@ -38,5 +38,10 @@ app.controller('TransactionController', function($scope, $http, $routeParams, $t
     // Call getUserTransactions with the userId from the URL
     $scope.getUserTransactions($routeParams.id);
 
+    // Ensure items are displayed
+    $scope.parseItems = function(items) {
+        return items || []; // Return items or an empty array if undefined
+    };
+
     // CRUD METHODS END
 });

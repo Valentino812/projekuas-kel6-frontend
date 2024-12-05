@@ -230,7 +230,7 @@
                 <p><strong>Date:</strong> {{ transaction.datetime | date:'medium' }}</p>
                 <p><strong>Items:</strong></p>
                 <ul class="item-list">
-                    <li ng-repeat="item in transaction.items track by $index" class="item">
+                    <li ng-repeat="item in parseItems(transaction.items) track by $index" class="item">
                         <div class="item-details">
                             <p><strong>Product ID:</strong> {{ item.product_id }}</p>
                             <p><strong>Price:</strong> Rp {{ item.price | number:2 }} IDR</p>
