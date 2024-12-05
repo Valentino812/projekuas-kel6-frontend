@@ -167,52 +167,39 @@
         </div>
         <a ng-href="/admin/newProduct/{{ adminId }}" class="btn">+ Add new product</a>
       </div>
-      <div class="content-container hidden" id="content-rating">
-        <h1>Ratings</h1>
-        <p>Check product reviews and ratings here.</p>
 
-        <div ng-if="reviews.length === 0">
-            <p>No reviews found.</p>
+      <div class="content-container hidden" id="content-rating">
+        <h1>Rating</h1>
+        <p>Manage and view ratings here.</p>
+        <!-- Display done carts -->
+        <div ng-if="doneCarts.length === 0" class="no-orders">
+            <p>No completed carts found.</p>
         </div>
-        <div class="product-item-container" ng-repeat="review in reviews">
-            <!-- Review display section -->
-            <div ng-if="!review.editing">
-                <div class="product-images">
-                    <img ng-src="{{review.img1}}" alt="{{review.name}} Image 1" class="product-image">
-                    <img ng-src="{{review.img2}}" alt="{{review.name}} Image 2" class="product-image">
+        <ul ng-if="writtenReviews.length > 0" class="order-list">
+            <li ng-repeat="review in writtenReviews" class="order-item">
+                <div class="order-header">
+                    <strong>User ID: {{ review.userId }}</strong>
+                    <button class="btn delete-btn" ng-click="deleteOrder(cart.id)">Delete Order</button>
+                    <button class="btn move-btn" ng-click="moveToTransaction(cart.userId)">Mark as completed</button>
                 </div>
-                <div class="product-details">
-                    <p><strong>Comment:</strong> {{review.comment}}</p>
-                    <div class="button-group">
-                        <button class="btn edit-btn" ng-click="editReview(review)">Edit Review</button>
-                        <button class="btn delete-btn" ng-click="deleteReview(review)">Delete Review</button>
-                    </div>
+                <div class="order-details">
+                    <p><strong>Product ID:</strong> {{ review.productId }}</p>
+                    <ul class="item-list">
+                        <li ng-repeat="item in parseItems(review.items)" class="item">
+                            <div class="item-details">
+                                <p><strong>Comment:</strong> {{ review.comment }}</p>
+                                <p><strong>Price:</strong> Rp {{ item.price | number:2 }} IDR</p>
+                                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                                <p><strong>Total Price:</strong> Rp {{ item.total_price | number:2 }} IDR</p>
+                            </div>
+                            <!-- Edit Product Button -->
+                            <button class="btn edit-btn" ng-click="editProduct(item)">Edit Product</button>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-            
-            <!-- Edit form section -->
-            <div ng-if="review.editing" class="edit-form">
-                <form ng-submit="updateReview(review)">
-                    <div class="form-group">
-                        <label>Comment:</label>
-                        <textarea ng-model="review.comment" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Image 1:</label>
-                        <input type="file" file-model="review.newImg1">
-                    </div>
-                    <div class="form-group">
-                        <label>Image 2:</label>
-                        <input type="file" file-model="review.newImg2">
-                    </div>
-                    <div class="button-group">
-                        <button type="submit" class="btn save-btn">Save Changes</button>
-                        <button type="button" class="btn cancel-btn" ng-click="cancelEdit(review)">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        </div>
+            </li>
+        </ul>
+      </div>
 
       <div class="content-container hidden" id="content-transactions">
         <h1>Transactions</h1>

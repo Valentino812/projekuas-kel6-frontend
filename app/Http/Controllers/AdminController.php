@@ -114,4 +114,14 @@ class AdminController extends Controller
         return response()->json(['product' => $product], 200);
     }
 
+    public function getReview($id)
+    {
+        $review = DB::table('reviews')->where('id', $id)->first();
+        if (!$review) {
+            return response()->json(['message' => 'Review not found'], 404);
+        }
+
+        // Ensure all necessary fields, including price, are returned
+        return response()->json(['review' => $review], 200);
+    }
 }

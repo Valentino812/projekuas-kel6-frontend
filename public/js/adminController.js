@@ -227,6 +227,20 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
 
     $scope.getAllDoneCarts(); // Call this function to load done carts on page load
 
+    $scope.writtenReviews = [];
+
+    $scope.getAllWrittenReviews = function() {
+        $http.get('/api/written-reviews')
+            .then(function(response) {
+                $scope.writtenReviews = response.data.reviews;
+            })
+            .catch(function(error) {
+                console.error('Error fetching written reviews:', error);
+            });
+    };
+
+    $scope.getAllWrittenReviews();
+
     $scope.deleteOrder = function(cartId) {
         if (confirm('Are you sure you want to delete this order?')) {
             $http.delete('/api/order/' + cartId)

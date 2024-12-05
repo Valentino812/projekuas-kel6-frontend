@@ -33,4 +33,40 @@ class ReviewController extends Controller
 
         return response()->json(['success' => 'Review added successfully'], 200);
     }
+
+    public function getAllReviews(Request $request)
+    {
+        $query = Review::query();
+
+        $reviews = $query->get();
+
+        // Modify the response 
+        $reviewsArray = $reviews->map(function ($review) {
+            return [
+                'productId' => $review->productId,
+                'userId' => $review->userId,
+                'comment' => $review->comment,
+            ];
+        });
+
+        return response()->json(['reviews' => $reviewsArray], 200);
+    }
+
+    public function getAllWrittenReviews()
+    {
+        $query = Review::query();
+
+        $reviews = $query->get();
+
+        $reviewsArray = $reviews->map(function ($review) {
+            return [
+                'id' => $review->id,
+                'productId' => $review->productId,
+                'userId' => $review->userId,
+                'comment' => $review->comment,
+            ];
+        });
+
+        return response()->json(['reviews' => $reviewsArray], 200);
+    }
 }
