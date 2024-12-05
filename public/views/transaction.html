@@ -51,11 +51,7 @@
         <div class="modal-content">
             <h2>Transaction History</h2>
             <p>View your transaction history</p>
-
-            <!-- Display Transaction Data Start -->
-            <div class="transaction-data">
-                <h2>Your Transactions</h2>
-                <ul>
+                <ul ng-if="transactions.length > 0">
                     <li ng-repeat="transaction in transactions">
                         <p>Transaction ID: {{ transaction.id }}</p>
                         <p>Total: {{ transaction.total }}</p>
@@ -69,6 +65,10 @@
                             </li>
                         </ul>
                     </li>
+                </ul>
+
+                <ul ng-if="transactions.length === 0">
+                    <h4>You have no transactions</h4>
                 </ul>
             </div>
             <!-- Display Transaction Data End -->
