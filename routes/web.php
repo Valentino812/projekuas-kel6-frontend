@@ -47,10 +47,12 @@ Route::prefix('api')->group(function () {
     Route::post('/update-product/{id}', [AdminController::class, 'updateProduct']);
     Route::delete('/delete-product/{id}', [AdminController::class, 'deleteProduct']);
     Route::post('/move-to-transaction', [OrderController::class, 'moveToTransaction']);
-    Route::get('/api/transactions', [TransactionController::class, 'getAllTransactions']);
+    Route::get('/transactions', [TransactionController::class, 'getAllTransactions']);
     Route::post('/move-cart-to-transaction', [OrderController::class, 'moveCartToTransaction']);
     Route::get('/done-carts', [OrderController::class, 'getAllDoneCarts']);
     Route::delete('/order/{id}', [OrderController::class, 'deleteOrder']);
+    Route::get('/api/carts', [OrderController::class, 'getAllCarts']);
+    Route::get('/transactions/{id}', [TransactionController::class, 'getTransactions']);
 });
 
 // Fallback route for AngularJS

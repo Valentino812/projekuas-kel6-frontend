@@ -58,5 +58,22 @@ app.controller('TransactionController', function($scope, $http, $routeParams, $t
                 $scope.successMessage = '';
             });
     };
+
+    // Fetching cart data from the server
+    $scope.getTransactions = function() {
+        const userId = $routeParams.userId; // Get user ID from route parameters
+        $http.get(`/api/transactions` + userId)
+            .then(function(response) {
+                $scope.transactions = response.data;
+                console.log('Transactions:', $scope.transactions); // Log the transactions to the console
+            })
+            .catch(function(error) {
+                console.error('Error fetching carts:', error);
+            });
+    };
+
+    // Call fetchCarts when the controller is initialized
+    $scope.getTransactions();
+
     // CRUD METHODS END
 });

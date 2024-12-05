@@ -67,6 +67,7 @@
                     <strong>Cart ID: {{ cart.id }}</strong>
                     <span class="order-status">{{ cart.status }}</span>
                     <button class="btn delete-btn" ng-click="deleteOrder(cart.id)">Delete Order</button>
+                    <button class="btn move-btn" ng-click="moveToTransaction(cart.userId)">Make as Transaction</button>
                 </div>
                 <div class="order-details">
                     <p><strong>User ID:</strong> {{ cart.userId }}</p>
@@ -220,13 +221,24 @@
         <div ng-if="transactions.length === 0">
             <p>No transactions found.</p>
         </div>
-        <ul ng-if="transactions.length > 0">
-            <li ng-repeat="transaction in transactions">
+        <ul ng-if="transactions.length > 0" class="transaction-list">
+            <li ng-repeat="transaction in transactions track by transaction.id" class="transaction-item">
                 <strong>Transaction ID: {{ transaction.id }}</strong>
                 <p><strong>User ID:</strong> {{ transaction.userId }}</p>
                 <p><strong>Total:</strong> Rp {{ transaction.total | number:2 }} IDR</p>
                 <p><strong>Status:</strong> {{ transaction.status }}</p>
-                <p><strong>Items:</strong> {{ transaction.items }}</p>
+                <p><strong>Date:</strong> {{ transaction.datetime | date:'medium' }}</p>
+                <p><strong>Items:</strong></p>
+                <ul class="item-list">
+                    <li ng-repeat="item in transaction.items track by $index" class="item">
+                        <div class="item-details">
+                            <p><strong>Product ID:</strong> {{ item.product_id }}</p>
+                            <p><strong>Price:</strong> Rp {{ item.price | number:2 }} IDR</p>
+                            <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                            <p><strong>Total Price:</strong> Rp {{ item.total_price | number:2 }} IDR</p>
+                        </div>
+                    </li>
+                </ul>
             </li>
         </ul>
       </div>
