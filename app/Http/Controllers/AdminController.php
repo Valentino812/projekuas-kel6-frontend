@@ -43,6 +43,13 @@ class AdminController extends Controller
 
     public function updateProduct(Request $request, $id)
     {
+        // Fetch the existing product details
+        $product = DB::table('products')->where('id', $id)->first();
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        // Validate the incoming request
         $validator = Validator::make($request->all(), [
             'name' => 'string',
             'price' => 'integer',
@@ -56,11 +63,6 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $product = DB::table('products')->where('id', $id)->first();
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
         }
 
         $updateData = [];
@@ -99,6 +101,17 @@ class AdminController extends Controller
         DB::table('products')->where('id', $id)->delete();
 
         return response()->json(['message' => 'Product deleted successfully'], 200);
+    }
+
+    public function getProduct($id)
+    {
+        $product = DB::table('products')->where('id', $id)->first();
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        // Ensure all necessary fields, including price, are returned
+        return response()->json(['product' => $product], 200);
     }
 
 }

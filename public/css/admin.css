@@ -475,16 +475,12 @@ html, body {
 }
 
 .order-item {
-    background-color: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 15px;
     padding: 15px;
-    transition: box-shadow 0.3s;
-}
-
-.order-item:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .order-header {
@@ -492,22 +488,109 @@ html, body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #333;
 }
 
-.order-status {
-    background-color: #3498db;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 3px;
-    font-size: 0.9em;
+.order-details {
+    margin-top: 10px;
 }
 
-.order-details p {
-    margin: 5px 0;
+.item-list {
+    list-style-type: none;
+    padding: 0;
 }
 
-.no-orders {
-    text-align: center;
-    color: #888;
-    font-style: italic;
+.item {
+    border-top: 1px solid #eee;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-details {
+    flex-grow: 1;
+}
+
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+    margin-left: 10px;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* Add these styles to improve the edit form appearance */
+.edit-form {
+    background-color: #f9f9f9; /* Light background for contrast */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding for spacing */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    margin-top: 20px; /* Space above the form */
+}
+
+.edit-form .form-group {
+    margin-bottom: 15px; /* Space between form groups */
+}
+
+.edit-form label {
+    font-weight: bold; /* Bold labels for emphasis */
+    display: block; /* Block display for alignment */
+    margin-bottom: 5px; /* Space below labels */
+}
+
+.edit-form input[type="text"],
+.edit-form input[type="number"],
+.edit-form textarea,
+.edit-form select {
+    width: 100%; /* Full width inputs */
+    padding: 8px; /* Padding inside inputs */
+    border: 1px solid #ccc; /* Border for inputs */
+    border-radius: 4px; /* Rounded input corners */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.edit-form .button-group {
+    display: flex; /* Flexbox for button alignment */
+    justify-content: space-between; /* Space between buttons */
+    margin-top: 20px; /* Space above buttons */
+}
+
+.edit-form .btn {
+    padding: 10px 20px; /* Button padding */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Rounded button corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth background transition */
+}
+
+.edit-form .save-btn {
+    background-color: #28a745; /* Green background */
+    color: white; /* White text */
+}
+
+.edit-form .cancel-btn {
+    background-color: #dc3545; /* Red background */
+    color: white; /* White text */
+}
+
+.edit-form .btn:hover {
+    opacity: 0.9; /* Slightly transparent on hover */
 }

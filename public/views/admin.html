@@ -72,12 +72,16 @@
                     <p><strong>User ID:</strong> {{ cart.userId }}</p>
                     <p><strong>Total:</strong> Rp {{ cart.total | number:2 }} IDR</p>
                     <p><strong>Items:</strong></p>
-                    <ul>
-                        <li ng-repeat="item in parseItems(cart.items)">
-                            <p><strong>Product ID:</strong> {{ item.product_id }}</p>
-                            <p><strong>Price:</strong> Rp {{ item.price | number:2 }} IDR</p>
-                            <p><strong>Quantity:</strong> {{ item.quantity }}</p>
-                            <p><strong>Total Price:</strong> Rp {{ item.total_price | number:2 }} IDR</p>
+                    <ul class="item-list">
+                        <li ng-repeat="item in parseItems(cart.items)" class="item">
+                            <div class="item-details">
+                                <p><strong>Product ID:</strong> {{ item.product_id }}</p>
+                                <p><strong>Price:</strong> Rp {{ item.price | number:2 }} IDR</p>
+                                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                                <p><strong>Total Price:</strong> Rp {{ item.total_price | number:2 }} IDR</p>
+                            </div>
+                            <!-- Edit Product Button -->
+                            <button class="btn edit-btn" ng-click="editProduct(item)">Edit Product</button>
                         </li>
                     </ul>
                 </div>

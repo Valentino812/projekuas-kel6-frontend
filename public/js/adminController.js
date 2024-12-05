@@ -98,16 +98,26 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
     $scope.getOrders();
 
     $scope.editProduct = function(product) {
-        product.editing = true;
-        // Store original values in case of cancel
-        product.original = {
-            name: product.name,
-            price: product.price,
-            type: product.type,
-            gender: product.gender,
-            description: product.description,
-            stock: product.stock
-        };
+        // Fetch the latest product details from the server
+        $http.get('/api/product/' + product.id)
+            .then(function(response) {
+                // Update the product with the fetched data
+                Object.assign(product, response.data.product);
+                product.editing = true;
+                // Store original values in case of cancel
+                product.original = {
+                    name: product.name,
+                    price: product.price,
+                    type: product.type,
+                    gender: product.gender,
+                    description: product.description,
+                    stock: product.stock
+                };
+            })
+            .catch(function(error) {
+                console.error('Error fetching product details:', error);
+                alert('Failed to fetch product details. Please try again.');
+            });
     };
 
     $scope.cancelEdit = function(product) {
