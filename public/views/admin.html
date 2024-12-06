@@ -117,7 +117,7 @@
             
             <!-- Edit form section -->
             <div ng-if="product.editing" class="edit-form">
-                <form ng-submit="updateProduct(product)">
+                <form ng-submit="updateProduct(product, $event)">
                     <div class="form-group">
                         <label>Name:</label>
                         <input type="text" ng-model="product.name" required>
@@ -148,7 +148,7 @@
                     </div>
                     <div class="form-group">
                         <label>Stock:</label>
-                        <input type="number" ng-model="product.stock" required>
+                        <input type="integer" ng-model="product.stock" required>
                     </div>
                     <div class="form-group">
                         <label>Image 1 (upload new image if want to change):</label>

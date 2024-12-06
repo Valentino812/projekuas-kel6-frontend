@@ -129,7 +129,10 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
         delete product.newImg2;
     };
 
-    $scope.updateProduct = function(product) {
+    $scope.updateProduct = function(product, event) {
+
+        if (event) event.preventDefault();
+
         var formData = new FormData();
         
         // Append text data
@@ -150,7 +153,8 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
 
         $http.post('/api/update-product/' + product.id, formData, {
             transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
+            headers: {'Content-Type': undefined},
+            timeout: 30000
         })
         .then(function(response) {
             alert('Product updated successfully!');
@@ -229,17 +233,17 @@ app.controller('AdminController', function($scope, $timeout, $routeParams, $http
 
     $scope.writtenReviews = [];
 
-    $scope.getAllWrittenReviews = function() {
-        $http.get('/api/written-reviews')
-            .then(function(response) {
-                $scope.writtenReviews = response.data.reviews;
-            })
-            .catch(function(error) {
-                console.error('Error fetching written reviews:', error);
-            });
-    };
+    // $scope.getAllWrittenReviews = function() {
+    //     $http.get('/api/written-reviews')
+    //         .then(function(response) {
+    //             $scope.writtenReviews = response.data.reviews;
+    //         })
+    //         .catch(function(error) {
+    //             console.error('Error fetching written reviews:', error);
+    //         });
+    // };
 
-    $scope.getAllWrittenReviews();
+    // $scope.getAllWrittenReviews();
 
     $scope.deleteOrder = function(cartId) {
         if (confirm('Are you sure you want to delete this order?')) {
