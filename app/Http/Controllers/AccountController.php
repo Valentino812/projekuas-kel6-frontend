@@ -28,7 +28,7 @@ class AccountController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation failed',
+                'message' => 'The password field must be at least 8 characters. ',
                 'errors' => $validator->errors(),
             ], 422); // Unprocessable Entity
         }
