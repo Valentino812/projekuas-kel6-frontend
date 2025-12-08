@@ -124,6 +124,7 @@ header nav ul li a {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 .hero-text h1 {
@@ -903,9 +904,22 @@ footer {
     display: flex;
     justify-content: flex-end; 
     margin: 20px 50px;
+    gap: 10px;
 }
 
 #sort-select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#gender-filter {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#type-filter {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
