@@ -20,7 +20,7 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
     });
     // 1.Entrance Transition End
 
-    // 2.Navbar and sidebar
+    // 2.Navbar and sidebar Start
     const burgerMenu = document.getElementById('burger-menu');
     const navbarMenu = document.querySelector('.navbar-menu');
     const closeButton = document.getElementById('close-button');
@@ -60,8 +60,59 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
         navbarMenu.classList.remove('active');
         burgerMenu.classList.remove('active');
     });
+    // 2.Navbar and sidebar End
 
-    // 2.Account, cart, and forgot sidebar:
+    // 2.Hero Carousel Start 
+    let currentIndex = 0;
+    let autoSlideHero;
+
+    function heroCorouselSlide(index) {
+        const carousel = document.querySelector('.carousel-hero');
+        const totalSlides = document.querySelectorAll('.carousel-hero img').length;
+
+        if (index >= totalSlides) {
+            currentIndex = 0;
+        } else if (index < 0) {
+            currentIndex = totalSlides - 1;
+        } else {
+            currentIndex = index;
+        }
+
+        const offset = -currentIndex * 100;
+        carousel.style.transform = `translateX(${offset}%)`;
+    }
+
+    function nextSlide() {
+        heroCorouselSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+        heroCorouselSlide(currentIndex - 1);
+    }
+
+    // Resetting the hero carousel auto slide interval
+    function resetAutoSlide() {
+        clearInterval(autoSlideHero); 
+        autoSlideHero = setInterval(nextSlide, 8000); 
+    }
+
+    // Hero carousel slides automatically every 8 seconds
+    autoSlideHero = setInterval(nextSlide, 8000);
+
+    // Reset interval when button is clicked
+    document.querySelector('.next').addEventListener('click', () => {
+        nextSlide();
+        resetAutoSlide();  
+    });
+
+    // Reset interval when button is clicked
+    document.querySelector('.prev').addEventListener('click', () => {
+        prevSlide();
+        resetAutoSlide();  
+    });
+    // 2.Hero Carousel End
+
+    // 3.Navbar Sidebar Start
 
     // Button to open sidebar cart (Destkop)
     cartButton.addEventListener('click', () => {
@@ -108,9 +159,9 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
     closeForgotButton.addEventListener('click', () => {
         sidebarForgot.classList.remove('active');
     });
-    // 2.Navbar and sidebar
+    // 3.Navbar and Sidebar End
 
-    // 5.Login
+    // 4.Login Start
     
     // Check if the 'id' is part of the route
     $scope.userId = $routeParams.id;
