@@ -161,35 +161,61 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
     });
     // 3.Navbar and Sidebar End
 
-    // 4.Login Start
+   // SIDEBAR ACCOUNT START
     
-    // Check if the 'id' is part of the route
-    $scope.userId = $routeParams.id;
+    // Initialization
+    $scope.userId = null; 
+    $scope.showLoginForm = true; 
+    $scope.accountInfo = {};
+    
+    $scope.errorMessage = '';
+    $scope.successMessage = '';
+    $scope.loginData = {}; 
 
-    // Derterment what to show on sidebar account (login form or account info)
-    $scope.showLoginForm = !$scope.userId;
+    // Check Login Status & Get Account Info
+    $scope.checkLoginStatus = function() {
+        $http.get('/api/account-info')
+            .then(function(response) {
+                // User is logged in
+                $scope.accountInfo = response.data.account;
+                $scope.userId = response.data.account._id; 
+                $scope.showLoginForm = false; 
+            
+            })
+            .catch(function(error) {
+                // User is NOT logged in 
+                $scope.showLoginForm = true; 
+                $scope.userId = null;
+            });
+    };
 
+    // Login Function 
     $scope.login = function() {
-        const routeName = 'homeLogin'; 
+        const routeName = 'products'; 
+        
         $http.post('/api/login', {
-            email: $scope.login.email,
-            password: $scope.login.password,
+            email: $scope.loginData.email,     
+            password: $scope.loginData.password,
             redirect_route: routeName
         })
         .then(function(response) {
-            $scope.successMessage = response.data.message;;
+            $scope.successMessage = response.data.message;
             $scope.errorMessage = '';
-            $scope.login = {};
+            $scope.loginData = {}; // Clearing login form
 
-            // Redirect user to the provided URL
+            // Redirect logic
             if (response.data.redirect_url) {
                 window.location.href = response.data.redirect_url;
+            } else {
+                // Reload the account info
+                $scope.checkLoginStatus();
             }
         })
         .catch(function(error) {
-            console.error('Error:', error);
+            console.error('Login Error:', error);
             if (error.data && error.data.errors) {
-                $scope.errorMessage = Object.values(error.data.errors).join(' ');
+                // Handle Laravel validation errors array
+                $scope.errorMessage = Object.values(error.data.errors).flat().join(' ');
             } else if (error.data && error.data.message) {
                 $scope.errorMessage = error.data.message;
             } else {
@@ -199,75 +225,22 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
         });
     }
 
-    if($scope.userId){
-        $scope.getAccountInfo = function(userId) {
-        
-            $http.get('/api/account-info/' + userId)
-                .then(function(response) {
-                    // console.log('Response from API:', response); 
-                    $scope.accountInfo = response.data.account;
-                    // console.log('Account Info:', $scope.accountInfo); 
-                    $scope.errorMessage = '';
-                })
-                .catch(function(error) {
-                    console.error('Error:', error);
-                    if (error.data && error.data.message) {
-                        $scope.errorMessage = error.data.message;
-                    } else {
-                        $scope.errorMessage = 'An error occurred. Please try again.';
-                    }
-                });
-        };
-        
-        // Call getAccountInfo 
-        $scope.getAccountInfo($scope.userId);
-    }
-
-    $scope.products = [];
-    $scope.filteredProducts = [];
-    $scope.searchQuery = '';
-    $scope.selectedGender = '';
-    $scope.selectedType = '';
-    $scope.sortCriteria = '';
-
-    if($routeParams.gender){
-        $scope.selectedGender = $routeParams.gender;
-    }
-
-    $scope.getAllProducts = function() {
-        const params = {
-            search: $scope.searchQuery,
-            gender: $scope.selectedGender,
-            type: $scope.selectedType
-        };
-        $http.get('/api/products', { params: params })
+    // Logout Function 
+    $scope.logout = function() {
+        $http.post('/api/logout')
             .then(function(response) {
-                $scope.products = response.data.products;
-                $scope.filteredProducts = $scope.products; // Initialize filtered products
-                $scope.sortProducts($scope.sortCriteria); 
-            })
-            .catch(function(error) {
-                console.error('Error fetching products:', error);
+                // On success, reset state to guest mode
+                $scope.userId = null;
+                $scope.accountInfo = {};
+                $scope.showLoginForm = true;
+                window.location.href = '/';
             });
-    };
+    }
 
-    $scope.filterProducts = function() {
-        $scope.getAllProducts(); // Fetch products with the current filters
-    };
+    // Checking if user is already logged in
+    $scope.checkLoginStatus();
 
-    $scope.sortProducts = function(criteria) {
-        if (criteria === 'price') {
-            $scope.filteredProducts.sort((a, b) => b.price - a.price);
-        } else if (criteria === 'price-low-to-high') {
-            $scope.filteredProducts.sort((a, b) => a.price - b.price);
-        } else if (criteria === 'alphabetical') {
-            $scope.filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (criteria === 'reverse-alphabetical') {
-            $scope.filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-        }
-    };
-
-    $scope.getAllProducts();
+    // SIDEBAR ACCOUNT END
 
     // SIDEBAR CART START
 
@@ -276,11 +249,7 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
 
     // Getting cartItems from the database
     $scope.getCartItems = function() {
-        const data = {
-            userId: $scope.userId
-        };
-
-        $http.post('/api/get-cart-items', data)
+        $http.post('/api/get-cart-items')
             .then(function(response) {
                 if (response.data.items && response.data.items.length > 0) {
                     // Map database items to the format used in the frontend
@@ -312,13 +281,11 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
         $scope.getCartItems();  
     }
 
-    
     // Increasing the quantity of the product
     $scope.increaseQuantity = function(item) {
         $http.post('/api/increase-quantity', {
             productId: item.id,
             quantity: 1,
-            userId: $scope.userId
         })
         .then(function(response) {
             if (response.data.message) {
@@ -340,7 +307,6 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
             $http.post('/api/decrease-quantity', {
                 productId: item.id,
                 quantity: 1,
-                userId: $scope.userId
             })
             .then(function(response) {
                 if (response.data.message) {
@@ -359,7 +325,6 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
     // Remove product from cart
     $scope.removeFromCart = function(product) {
         const data = {
-            userId: $scope.userId,
             product_id: product.id
         };
 
@@ -395,11 +360,7 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
             return;
         }
     
-        const orderData = {
-            userId: $scope.userId,
-        };
-    
-        $http.post('/api/checkout', orderData)
+        $http.post('/api/checkout', {})
             .then(function(response) {
                 alert('Order placed successfully!');
                 // Clear the cart after successful checkout

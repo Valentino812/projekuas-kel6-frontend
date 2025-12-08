@@ -10,19 +10,19 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ReviewController;
 
-// After login routes to web page:
-Route::get('/{id}', function () {
+// Route namings
+Route::get('/', function () {
     return view('layouts.app');
-})->name('homeLogin');
+})->name('home');
 Route::get('/contact/{id}', function () {
     return view('layouts.app');
-})->name('contactLogin');
+})->name('contact');
 Route::get('/admin/{id}', function () {
     return view('layouts.app');
 })->name('admin');
 Route::get('/products/{id}', function () {
     return view('layouts.app');
-})->name('productsLogin');
+})->name('products');
 
 // API Routes (for CRUD operations)
 Route::prefix('api')->group(function () {
@@ -30,32 +30,54 @@ Route::prefix('api')->group(function () {
     Route::post('/login', [AccountController::class, 'login']);
     Route::post('/contact', [ContactController::class, 'contact']);
     Route::get('/contacts', [ContactController::class, 'getAllContacts']);
-    Route::get('/account-info/{id}', [AccountController::class, 'getAccountInfo']);
+    // Route::get('/account-info/{id}', [AccountController::class, 'getAccountInfo']);
     Route::post('/admin-login', [AdminController::class, 'adminLogin']);
-    Route::patch('/accountInfo-update/{id}', [AccountController::class, 'updateAccountInfo']);
-    Route::patch('/accountLogin-update/{id}', [AccountController::class, 'updateAccountLogin']);
-    Route::delete('/accountDelete/{id}', [AccountController::class, 'deleteAccount']);
+    // Route::patch('/accountInfo-update/{id}', [AccountController::class, 'updateAccountInfo']);
+    // Route::patch('/accountLogin-update/{id}', [AccountController::class, 'updateAccountLogin']);
+    // Route::delete('/accountDelete/{id}', [AccountController::class, 'deleteAccount']);
     Route::post('/product', [ProductController::class, 'addProduct']);
     Route::get('/products', [ProductController::class, 'getAllProducts']);
     Route::get('/product/{id}', [ProductController::class, 'getProduct']);
     Route::post('/review', [ReviewController::class, 'addReview']);
-    Route::post('/add-to-cart', [OrderController::class, 'addToCart']);
-    Route::post('/remove-from-cart', [OrderController::class, 'deleteFromCart']);
-    Route::post('/increase-quantity', [OrderController::class, 'increaseQuantity']);
-    Route::post('/decrease-quantity', [OrderController::class, 'decreaseQuantity']);
-    Route::post('/checkout', [OrderController::class, 'checkout']);
-    Route::post('/get-cart-items', [OrderController::class, 'getCartItems']); 
+    // Route::post('/add-to-cart', [OrderController::class, 'addToCart']);
+    // Route::post('/remove-from-cart', [OrderController::class, 'deleteFromCart']);
+    // Route::post('/increase-quantity', [OrderController::class, 'increaseQuantity']);
+    // Route::post('/decrease-quantity', [OrderController::class, 'decreaseQuantity']);
+    // Route::post('/checkout', [OrderController::class, 'checkout']);
+    // Route::post('/get-cart-items', [OrderController::class, 'getCartItems']); 
     Route::get('/api/orders', [AdminController::class, 'getOrders']);
     Route::post('/update-product/{id}', [AdminController::class, 'updateProduct']);
     Route::delete('/delete-product/{id}', [AdminController::class, 'deleteProduct']);
     Route::post('/move-to-transaction', [OrderController::class, 'moveToTransaction']);
-    Route::get('/transactions', [TransactionController::class, 'getAllTransactions']);
-    Route::get('/user-transactions/{id}', [TransactionController::class, 'getTransactions']);
-    Route::post('/move-cart-to-transaction', [OrderController::class, 'moveCartToTransaction']);
-    Route::get('/done-carts', [OrderController::class, 'getAllDoneCarts']);
-    Route::delete('/order/{id}', [OrderController::class, 'deleteOrder']);
+    // Route::get('/transactions', [TransactionController::class, 'getAllTransactions']);
+    // Route::get('/user-transactions/{id}', [TransactionController::class, 'getTransactions']);
+    // Route::get('/done-carts', [OrderController::class, 'getAllDoneCarts']);
+    // Route::delete('/order/{id}', [OrderController::class, 'deleteOrder']);
     Route::get('/api/carts', [OrderController::class, 'getAllCarts']);
     Route::get('/transactions/{id}', [TransactionController::class, 'getTransactions']);
+    
+    // Protected Pages
+    // Route::get('/admin', function () { return view('layouts.app'); })->name('admin');
+
+    // Protected API Routes
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/account-info', [AccountController::class, 'getAccountInfo']);
+        Route::patch('/account-info', [AccountController::class, 'updateAccountInfo']);
+        Route::post('/logout', [AccountController::class, 'logout']);
+        Route::patch('/accountInfo-update', [AccountController::class, 'updateAccountInfo']);
+        Route::patch('/accountLogin-update', [AccountController::class, 'updateAccountLogin']);
+        Route::delete('/accountDelete', [AccountController::class, 'deleteAccount']);
+
+        Route::post('/get-cart-items', [OrderController::class, 'getCartItems']); 
+        Route::post('/add-to-cart', [OrderController::class, 'addToCart']);
+        Route::post('/remove-from-cart', [OrderController::class, 'deleteFromCart']);
+        Route::post('/increase-quantity', [OrderController::class, 'increaseQuantity']);
+        Route::post('/decrease-quantity', [OrderController::class, 'decreaseQuantity']);
+        Route::delete('/order', [OrderController::class, 'deleteOrder']);
+        Route::post('/checkout', [OrderController::class, 'checkout']);
+
+        Route::get('/user-transactions', [TransactionController::class, 'getTransactions']);
+    });  
 });
 
 // Fallback route for AngularJS

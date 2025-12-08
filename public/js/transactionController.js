@@ -1,4 +1,4 @@
-app.controller('TransactionController', function($scope, $http, $routeParams, $timeout) {
+app.controller('TransactionController', function($scope, $http, $timeout) {
     // VIEWS START
     // Using jQuery to change an element's style after the page is loaded
     $scope.$on('$viewContentLoaded', function() {
@@ -24,8 +24,8 @@ app.controller('TransactionController', function($scope, $http, $routeParams, $t
     // VIEWS END
 
     // Fetching transactions for a specific user from the server
-    $scope.getUserTransactions = function(userId) {
-        $http.get('/api/user-transactions/' + userId)
+    $scope.getUserTransactions = function() {
+        $http.get('/api/user-transactions/')
             .then(function(response) {
                 $scope.transactions = response.data;
                 console.log('User Transactions:', $scope.transactions); // Log the transactions to the console
@@ -35,8 +35,8 @@ app.controller('TransactionController', function($scope, $http, $routeParams, $t
             });
     };
 
-    // Call getUserTransactions with the userId from the URL
-    $scope.getUserTransactions($routeParams.id);
+    // Call getUserTransactions 
+    $scope.getUserTransactions();
 
     // Ensure items are displayed
     $scope.parseItems = function(items) {

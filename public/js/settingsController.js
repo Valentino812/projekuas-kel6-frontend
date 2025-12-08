@@ -34,49 +34,40 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
         burgerMenu.classList.remove('active');
     });
 
-
-
     $scope.updateAccount = function() {
         console.log($scope.accountData);
     };
 
-    // Check if the 'id' is part of the route
-    $scope.userId = $routeParams.id;
+    $scope.getAccountInfo = function() {
+    
+        $http.get('/api/account-info/')
+            .then(function(response) {
+                $scope.accountInfo = response.data.account;
 
-    if($scope.userId){
-        $scope.errorMessage = '';
-        $scope.successMessage = '';
+                // Pre-fill accountData with the fetched account information
+                $scope.accountData = {
+                    first_name: $scope.accountInfo.first_name || '', 
+                    last_name: $scope.accountInfo.last_name || '',
+                    email: $scope.accountInfo.email || '',
+                    password: '', 
+                    new_password: ''
+                };
 
-        $scope.getAccountInfo = function(userId) {
-        
-            $http.get('/api/account-info/' + userId)
-                .then(function(response) {
-                    $scope.accountInfo = response.data.account;
-
-                    // Pre-fill accountData with the fetched account information
-                    $scope.accountData = {
-                        first_name: $scope.accountInfo.first_name || '', 
-                        last_name: $scope.accountInfo.last_name || '',
-                        email: $scope.accountInfo.email || '',
-                        password: '', 
-                        new_password: ''
-                    };
-
-                    $scope.errorMessage = '';
-                })
-                .catch(function(error) {
-                    console.error('Error:', error);
-                    if (error.data && error.data.message) {
-                        $scope.errorMessage = error.data.message;
-                    } else {
-                        $scope.errorMessage = 'An error occurred. Please try again.';
-                    }
-                });
-        };
-        
-        // Call getAccountInfo 
-        $scope.getAccountInfo($scope.userId);
-    }
+                $scope.errorMessage = '';
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                if (error.data && error.data.message) {
+                    $scope.errorMessage = error.data.message;
+                } else {
+                    $scope.errorMessage = 'An error occurred. Please try again.';
+                }
+            });
+    };
+    
+    // Call getAccountInfo 
+    $scope.getAccountInfo();
+    
 
     $scope.errorMessageInfo = '';
     $scope.successMessageInfo = '';
@@ -84,7 +75,7 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
     // Update Account Info (First Name and Last Name)
     $scope.accountInfoUpdate = function () {
         // Send only the first_name and last_name properties from accountData
-        $http.patch('/api/accountInfo-update/' + $scope.userId, {
+        $http.patch('/api/accountInfo-update/', {
             first_name: $scope.accountData.first_name,
             last_name: $scope.accountData.last_name
         })
@@ -107,7 +98,7 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
 
     // Update Login Info (Email and Password)
     $scope.accountLoginUpdate = function () {
-        $http.patch('/api/accountLogin-update/' + $scope.userId, {
+        $http.patch('/api/accountLogin-update/', {
             email: $scope.accountData.email,
             password: $scope.accountData.password,
             new_password: $scope.accountData.new_password,
@@ -136,7 +127,7 @@ app.controller('SettingsController', function($scope, $timeout, $http, $routePar
     $scope.successMessageDelete = '';
 
     $scope.deleteAccount = function () {
-        $http.delete('/api/accountDelete/' + $scope.userId, {
+        $http.delete('/api/accountDelete/', {
             data: { password: $scope.accountDeleteData.password }, 
             headers: { 'Content-Type': 'application/json' }
         })

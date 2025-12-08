@@ -4,14 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
-    public function getTransactions($id)
+    public function getTransactions()
     {
-        $transactions = Transaction::where('userId', $id)->get(); // Fetch transactions for the specific user
+        // User Authentication
+        $user = Auth::user(); 
 
-        return response()->json($transactions); // Return the transactions as a JSON response
+        // Fetch transactions for the specific user
+        $transactions = Transaction::where('userId', $user->id)->get();
+
+        // Return the transactions as a JSON response
+        return response()->json($transactions);
     }
 
     public function getAllTransactions()
