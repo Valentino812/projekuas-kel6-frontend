@@ -135,37 +135,61 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
         });
     };
 
-    // LOGIN
-    // Check if the 'id' is part of the route
-    $scope.userId = $routeParams.id;
-
-    // Derterment what to show on sidebar account (login form or account info)
-    $scope.showLoginForm = !$scope.userId;
-
+    // SIDEBAR ACCOUNT START
+    
+    // Initialization
+    $scope.userId = null; 
+    $scope.showLoginForm = true; 
+    $scope.accountInfo = {};
+    
     $scope.errorMessage = '';
     $scope.successMessage = '';
+    $scope.loginData = {}; 
 
+    // Check Login Status & Get Account Info
+    $scope.checkLoginStatus = function() {
+        $http.get('/api/account-info')
+            .then(function(response) {
+                // User is logged in
+                $scope.accountInfo = response.data.account;
+                $scope.userId = response.data.account._id; 
+                $scope.showLoginForm = false; 
+            
+            })
+            .catch(function(error) {
+                // User is NOT logged in 
+                $scope.showLoginForm = true; 
+                $scope.userId = null;
+            });
+    };
+
+    // Login Function 
     $scope.login = function() {
-        const routeName = 'contactLogin'; 
+        const routeName = 'contact'; 
+        
         $http.post('/api/login', {
-            email: $scope.login.email,
-            password: $scope.login.password,
+            email: $scope.loginData.email,     
+            password: $scope.loginData.password,
             redirect_route: routeName
         })
         .then(function(response) {
-            $scope.successMessage = response.data.message;;
+            $scope.successMessage = response.data.message;
             $scope.errorMessage = '';
-            $scope.login = {};
+            $scope.loginData = {}; // Clearing login form
 
-            // Redirect user to the provided URL
+            // Redirect logic
             if (response.data.redirect_url) {
                 window.location.href = response.data.redirect_url;
+            } else {
+                // Reload the account info
+                $scope.checkLoginStatus();
             }
         })
         .catch(function(error) {
-            console.error('Error:', error);
+            console.error('Login Error:', error);
             if (error.data && error.data.errors) {
-                $scope.errorMessage = Object.values(error.data.errors).join(' ');
+                // Handle Laravel validation errors array
+                $scope.errorMessage = Object.values(error.data.errors).flat().join(' ');
             } else if (error.data && error.data.message) {
                 $scope.errorMessage = error.data.message;
             } else {
@@ -175,30 +199,22 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
         });
     }
 
-    if($scope.userId){
-        $scope.getAccountInfo = function(userId) {
-            // console.log('Fetching Account Info for User ID:', userId);
-        
-            $http.get('/api/account-info/' + userId)
-                .then(function(response) {
-                    // console.log('Response from API:', response); 
-                    $scope.accountInfo = response.data.account;
-                    // console.log('Account Info:', $scope.accountInfo); 
-                    $scope.errorMessage = '';
-                })
-                .catch(function(error) {
-                    console.error('Error:', error);
-                    if (error.data && error.data.message) {
-                        $scope.errorMessage = error.data.message;
-                    } else {
-                        $scope.errorMessage = 'An error occurred. Please try again.';
-                    }
-                });
-        };
-        
-        // Call getAccountInfo 
-        $scope.getAccountInfo($scope.userId);
+    // Logout Function 
+    $scope.logout = function() {
+        $http.post('/api/logout')
+            .then(function(response) {
+                // On success, reset state to guest mode
+                $scope.userId = null;
+                $scope.accountInfo = {};
+                $scope.showLoginForm = true;
+                window.location.href = '/';
+            });
     }
+
+    // Checking if user is already logged in
+    $scope.checkLoginStatus();
+
+    // SIDEBAR ACCOUNT END
 
     // SIDEBAR CART START
 
@@ -207,11 +223,7 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
 
     // Getting cartItems from the database
     $scope.getCartItems = function() {
-        const data = {
-            userId: $scope.userId
-        };
-
-        $http.post('/api/get-cart-items', data)
+        $http.post('/api/get-cart-items')
             .then(function(response) {
                 if (response.data.items && response.data.items.length > 0) {
                     // Map database items to the format used in the frontend
@@ -243,13 +255,11 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
         $scope.getCartItems();  
     }
 
-    
     // Increasing the quantity of the product
     $scope.increaseQuantity = function(item) {
         $http.post('/api/increase-quantity', {
             productId: item.id,
             quantity: 1,
-            userId: $scope.userId
         })
         .then(function(response) {
             if (response.data.message) {
@@ -265,14 +275,12 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
         });
     };
     
-    
     // Decreasing the quantity of the product
     $scope.decreaseQuantity = function(item) {
         if (item.quantity > 1) {
             $http.post('/api/decrease-quantity', {
                 productId: item.id,
                 quantity: 1,
-                userId: $scope.userId
             })
             .then(function(response) {
                 if (response.data.message) {
@@ -291,7 +299,6 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
     // Remove product from cart
     $scope.removeFromCart = function(product) {
         const data = {
-            userId: $scope.userId,
             product_id: product.id
         };
 
@@ -327,11 +334,7 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
             return;
         }
     
-        const orderData = {
-            userId: $scope.userId,
-        };
-    
-        $http.post('/api/checkout', orderData)
+        $http.post('/api/checkout', {})
             .then(function(response) {
                 alert('Order placed successfully!');
                 // Clear the cart after successful checkout

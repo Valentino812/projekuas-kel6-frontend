@@ -9,7 +9,7 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }
         })
-        .when('/settings/:id', {
+        .when('/settings', {
             templateUrl: '/views/settings.html',
             controller: 'SettingsController',
             resolve: {
@@ -18,7 +18,7 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }
         })
-        .when('/transaction/:id', {
+        .when('/transaction', {
             templateUrl: '/views/transaction.html',
             controller: 'TransactionController',
             resolve: {
@@ -63,25 +63,7 @@ app.config(function($routeProvider, $locationProvider) {
                 }
             }            
         })
-        .when('/product/:productid/:id', {
-            templateUrl: '/views/product.html',
-            controller: 'ProductController',
-            resolve: {
-                load: function($ocLazyLoad) {
-                    return $ocLazyLoad.load('/js/productController.js');
-                }
-            }            
-        })
         .when('/products', {
-            templateUrl: '/views/products.html',
-            controller: 'ProductsController',
-            resolve: {
-                load: function($ocLazyLoad) {
-                    return $ocLazyLoad.load('/js/productsController.js');
-                }
-            }
-        })
-        .when('/products/:id', {
             templateUrl: '/views/products.html',
             controller: 'ProductsController',
             resolve: {
@@ -96,33 +78,6 @@ app.config(function($routeProvider, $locationProvider) {
             resolve: {
                 load: function($ocLazyLoad) {
                     return $ocLazyLoad.load('/js/productsController.js');
-                }
-            }
-        })
-        .when('/products/gender/:gender/:id', {
-            templateUrl: '/views/products.html',
-            controller: 'ProductsController',
-            resolve: {
-                load: function($ocLazyLoad) {
-                    return $ocLazyLoad.load('/js/productsController.js');
-                }
-            }
-        })
-        .when('/:id', {
-            templateUrl: '/views/home.html',
-            controller: 'HomeController',
-            resolve: {
-                load: function($ocLazyLoad) {
-                    return $ocLazyLoad.load('/js/homeController.js');
-                }
-            }
-        })
-        .when('/contact/:id', {
-            templateUrl: '/views/contact.html',
-            controller: 'ContactController',
-            resolve: {
-                load: function($ocLazyLoad) {
-                    return $ocLazyLoad.load('/js/contactController.js');
                 }
             }
         })

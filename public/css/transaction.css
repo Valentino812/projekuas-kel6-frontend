@@ -140,6 +140,7 @@ html, body {
     justify-content: center; 
     align-items: center; 
     padding: 40px; 
+    min-height: 400px;
 }
 
 .modal-overlay {

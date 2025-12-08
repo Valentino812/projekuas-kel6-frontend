@@ -15,20 +15,16 @@
             <div class="close-button" id="close-button">&times;</div>
             <ul>
                 <li>
-                    <a ng-if="!accountInfo" ng-href="/products"><h3>Products</h3></a>
-                    <a ng-if="accountInfo" ng-href="/products/{{ accountInfo.id }}"><h3>Products</h3></a> 
+                    <a ng-href="/products"><h3>Products</h3></a>
                 </li>
                 <li>
-                    <a ng-if="!accountInfo" ng-href="/products/gender/male"><h3>Male</h3></a>
-                    <a ng-if="accountInfo" ng-href="/products/gender/male/{{ accountInfo.id }}"><h3>Male</h3></a> 
+                    <a ng-href="/products/gender/male"><h3>Male</h3></a>
                 </li>
                 <li>
-                    <a ng-if="!accountInfo" ng-href="/products/gender/female"><h3>Female</h3></a>
-                    <a ng-if="accountInfo" ng-href="/products/gender/female/{{ accountInfo.id }}"><h3>Female</h3></a> 
+                    <a ng-href="/products/gender/female"><h3>Female</h3></a>
                 </li>
                 <li>
-                    <a ng-if="!accountInfo" ng-href="/contact"><h3>Contact</h3></a>
-                    <a ng-if="accountInfo" ng-href="/contact/{{ accountInfo.id }}"><h3>Contact</h3></a> 
+                    <a ng-href="/contact"><h3>Contact</h3></a>
                 </li>
             </ul>
             <!-- Mobile Icons -->
@@ -89,16 +85,16 @@
                 <hr class="divider">
                     <ul>
                         <form id="account-form" ng-submit="login()" ng-if="showLoginForm">
-                        <li>
-                            <input type="email" id="email-account" name="email-account" placeholder="Email" ng-model="login.email" required>
-                        </li>
-                        <li>
-                            <input type="password" id="password" name="password" placeholder="Password" ng-model="login.password" required>
-                        </li>
-    
-                        <li>
-                            <button type="submit" id="login">Login</button>
-                        </li>
+                            <li>
+                                <input type="email" id="email-account" name="email-account" placeholder="Email" ng-model="loginData.email" required>
+                            </li>
+                            <li>
+                                <input type="password" id="password" name="password" placeholder="Password" ng-model="loginData.password" required>
+                            </li>
+
+                            <li>
+                                <button type="submit" id="login">Login</button>
+                            </li>
                         </form>
                         <!-- When user has login -->
                         <div ng-if="!showLoginForm">
@@ -116,11 +112,11 @@
     
                                 <!-- Buttons -->
                                 <div class="account-buttons">
-                                    <a ng-href="/settings/{{ accountInfo.id }}" class="account-button">
+                                    <a ng-href="/settings" class="account-button">
                                         <i class="bi bi-gear"></i>
                                         <h3>Settings ></h3>
                                     </a>
-                                    <a ng-href="/transaction/{{ accountInfo.id }}" class="account-button">
+                                    <a ng-href="/transaction" class="account-button">
                                         <i class="bi bi-wallet2"></i>
                                         <h3>Transactions ></h3>
                                     </a>   

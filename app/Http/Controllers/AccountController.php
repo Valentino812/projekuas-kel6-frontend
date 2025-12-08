@@ -47,7 +47,7 @@ class AccountController extends Controller
         $accounts->first_name = $request->input('first_name');
         $accounts->last_name = $request->input('last_name');
         $accounts->email = $request->input('email');
-        $accounts->password = bcrypt($request->input('password'));
+        $accounts->password = Hash::make($request->input('password'));
         $accounts->failed_attempts = 0;
         $accounts->save();
 
@@ -67,8 +67,8 @@ class AccountController extends Controller
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required|string|min:8',
-            'redirect_route' => 'required|string', // Determent the route after login
+            'password' => 'required|string',
+            'redirect_route' => 'required|string',
         ]);
 
         // Check if validation fails
@@ -77,157 +77,149 @@ class AccountController extends Controller
         }
 
         // Find the user by email
-        $user = DB::table('accounts')->where('email', $request->input('email'))->first();
+        $user = Account::where('email', $request->email)->first();
 
-        if ($user) {
-            // Check if the account is blocked
-            if ($user->failed_attempts >= 3) {
-                return response()->json([
-                    'message' => 'Your account is blocked due to too many failed login attempts. Please contact our customer service.'
-                ], 403); 
-            }
-
-            if (Hash::check($request->input('password'), $user->password)) {
-                // Resetting failed attempts when login is successfull
-                if ($user->failed_attempts > 0) {
-                    DB::table('accounts')
-                        ->where('email', $user->email)
-                        ->update(['failed_attempts' => 0]);
-                }
-
-                // Determine redirect URL
-                $redirectRoute = $request->input('redirect_route'); 
-
-                // Authenticate the user using Laravel's session-based authentication
-                // Auth::login($user);
-
-                // Set message login sucessfull and redirect to new page
-                return response()->json([
-                    'message' => 'Login successful!',
-                    'redirect_url' => route($redirectRoute, ['id' => $user->id]) // URL destination
-                ], 200);
-            } else {
-                // Increment the account failed login attempts 
-                $remainingAttempts = 3 - ($user->failed_attempts + 1);
-                DB::table('accounts')
-                    ->where('email', $user->email)
-                    ->increment('failed_attempts');
-
-                    // Account blocking for 3 failed login attempts
-                    if($remainingAttempts <= 0){
-                        return response()->json([
-                            'message' => 'Your account is blocked due to too many failed login attempts. Please contact our customer service.'
-                        ], 403); 
-                    } else {
- 
-                    // Failed login message
-                    return response()->json([
-                        'message' => 'Invalid password. You have ' . $remainingAttempts . ' login attempts left before your account is blocked.'
-                    ], 401);
-                }
-            }
+        // Check if the account is blocked
+        if ($user && $user->failed_attempts >= 3) {
+            return response()->json([
+                'message' => 'Your account is blocked due to too many failed login attempts. Please contact our customer service.'
+            ], 403);
         }
 
-        // If the email doesn't exist, return the same failure message
-        return response()->json([
-            'message' => 'Email not found'
-        ], 401);
+        // Login Attempt
+        if (Auth::attempt($request->only('email', 'password'))) {
+            
+            // Generating session ID
+            $request->session()->regenerate();
 
+            // Resetting failed attempts
+            if ($user && $user->failed_attempts > 0) {
+                $user->update(['failed_attempts' => 0]);
+            }
+
+            return response()->json([
+                'message' => 'Login successful!',
+                'redirect_url' => route($request->input('redirect_route')) 
+            ], 200);
+        }
+
+        // Failed Login
+        if ($user) {
+            $user->increment('failed_attempts');
+            $remaining = 3 - $user->failed_attempts;
+
+            if ($remaining <= 0) {
+                return response()->json([
+                    'message' => 'Your account is blocked due to too many failed login attempts.'
+                ], 403);
+            }
+
+            return response()->json([
+                'message' => "Invalid password. You have $remaining login attempts left."
+            ], 401);
+        }
+
+        // If the email doesn't existe
+        return response()->json(['message' => 'Email not found'], 401);
     }
 
-/**
+    /**
      * Get account information.
      *
      * @param  string  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getAccountInfo($id)
+    public function getAccountInfo(Request $request)
     {
-        $user = Account::find($id); 
+        // Authenticate user
+        $user = Auth::user();
 
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         return response()->json(['account' => $user], 200);
     }
 
-     // Update Account Info (First Name and Last Name)
-     public function updateAccountInfo(Request $request, $id)
-     {
-         // Validate the inputs
-         $validator = Validator::make($request->all(), [
-             'first_name' => 'required|string|max:255',
-             'last_name' => 'required|string|max:255',
-         ]);
- 
-         if ($validator->fails()) {
-             return response()->json(['errors' => $validator->errors()], 422);
-         }
- 
-         // Find the account
-         $account = Account::find($id);
- 
-         if (!$account) {
-             return response()->json(['message' => 'Account not found'], 404);
-         }
- 
-         // Update first and last name
-         $account->first_name = $request->input('first_name', $account->first_name); // Keep existing value if not provided
-         $account->last_name = $request->input('last_name', $account->last_name);   // Keep existing value if not provided
-         $account->save();
- 
-         return response()->json(['message' => 'Account info updated successfully'], 200);
-     }
- 
-     // Update Account Login Info (Email and Password)
-     public function updateAccountLogin(Request $request, $id)
-     {
-         // Validate the inputs
-         $validator = Validator::make($request->all(), [
-             'email' => 'required|email|max:255|unique:users,email,' . $id,
-             'password' => 'required|string|min:8',
-             'new_password' => 'nullable|string|min:8'
-         ]);
- 
-         if ($validator->fails()) {
-             return response()->json(['errors' => $validator->errors()], 422);
-         }
- 
-         // Find the account
-         $account = Account::find($id);
- 
-         if (!$account) {
-             return response()->json(['message' => 'Account not found'], 404);
-         }
- 
-         // Check if the provided password matches the current password
-         if (!Hash::check($request->input('password'), $account->password)) {
-             return response()->json(['errors' => 'The provided password is incorrect'], 400);
-         }
- 
-         // Check if the email is being updated and is already in use
-         if ($request->input('email') && $account->email !== $request->input('email')) {
-             $existingAccount = Account::where('email', $request->input('email'))->first();
-             if ($existingAccount) {
-                 return response()->json(['message' => 'Email already in use'], 400);
-             }
-             $account->email = $request->input('email');
-         }
- 
-         // Update password if provided
-         if ($request->filled('new_password')) {
-             $account->password = Hash::make($request->input('new_password'));
-         }
- 
-         $account->save();
- 
-         return response()->json(['message' => 'Login info updated successfully'], 200);
-     }
-
-    public function deleteAccount(Request $request, $id)
+    // Update Account Info (First Name and Last Name)
+    public function updateAccountInfo(Request $request)
     {
-        // Validate the request
+        // Authenticate user
+        $user = Auth::user(); 
+
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Update first and last name
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name
+        ]);
+
+        return response()->json(['message' => 'Account info updated successfully'], 200);
+    }
+ 
+    // Update Account Login Info (Email and Password)
+    public function updateAccountLogin(Request $request)
+    {
+        // Autenthicate User
+        $user = Auth::user(); 
+
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|max:255|unique:accounts,email,' . $user->id,
+            'password' => 'required|string|min:8',
+            'new_password' => 'nullable|string|min:8' 
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Check if the provided password matches the current password
+        if (!Hash::check($request->input('password'), $user->password)) {
+            return response()->json([
+                'errors' => ['password' => ['The provided password is incorrect.']]
+            ], 400);
+        }
+
+        // Check if the email is being updated and is already in use
+        if ($request->input('email') !== $user->email) {
+            $user->email = $request->input('email');
+        }
+
+        // Updating Password If Provided 
+        if ($request->filled('new_password')) {
+            $user->password = Hash::make($request->input('new_password'));
+        }
+
+        $user->save();
+
+        return response()->json(['message' => 'Login info updated successfully'], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Logged out successfully'], 200);
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        // Autenthicate User
+        $user = Auth::user();
+
+        // Validate that they sent a password
         $validator = Validator::make($request->all(), [
             'password' => 'required|string|min:8',
         ]);
@@ -236,24 +228,22 @@ class AccountController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Find the account by ID
-        $account = Account::find($id);
-
-        if (!$account) {
-            return response()->json(['message' => 'Account not found'], 404);
-        }
-
-        // Check if the password matches
-        if (!Hash::check($request->password, $account->password)) {
+        // Verifiying password before deleting
+        if (!Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Invalid password'], 403);
         }
 
-        // Delete the account
-        $account->delete();
+        // Deleting the account from the database
+        $user->delete();
+
+        // Log out and kill the session
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json([
             'message' => 'Account deleted successfully',
-            'redirect_url' => '/' // URL destination
-    ], 200);
+            'redirect_url' => '/' 
+        ], 200);
     }
 }
