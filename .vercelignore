@@ -1,24 +1,27 @@
-/vendor
+# .vercelignore
+
+# 1. System & Git 
+.git
+.gitattributes
+.gitignore
 .env
 
-# Ignore Git history 
-.git
+# 2. Dependencies 
+/node_modules
+/vendor
 
-# Ignore frontend dependencies (Vercel builds assets, then we only need the /public/build folder)
-node_modules
-
-# Ignore tests
+# 3. Tests & Documentation
 tests
-
-# Ignore large media sources 
-storage/app
-storage/framework/cache
-storage/framework/testing
-storage/framework/sessions
-storage/framework/views
-
-# Ignore documentation or dev tooling
-README.md
 phpunit.xml
+README.md
 .editorconfig
-.gitattributes
+
+# 4. Storage & Caches
+/storage/framework
+/storage/logs
+/storage/*.key
+
+# 5. Build Artifacts
+/public/hot
+/public/storage
+/bootstrap/cache/*.php
