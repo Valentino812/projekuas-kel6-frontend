@@ -232,32 +232,17 @@
         </div>
         <!-- Dynamically repeat products -->
         <div class="product" ng-repeat="product in products">
-            <div ng-if="!accountInfo">
-                <a href="/product/{{ product.id }}" class="product-link">
-                    <div class="product-image">
-                        <!-- Main Image -->
-                        <img ng-src="{{ product.img1 }}" alt="{{ product.name }}" class="main-image">
-                        
-                        <!-- Hover Image -->
-                        <img ng-src="{{ product.img2 }}" alt="{{ product.name }} Hover" class="hover-image">
-                    </div>
-                    <h2>{{ product.name }}</h2>
-                    <p>Rp {{ product.price | number:2 }} IDR</p>
-                </a>
-            </div>
-            <div ng-if="accountInfo">
-                <a href="/product/{{ product.id }}/{{ accountInfo.id }}" class="product-link">
-                    <div class="product-image">
-                        <!-- Main Image -->
-                        <img ng-src="{{ product.img1 }}" alt="{{ product.name }}" class="main-image">
-                        
-                        <!-- Hover Image -->
-                        <img ng-src="{{ product.img2 }}" alt="{{ product.name }} Hover" class="hover-image">
-                    </div>
-                    <h2>{{ product.name }}</h2>
-                    <p>Rp {{ product.price | number:2 }} IDR</p>
-                </a>
-            </div>
+            <a href="/product/{{ product.id }}" class="product-link">
+                <div class="product-image">
+                    <!-- Main Image -->
+                    <img ng-src="{{ product.img1 }}" alt="{{ product.name }}" class="main-image">
+                    
+                    <!-- Hover Image -->
+                    <img ng-src="{{ product.img2 }}" alt="{{ product.name }} Hover" class="hover-image">
+                </div>
+                <h2>{{ product.name }}</h2>
+                <p>Rp {{ product.price | number:2 }} IDR</p>
+            </a>
         </div>
     </section>
 
