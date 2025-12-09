@@ -20,7 +20,6 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
     });
     // Entrance Transition End
 
-
     const configSections = document.querySelectorAll('.config-section');
 
     configSections.forEach(section => {
@@ -184,71 +183,6 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
      // Sidebars End
 
     // 5.Login
-    
-    // Check if the 'id' is part of the route
-    $scope.userId = $routeParams.id;
-
-    // console.log('Account ID:', $scope.userId);
-
-    // Derterment what to show on sidebar account (login form or account info)
-    $scope.showLoginForm = !$scope.userId;
-
-    $scope.errorMessage = '';
-    $scope.successMessage = '';
-
-    $scope.login = function() {
-        const routeName = 'productsLogin'; 
-        $http.post('/api/login', {
-            email: $scope.login.email,
-            password: $scope.login.password,
-            redirect_route: routeName
-        })
-        .then(function(response) {
-            $scope.successMessage = response.data.message;;
-            $scope.errorMessage = '';
-            $scope.login = {};
-
-            // Redirect user to the provided URL
-            if (response.data.redirect_url) {
-                window.location.href = response.data.redirect_url;
-            }
-        })
-        .catch(function(error) {
-            console.error('Error:', error);
-            if (error.data && error.data.errors) {
-                $scope.errorMessage = Object.values(error.data.errors).join(' ');
-            } else if (error.data && error.data.message) {
-                $scope.errorMessage = error.data.message;
-            } else {
-                $scope.errorMessage = 'An error occurred. Please try again.';
-            }
-            $scope.successMessage = '';
-        });
-    }
-
-    if($scope.userId){
-        $scope.getAccountInfo = function(userId) {
-        
-            $http.get('/api/account-info/' + userId)
-                .then(function(response) {
-                    // console.log('Response from API:', response); 
-                    $scope.accountInfo = response.data.account;
-                    // console.log('Account Info:', $scope.accountInfo); 
-                    $scope.errorMessage = '';
-                })
-                .catch(function(error) {
-                    console.error('Error:', error);
-                    if (error.data && error.data.message) {
-                        $scope.errorMessage = error.data.message;
-                    } else {
-                        $scope.errorMessage = 'An error occurred. Please try again.';
-                    }
-                });
-        };
-        
-        // Call getAccountInfo 
-        $scope.getAccountInfo($scope.userId);
-    }
 
     // Initialize product data
     $scope.product = {};
@@ -284,64 +218,99 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
 
     $scope.getProductInfo();
 
+    // SIDEBAR ACCOUNT START
+    
+    // Initialization
+    $scope.userId = null; 
+    $scope.showLoginForm = true; 
+    $scope.accountInfo = {};
+    
+    $scope.errorMessage = '';
+    $scope.successMessage = '';
+    $scope.loginData = {}; 
+
+    // Check Login Status & Get Account Info
+    $scope.checkLoginStatus = function() {
+        $http.get('/api/account-info')
+            .then(function(response) {
+                // User is logged in
+                $scope.accountInfo = response.data.account;
+                $scope.userId = response.data.account._id; 
+                $scope.showLoginForm = false; 
+            
+                $scope.getCartItems();
+            })
+            .catch(function(error) {
+                // User is NOT logged in 
+                $scope.showLoginForm = true; 
+                $scope.userId = null;
+
+                $scope.cartItems = [];
+                $scope.cartTotal = 0;
+            });
+    };
+
+    // Login Function 
+    $scope.login = function() {
+        const routeName = 'products'; 
+        
+        $http.post('/api/login', {
+            email: $scope.loginData.email,     
+            password: $scope.loginData.password,
+            redirect_route: routeName
+        })
+        .then(function(response) {
+            $scope.successMessage = response.data.message;
+            $scope.errorMessage = '';
+            $scope.loginData = {}; // Clearing login form
+
+            // Redirect logic
+            if (response.data.redirect_url) {
+                window.location.href = response.data.redirect_url;
+            } else {
+                // Reload the account info
+                $scope.checkLoginStatus();
+            }
+        })
+        .catch(function(error) {
+            console.error('Login Error:', error);
+            if (error.data && error.data.errors) {
+                // Handle Laravel validation errors array
+                $scope.errorMessage = Object.values(error.data.errors).flat().join(' ');
+            } else if (error.data && error.data.message) {
+                $scope.errorMessage = error.data.message;
+            } else {
+                $scope.errorMessage = 'An error occurred. Please try again.';
+            }
+            $scope.successMessage = '';
+        });
+    }
+
+    // Logout Function 
+    $scope.logout = function() {
+        $http.post('/api/logout')
+            .then(function(response) {
+                // On success, reset state to guest mode
+                $scope.userId = null;
+                $scope.accountInfo = {};
+                $scope.showLoginForm = true;
+                window.location.href = '/';
+            });
+    }
+
+    // Checking if user is already logged in
+    $scope.checkLoginStatus();
+
+    // SIDEBAR ACCOUNT END
+
     // SIDEBAR CART START
 
-    // Adding product to cart
-    $scope.addToCart = function(product, quantity) {
-        if(!quantity || quantity!=0){
-            const existingItem = $scope.cartItems.find(item => item.id === product.id);
-            if (existingItem) {
-                // If exist, then add to existing instead
-                existingItem.quantity += quantity;
-            } else {
-                // Create new if not
-                $scope.cartItems.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    img1: product.img1,
-                    quantity: quantity
-                });
-            }
-            // Update total price
-            $scope.cartTotal += product.price * quantity;
-            alert(`${quantity} item(s) added to cart!`);
-
-            const data = {
-                userId: $scope.userId, 
-                product_id: product.id,
-                price: product.price,
-                quantity: quantity
-            };
-        
-            // Make POST request to server
-            $http.post('/api/add-to-cart', data)
-                .then(function(response) {
-                    // Handle success response
-                    alert('Product successfully added to the cart on the server!');
-                    console.log('Server response:', response.data);
-                    $scope.getProductInfo();
-                })
-                .catch(function(error) {
-                    // Handle error response
-                    console.error('Failed to add product to the server cart:', error);
-                    alert('Error adding product to the cart. Please try again.');
-                });
-        } else {
-            alert("Please set the quantity");
-        }
-    };
-    
     $scope.cartItems = [];
     $scope.cartTotal = 0;
 
     // Getting cartItems from the database
     $scope.getCartItems = function() {
-        const data = {
-            userId: $scope.userId
-        };
-
-        $http.post('/api/get-cart-items', data)
+        $http.post('/api/get-cart-items')
             .then(function(response) {
                 if (response.data.items && response.data.items.length > 0) {
                     // Map database items to the format used in the frontend
@@ -367,25 +336,16 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
             });
     };
 
-    // Get cart items is user has login
-    if($scope.userId){
-        // Fetch cart items on load
-        $scope.getCartItems();  
-    }
-
-    
     // Increasing the quantity of the product
     $scope.increaseQuantity = function(item) {
         $http.post('/api/increase-quantity', {
             productId: item.id,
             quantity: 1,
-            userId: $scope.userId
         })
         .then(function(response) {
             if (response.data.message) {
                 item.quantity += 1;
                 $scope.cartTotal += +item.price;
-                $scope.getProductInfo();
             } else {
                 alert(response.data.error);
             }
@@ -396,20 +356,17 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
         });
     };
     
-    
     // Decreasing the quantity of the product
     $scope.decreaseQuantity = function(item) {
         if (item.quantity > 1) {
             $http.post('/api/decrease-quantity', {
                 productId: item.id,
                 quantity: 1,
-                userId: $scope.userId
             })
             .then(function(response) {
                 if (response.data.message) {
                     item.quantity -= 1;
                     $scope.cartTotal -= +item.price;
-                    $scope.getProductInfo();
                 }
             })
             .catch(function(error) {
@@ -420,10 +377,9 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
         }
     };
     
-   // Remove product from cart
+    // Remove product from cart
     $scope.removeFromCart = function(product) {
         const data = {
-            userId: $scope.userId,
             product_id: product.id
         };
 
@@ -436,7 +392,6 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
                     $scope.cartTotal -= $scope.cartItems[index].price * $scope.cartItems[index].quantity;
                     $scope.cartItems.splice(index, 1);
                 }
-                $scope.getProductInfo();
                 alert('Product removed from cart');
             })
             .catch(function(error) {
@@ -460,11 +415,7 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
             return;
         }
     
-        const orderData = {
-            userId: $scope.userId,
-        };
-    
-        $http.post('/api/checkout', orderData)
+        $http.post('/api/checkout', {})
             .then(function(response) {
                 alert('Order placed successfully!');
                 // Clear the cart after successful checkout
@@ -479,43 +430,49 @@ app.controller('ProductController', function($scope, $timeout, $routeParams, $ht
 
     // SIDEBAR CART END
 
-    // Get reviews
-        // Initialize the review
-        $scope.review = {
-            productId: $routeParams.productid,
-            userId: $routeParams.id,
-            comment: '',
-        };
+    // Adding product to cart
+    $scope.addToCart = function(product, quantity) {
+        if(!quantity || quantity!=0){
+            const existingItem = $scope.cartItems.find(item => item.id === product.id);
+            if (existingItem) {
+                // If exist, then add to existing instead
+                existingItem.quantity += quantity;
+            } else {
+                // Create new if not
+                $scope.cartItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    img1: product.img1,
+                    quantity: quantity
+                });
+            }
 
-    // Handle form submission
-    $scope.submitForm = function() {
-        if ($scope.addReviewForm.$valid) {
-            // Form data is valid, let's prepare the data for submission
-            var reviewFormData = new FormData();
-            reviewFormData.append('productId', $scope.review.productId);
-            reviewFormData.append('userId', $scope.review.userId);
-            reviewFormData.append('comment', $scope.review.comment);
- 
-            // Send the form data to the server
-            $http.post('/api/review', reviewFormData, {
-                headers: { 'Content-Type': undefined }
-            }).then(function(response) {
-                // Handle success
-                alert('Review added successfully!');
-                // Reset form
-                $scope.review = {
-                    productId: '',
-                    userId: '',
-                    comment: ''
-                };
-                $scope.addReviewForm.$setPristine();
-            }).catch(function(error) {
-                // Handle error
-                alert('Error adding review!');
-                console.error(error);
-            });
+            // Update total price
+            $scope.cartTotal += product.price * quantity;
+            alert(`${quantity} item(s) added to cart!`);
+
+            const data = {
+                product_id: product.id,
+                price: product.price,
+                quantity: quantity
+            };
+        
+            // Make POST request to server
+            $http.post('/api/add-to-cart', data)
+                .then(function(response) {
+                    // Handle success response
+                    alert('Product successfully added to the cart on the server!');
+                    console.log('Server response:', response.data);
+                    $scope.getProductInfo();
+                })
+                .catch(function(error) {
+                    // Handle error response
+                    console.error('Failed to add product to the server cart:', error);
+                    alert('Error adding product to the cart. Please try again.');
+                });
         } else {
-        alert('Please fill out all required fields.');
+            alert("Please set the quantity");
         }
     };
 });

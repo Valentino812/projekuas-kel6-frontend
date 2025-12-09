@@ -248,17 +248,21 @@ app.controller('HomeController', function($scope, $timeout, $routeParams,  $http
                 $scope.userId = response.data.account._id; 
                 $scope.showLoginForm = false; 
             
+                $scope.getCartItems();
             })
             .catch(function(error) {
                 // User is NOT logged in 
                 $scope.showLoginForm = true; 
                 $scope.userId = null;
+
+                $scope.cartItems = [];
+                $scope.cartTotal = 0;
             });
     };
 
     // Login Function 
     $scope.login = function() {
-        const routeName = 'home'; 
+        const routeName = 'products'; 
         
         $http.post('/api/login', {
             email: $scope.loginData.email,     
@@ -268,7 +272,7 @@ app.controller('HomeController', function($scope, $timeout, $routeParams,  $http
         .then(function(response) {
             $scope.successMessage = response.data.message;
             $scope.errorMessage = '';
-            $scope.loginData = {}; // Clearing login form
+            $scope.loginData = {}; 
 
             // Redirect logic
             if (response.data.redirect_url) {
@@ -341,12 +345,6 @@ app.controller('HomeController', function($scope, $timeout, $routeParams,  $http
                 alert('Failed to fetch cart items. Please try again later.');
             });
     };
-
-    // Get cart items is user has login
-    if($scope.userId){
-        // Fetch cart items on load
-        $scope.getCartItems();  
-    }
 
     // Increasing the quantity of the product
     $scope.increaseQuantity = function(item) {

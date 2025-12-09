@@ -161,7 +161,7 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
     });
     // 3.Navbar and Sidebar End
 
-   // SIDEBAR ACCOUNT START
+    // SIDEBAR ACCOUNT START
     
     // Initialization
     $scope.userId = null; 
@@ -181,11 +181,15 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
                 $scope.userId = response.data.account._id; 
                 $scope.showLoginForm = false; 
             
+                $scope.getCartItems();
             })
             .catch(function(error) {
                 // User is NOT logged in 
                 $scope.showLoginForm = true; 
                 $scope.userId = null;
+
+                $scope.cartItems = [];
+                $scope.cartTotal = 0;
             });
     };
 
@@ -201,7 +205,7 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
         .then(function(response) {
             $scope.successMessage = response.data.message;
             $scope.errorMessage = '';
-            $scope.loginData = {}; // Clearing login form
+            $scope.loginData = {}; 
 
             // Redirect logic
             if (response.data.redirect_url) {
@@ -274,12 +278,6 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
                 alert('Failed to fetch cart items. Please try again later.');
             });
     };
-
-    // Get cart items is user has login
-    if($scope.userId){
-        // Fetch cart items on load
-        $scope.getCartItems();  
-    }
 
     // Increasing the quantity of the product
     $scope.increaseQuantity = function(item) {
@@ -375,4 +373,51 @@ app.controller('ProductsController', function($scope, $timeout, $routeParams,  $
 
     // SIDEBAR CART END
 
+    // Get Products Start
+    $scope.products = [];
+    $scope.filteredProducts = [];
+    $scope.searchQuery = '';
+    $scope.selectedGender = '';
+    $scope.selectedType = '';
+    $scope.sortCriteria = '';
+
+    if($routeParams.gender){
+        $scope.selectedGender = $routeParams.gender;
+    }
+
+    $scope.getAllProducts = function() {
+        const params = {
+            search: $scope.searchQuery,
+            gender: $scope.selectedGender,
+            type: $scope.selectedType
+        };
+        $http.get('/api/products', { params: params })
+            .then(function(response) {
+                $scope.products = response.data.products;
+                $scope.filteredProducts = $scope.products; // Initialize filtered products
+                $scope.sortProducts($scope.sortCriteria); 
+            })
+            .catch(function(error) {
+                console.error('Error fetching products:', error);
+            });
+    };
+
+    $scope.filterProducts = function() {
+        $scope.getAllProducts(); // Fetch products with the current filters
+    };
+
+    $scope.sortProducts = function(criteria) {
+        if (criteria === 'price') {
+            $scope.filteredProducts.sort((a, b) => b.price - a.price);
+        } else if (criteria === 'price-low-to-high') {
+            $scope.filteredProducts.sort((a, b) => a.price - b.price);
+        } else if (criteria === 'alphabetical') {
+            $scope.filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (criteria === 'reverse-alphabetical') {
+            $scope.filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+        }
+    };
+
+    $scope.getAllProducts();
+    // Get Products End
 });

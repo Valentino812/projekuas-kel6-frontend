@@ -129,7 +129,6 @@ html, body {
 }
 /* Entrance Animation and Filter End */
 
-
 /* 4.Sidebars Start */
 .sidebar-cart,
 .sidebar-account,
@@ -217,9 +216,9 @@ html, body {
     margin-bottom: 15px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
-    flex-grow: 1; /* Allows the item list to expand and use available space */
-    overflow-y: auto; /* Scrolls independently within the sidebar */
-    margin-bottom: 20px; /* Adds space between the list and the total/checkout section */
+    flex-grow: 1; 
+    overflow-y: auto; 
+    margin-bottom: 20px; 
 }
 
 .cart-item:last-child {
@@ -228,7 +227,7 @@ html, body {
 
 .cart-item-img {
     width: 60px;
-    height: 60px;
+    height: 80px;
     object-fit: cover;
     border-radius: 5px;
     margin-right: 10px;
