@@ -1,2 +1,24 @@
 /vendor
 .env
+
+# Ignore Git history 
+.git
+
+# Ignore frontend dependencies (Vercel builds assets, then we only need the /public/build folder)
+node_modules
+
+# Ignore tests
+tests
+
+# Ignore large media sources 
+storage/app
+storage/framework/cache
+storage/framework/testing
+storage/framework/sessions
+storage/framework/views
+
+# Ignore documentation or dev tooling
+README.md
+phpunit.xml
+.editorconfig
+.gitattributes
