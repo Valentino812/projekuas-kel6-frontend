@@ -262,7 +262,7 @@ app.controller('HomeController', function($scope, $timeout, $routeParams,  $http
 
     // Login Function 
     $scope.login = function() {
-        const routeName = 'products'; 
+        const routeName = 'home'; 
         
         $http.post('/api/login', {
             email: $scope.loginData.email,     

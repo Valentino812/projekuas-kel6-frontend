@@ -20,7 +20,7 @@ Route::get('/contact/{id}', function () {
 Route::get('/admin/{id}', function () {
     return view('layouts.app');
 })->name('admin');
-Route::get('/products/{id}', function () {
+Route::get('/products', function () {
     return view('layouts.app');
 })->name('products');
 
