@@ -169,7 +169,7 @@ app.controller('ContactController', function($scope, $timeout, $routeParams, $ht
 
     // Login Function 
     $scope.login = function() {
-        const routeName = 'products'; 
+        const routeName = 'contact'; 
         
         $http.post('/api/login', {
             email: $scope.loginData.email,     
