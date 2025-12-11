@@ -7,28 +7,8 @@
     },
     "routes": [
         {
-            "src": "/build/(.*)",
-            "dest": "/public/build/$1"
-        },
-        {
-            "src": "/js/(.*)",
-            "dest": "/public/js/$1"
-        },
-        {
-            "src": "/css/(.*)",
-            "dest": "/public/css/$1"
-        },
-        {
-            "src": "/img/(.*)",
-            "dest": "/public/img/$1"
-        },
-        {
-            "src": "/views/(.*)",
-            "dest": "/public/views/$1"
-        },
-        {
-            "src": "/(favicon.ico|robots.txt)",
-            "dest": "/public/$1"
+            "src": "/(css|js|views|img)/(.*)",
+            "dest": "/public/$1/$2"
         },
         {
             "src": "/(.*)",
@@ -38,7 +18,7 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
-        "APP_URL": "https://${VERCEL_URL}",
+        "APP_URL": "https://SuShoes",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
