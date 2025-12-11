@@ -1,27 +1,3 @@
-# .vercelignore
-
-# 1. System & Git 
-.git
-.gitattributes
-.gitignore
-.env
-
-# 2. Dependencies 
-/node_modules
 /vendor
-
-# 3. Tests & Documentation
-tests
-phpunit.xml
-README.md
-.editorconfig
-
-# 4. Storage & Caches
-/storage/framework
-/storage/logs
+.env
 /storage/*.key
-
-# 5. Build Artifacts
-/public/hot
-/public/storage
-/bootstrap/cache/*.php
