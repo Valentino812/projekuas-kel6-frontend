@@ -1,0 +1,116 @@
+<div>
+    <link rel="stylesheet" href="/css/newProduct.css">
+   <!-- Navigation Bar Start-->
+   <nav class="navbar fade-in blur">
+    <div class="navbar-logo">
+        <a ng-href="/">
+            <img src="/img/brand-logo.png" id="navbar-logo">    
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="close-button" id="close-button">&times;</div>
+        <ul>
+            <li><h3>New Product</h3></a></li>
+        </ul>
+        <!-- Mobile Icons -->
+        <div class="mobile-icons">
+            <a><div class="icon-container"><a ng-href="/" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
+        </div>
+    </div>        
+    <!-- Destkop Icons -->
+    <div class="icons">
+        <a><div class="icon-container"><a ng-href="/" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
+    </div>
+    <div class="burger-menu" id="burger-menu">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+</nav>
+<!-- Navigation Bar End -->
+    <div class="container fade-in blur">
+        <form name="addReview" class="container fade-in blur" id="add-product-form" method="POST" enctype="multipart/form-data" ng-submit="reviewed()">
+
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- First Product Image Upload -->
+                <label for="product-image-upload-1" class="image-upload-label">
+                    <img
+                    alt="Product Image 1"
+                    id="product-image-preview-1"
+                    height="400"
+                    ng-src="{{product.image1 || 'assets/default-placeholder.png'}}"
+                    width="600"
+                    style="cursor: pointer; border: 2px dashed #ccc;"
+                    />
+                </label>
+                <input
+                    type="file"
+                    id="product-image-upload-1"
+                    name="productImage1"
+                    accept="image/*"
+                    style="display: none;"
+                    ng-model="product.image1"
+                    onchange="angular.element(this).scope().updateImagePreview(event, 1)"
+                />
+
+                <!-- Second Product Image Upload -->
+                <label for="product-image-upload-2" class="image-upload-label">
+                    <img
+                    alt="Product Image 2"
+                    id="product-image-preview-2"
+                    height="400"
+                    ng-src="{{product.image2 || 'assets/default-placeholder.png'}}"
+                    width="600"
+                    style="cursor: pointer; border: 2px dashed #ccc;"
+                    />
+                </label>
+                <input
+                    type="file"
+                    id="product-image-upload-2"
+                    name="productImage2"
+                    accept="image/*"
+                    style="display: none;"
+                    ng-model="product.image2"
+                    onchange="angular.element(this).scope().updateImagePreview(event, 2)"
+                />
+            </div>
+           
+            <!-- Right Column -->
+            <div class="right-column">
+              <h1>Add New Review</h1>
+        
+              <!-- Review Comment -->
+              <div class="form-group">
+                <textarea
+                  id="product-description"
+                  name="productDescription"
+                  ng-model="review.comment"
+                  class="form-input"
+                  rows="6"
+                  placeholder="Enter comment"
+                  required
+                ></textarea>
+              </div>
+        
+              <!-- Submit Button -->
+              <button type="submit" id="add-product-button" class="add-to-cart">
+                Add Review
+              </button>
+            </div>
+          </form>
+    </div>
+
+    <!-- Footer Start -->
+    <footer class="footer fade-in blur">
+        <div class="footer-content">
+            <div class="logo">
+                <img src="/img/brand-logo.png"/>
+            </div>
+        </div>
+        <div class="copyright">
+            Copyright &copy; 2024 SuShoes Co.
+        </div>
+    </footer>    
+    <!-- Footer End -->
+</div>

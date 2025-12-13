@@ -1,0 +1,107 @@
+<div>
+    <link rel="stylesheet" href="/css/transaction.css">
+    <!-- Navigation Bar Start-->
+    <nav class="navbar fade-in blur">
+        <div class="navbar-logo">
+            <a ng-href="/">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="close-button" id="close-button">&times;</div>
+            <ul>
+                <li>
+                    <a ng-if="!accountInfo" ng-href="/products"><h3>Products</h3></a>
+                    <a ng-if="accountInfo" ng-href="/products/{{ accountInfo.id }}"><h3>Products</h3></a> 
+                </li>
+                <li>
+                    <a ng-if="!accountInfo" ng-href="/products/gender/male"><h3>Male</h3></a>
+                    <a ng-if="accountInfo" ng-href="/products/gender/male/{{ accountInfo.id }}"><h3>Male</h3></a> 
+                </li>
+                <li>
+                    <a ng-if="!accountInfo" ng-href="/products/gender/female"><h3>Female</h3></a>
+                    <a ng-if="accountInfo" ng-href="/products/gender/female/{{ accountInfo.id }}"><h3>Female</h3></a> 
+                </li>
+                <li>
+                    <a ng-if="!accountInfo" ng-href="/contact"><h3>Contact</h3></a>
+                    <a ng-if="accountInfo" ng-href="/contact/{{ accountInfo.id }}"><h3>Contact</h3></a> 
+                </li>
+            </ul>
+        <!-- Mobile Icons -->
+        <div class="mobile-icons">
+            <a><div class="icon-container"><a ng-href="/" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
+            </div>
+        </div>        
+        <!-- Destkop Icons -->
+        <div class="icons">
+            <a><div class="icon-container"><a ng-href="/" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
+        </div>
+        <div class="burger-menu" id="burger-menu">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    
+    </nav>
+    <!-- Navigation Bar End -->
+
+    <!-- Transaction Form Start -->
+    <div class="modal fade-in blur">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h2>Transaction History</h2>
+            <p>View your transaction history</p>
+                <ul ng-if="transactions.length > 0">
+                    <li ng-repeat="transaction in transactions">
+                        <p>Transaction ID: {{ transaction.id }}</p>
+                        <p>Total: {{ transaction.total }}</p>
+                        <p>Status: {{ transaction.status }}</p>
+                        <p>Date: {{ transaction.datetime | date:'medium' }}</p>
+                        <ul>
+                            <li ng-repeat="item in transaction.items">
+                                <p>Item: {{ item.name }}</p>
+                                <p>Quantity: {{ item.quantity }}</p>
+                                <p>Price: {{ item.price }}</p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul ng-if="transactions.length === 0">
+                    <h4>You have no transactions</h4>
+                </ul>
+            </div>
+            <!-- Display Transaction Data End -->
+        </div>
+    </div>
+    <!-- Transaction Form End -->
+
+    <footer class="footer fade-in blur">
+        <div class="footer-content">
+            <div class="logo">
+                <img src="/img/brand-logo.png"/>
+            </div>
+            <div class="footer-menu">
+                <a href="" class="footer-link">Products</a>
+                <a href="" class="footer-link">Male</a>
+                <a href="" class="footer-link">Female</a>
+                <a href="" class="footer-link">Contact</a>
+            </div>
+            <div class="social">
+                <div class="social-icon-container">
+                    <a href="" target="_blank" class="social-icon"><img src="/img/instagram.png"/></a>    
+                </div>
+                <div class="social-icon-container">
+                    <a href="" target="_blank" class="social-icon"><img src="/img/twitter.png"/></a>    
+                </div>
+                <div class="social-icon-container">
+                    <a href="" target="_blank" class="social-icon"><img src="/img/whatsapp.png"/></a>    
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            Copyright &copy; 2024 SuShoes Co.
+        </div>
+    </footer>
+    <!-- Footer End -->
+</div>
