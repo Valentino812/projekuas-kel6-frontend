@@ -6,10 +6,12 @@
         "api/index.php": { "runtime": "vercel-php@0.7.1" }
     },
     "routes": [
-        {
-            "src": "/(css|js|img|views|storage|build|fonts)/(.*)",
-            "dest": "/public/$1/$2"
-        },
+        { "src": "/css/(.*)", "dest": "/public/css/$1" },
+        { "src": "/js/(.*)", "dest": "/public/js/$1" },
+        { "src": "/img/(.*)", "dest": "/public/img/$1" },
+        { "src": "/views/(.*)", "dest": "/public/views/$1" },
+        { "src": "/fonts/(.*)", "dest": "/public/fonts/$1" },
+        { "src": "/storage/(.*)", "dest": "/public/storage/$1" },
         {
             "src": "/(.*)",
             "dest": "/api/index.php"
