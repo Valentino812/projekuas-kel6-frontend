@@ -1,0 +1,281 @@
+<div>
+    <link rel="stylesheet" href="/css/products.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> 
+    <!-- Search Popup -->
+    <div id="search-popup" class="search-popup" style="display:none;">
+        <span class="close-popup">&times;</span>
+        <input type="text" id="search-input" placeholder="Search products...">
+    </div>
+    <!-- Navigation Bar Start-->
+    <nav class="navbar fade-in blur">
+        <div class="navbar-logo">
+            <a ng-if="!accountInfo" ng-href="/">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
+            </a>
+            <a ng-if="accountInfo" ng-href="/{{ accountInfo.id }}">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="close-button" id="close-button">&times;</div>
+            <ul>
+                <li>
+                    <a ng-href="/products"><h3>Products</h3></a>
+                </li>
+                <li>
+                    <a ng-href="/products/gender/male"><h3>Male</h3></a>
+                </li>
+                <li>
+                    <a ng-href="/products/gender/female"><h3>Female</h3></a>
+                </li>
+                <li>
+                    <a ng-href="/contact"><h3>Contact</h3></a>
+                </li>
+            </ul>
+            <!-- Mobile Icons -->
+            <div class="mobile-icons">
+                <!-- Search -->
+                <input type="text" id="navbar-mobile-search-input" placeholder="Search products..." class="search-field">
+                <a href=""><div class="icon-container"><a id="account-button-mobile"><img class="icon" src="/img/account.png"></div></a></a>
+                <a href=""><div class="icon-container"><a id="cart-button-mobile"><img class="icon" src="/img/cart.png"></div></a></a>
+            </div>
+        </div>        
+        <!-- Destkop Icons -->
+        <div class="icons">
+            <!-- Search -->
+            <input type="text" id="navbar-search-input" placeholder="Search products..." class="search-field" ng-model="searchQuery" ng-change="filterProducts()">
+            <a href=""><div class="icon-container"><a id="account-button"><img class="icon" src="/img/account.png"></div></a> </a>
+            <a href=""><div class="icon-container"><a id="cart-button"><img class="icon" src="/img/cart.png"></div></a> </a>
+        </div>
+        <div class="burger-menu burger" id="burger-menu">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </nav>
+    <!-- Navigation Bar End -->
+
+    <!-- Sidebars Start -->
+    <div class="sidebar-cart" id="sidebar-cart">
+        <div class="sidebar-container">
+            <button class="close-sidebar" id="close-cart">&times;</button> 
+            <h3>SHOPPING CART</h3>
+            <hr class="divider">
+            <div ng-if="!accountInfo">
+                <h4>Please login to use our shopping feature</h4>
+            </div>
+            <div ng-if="accountInfo" class="cart-contents">
+                <ul class="cart-items">
+                    <li ng-repeat="item in cartItems" class="cart-item">
+                        <img ng-src="{{ item.img1 }}" alt="{{ item.name }}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <span class="cart-item-name">{{ item.name }}</span>
+                            <span class="cart-item-quantity">Quantity: {{ item.quantity }}</span>
+                            <span class="cart-item-subtotal">Subtotal: Rp {{ (item.price * item.quantity) | number:2 }} IDR</span>
+                            <div class="cart-item-actions">
+                                <button ng-click="decreaseQuantity(item)" class="cart-quantity-btn">-</button>
+                                <button ng-click="increaseQuantity(item)" class="cart-quantity-btn">+</button>
+                                <button ng-click="removeFromCart(item)" class="cart-remove-btn">Remove</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                    <h3 class="cart-total">Total: Rp {{ cartTotal | number:2 }} IDR</h3>
+                    <button ng-click="checkout()" class="checkout-btn">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-account" id="sidebar-account">
+        <div class="sidebar-container">
+            <button class="close-sidebar" id="close-account">&times;</button> 
+            <h3 ng-if="showLoginForm">LOGIN</h3>
+            <h3 ng-if="!showLoginForm">YOUR ACCOUNT</h3>
+            <hr class="divider">
+                <ul>
+                    <form id="account-form" ng-submit="login()" ng-if="showLoginForm">
+                        <li>
+                            <input type="email" id="email-account" name="email-account" placeholder="Email" ng-model="loginData.email" required>
+                        </li>
+                        <li>
+                            <input type="password" id="password" name="password" placeholder="Password" ng-model="loginData.password" required>
+                        </li>
+
+                        <li>
+                            <button type="submit" id="login">Login</button>
+                        </li>
+                    </form>
+                    <!-- When user has login -->
+                    <div ng-if="!showLoginForm">
+                        <div ng-if="accountInfo">
+                            <!-- Profile section with icon and name -->
+                            <div class="profile-info">
+                                <div class="account-icon-container">
+                                    <img src="/img/account.png" alt="Account Icon" class="account-icon" />
+                                </div>
+                                <div class="name">
+                                    <p><strong>{{ accountInfo.first_name }} {{ accountInfo.last_name }}</strong></p>
+                                    <p><em>{{ accountInfo.email }}</em></p>
+                                </div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="account-buttons">
+                                <a ng-href="/settings" class="account-button">
+                                    <i class="bi bi-gear"></i>
+                                    <h3>Settings ></h3>
+                                </a>
+                                <a ng-href="/transaction" class="account-button">
+                                    <i class="bi bi-wallet2"></i>
+                                    <h3>Transactions ></h3>
+                                </a>   
+                            </div>
+                            <div class="logout">
+                                <a ng-href="/products" ng-click="logout()" class="logout-button">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <small>Logout</small>
+                                </a>
+                            </div>
+                            <hr class="divider">
+                        </div>
+                        <!-- Loading message when info not loaded yet -->
+                        <div ng-if="!accountInfo">
+                            <p>{{ errorMessage || 'Loading account information...' }}</p>
+                        </div>
+                    </div>
+
+                    <li>
+                        <!-- Error and Success Messages -->
+                        <div ng-if="errorMessage" class="error-message">
+                            {{ errorMessage }}
+                        </div>
+                        <div ng-if="successMessage" class="success-message">
+                            {{ successMessage }}
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" id="forgot-button">Forgot your password?</a>
+                    </li>
+                    <li ng-if="showLoginForm">
+                        <a ng-href="/register" id="create-account">New customer? Create a new account</a>
+                    </li>
+                    <li ng-if="showLoginForm">
+                        <a ng-href="/adminLogin" id="admin-login">Admin Login</a>
+                    </li>
+                </ul>
+        </div>
+    </div>
+
+    <div class="sidebar-forgot" id="sidebar-forgot">
+        <div class="sidebar-container">
+            <button class="close-sidebar" id="close-forgot">&times;</button> 
+            <h3>RESET PASSWORD</h3>
+            <hr class="divider">
+            <p>Lost your password? Please enter your email address. You will receive a link to create a new password via email.</p>
+            <ul>
+                <li>
+                    <input type="email" id="email-account" name="email-account" placeholder="Email" required>
+                </li>
+                <li>
+                    <button type="submit" form="account-form" id="reset">Reset Password</button>
+                </li>
+            </ul>    
+        </div>
+    </div>
+    <!-- Sidebars End -->
+
+    <!-- Search Results -->
+    <div id="search-results" class="search-results" style="display:none;">
+        <ul id="results-list"></ul>
+    </div>
+    <!-- Hero Start -->
+    <div class="hero fade-in blur">
+        <div class="carousel-hero">
+            <img src="/img/hero-image1.jpg" alt="Boots">
+            <img src="/img/hero-image2.jpg" alt="Boots">
+            <img src="/img/hero-image3.jpg" alt="Boots">
+        </div>
+        <button class="prev" onclick="prevSlide()">❮</button>
+        <button class="next" onclick="nextSlide()">❯</button>
+        <div class="hero-text">
+            <h1>READY TO WEAR</h1>
+            <p>Our seasonal prêt-à-porter creation, from the start to the latest available collection in stock. We introduced our newest articles, materials and details through these collections.</p>
+        </div>
+    </div>
+    <!-- Hero End -->
+    <div class="sort-container fade-in blur">
+        <select id="sort-select" ng-model="sortCriteria" ng-change="sortProducts(sortCriteria)">
+            <option value="">Sort By</option>
+            <option value="price">Price: High to Low</option>
+            <option value="price-low-to-high">Price: Low to High</option>
+            <option value="alphabetical">Alphabetical Order</option>
+            <option value="reverse-alphabetical">Reverse Alphabetical Order</option>
+        </select>
+        <select id="gender-filter" ng-model="selectedGender" ng-change="filterProducts()">
+            <option value="">All Genders</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <select id="type-filter" ng-model="selectedType" ng-change="filterProducts()">
+            <option value="">All Types</option>
+            <option value="boots">Boots</option>
+            <option value="sneakers">Sneakers</option>
+            <option value="loafers">Loafers</option>
+            <option value="high_heels">High heels</option>
+        </select>
+    </div>
+
+    <section class="products fade-in blur">
+     
+        <div ng-if="products.length === 0">
+            <p>No products available.</p>
+        </div>
+        <!-- Dynamically repeat products -->
+        <div class="product" ng-repeat="product in products">
+            <a href="/product/{{ product.id }}" class="product-link">
+                <div class="product-image">
+                    <!-- Main Image -->
+                    <img ng-src="{{ product.img1 }}" alt="{{ product.name }}" class="main-image">
+                    
+                    <!-- Hover Image -->
+                    <img ng-src="{{ product.img2 }}" alt="{{ product.name }} Hover" class="hover-image">
+                </div>
+                <h2>{{ product.name }}</h2>
+                <p>Rp {{ product.price | number:2 }} IDR</p>
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer fade-in blur">
+        <div class="footer-content">
+            <div class="logo">
+                <img src="/img/brand-logo.png"/>
+            </div>
+            <div class="footer-menu">
+                <a ng-if="!accountInfo" ng-href="/products" class="footer-link">Products</a>
+                <a ng-if="accountInfo" ng-href="/products/{{ accountInfo.id }}" class="footer-link">Products</a>
+                <a ng-if="!accountInfo" ng-href="/products/gender/male" class="footer-link">Male</a>
+                <a ng-if="accountInfo" ng-href="/products/gender/male/{{ accountInfo.id }}" class="footer-link">Male</a>
+                <a ng-if="!accountInfo" ng-href="/products/gender/female" class="footer-link">Female</a>
+                <a ng-if="accountInfo" ng-href="/products/gender/female/{{ accountInfo.id }}" class="footer-link">Female</a>
+                <a ng-if="!accountInfo" ng-href="/contact" class="footer-link">Contact</a>
+                <a ng-if="accountInfo" ng-href="/contact/{{ accountInfo.id }}" class="footer-link">Contact</a>
+            </div>
+            <div class="social">
+                <div class="social-icon-container">
+                    <a href="" target="_blank" class="social-icon"><img src="/img/instagram.png"/></a>    
+                </div>
+                <div class="social-icon-container">
+                    <a href="" target="_blank" class="social-icon"><img src="/img/twitter.png"/></a>    
+                </div>
+                <div class="social-icon-container">
+                    <a href="" target="_blank" class="social-icon"><img src="/img/whatsapp.png"/></a>    
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            Copyright &copy; 2024 SuShoes Co.
+        </div>
+    </footer>
+    <!-- Footer End -->
+</div>

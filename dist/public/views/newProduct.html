@@ -1,0 +1,191 @@
+<div>
+    <link rel="stylesheet" href="/css/newProduct.css">
+   <!-- Navigation Bar Start-->
+   <nav class="navbar fade-in blur">
+    <div class="navbar-logo">
+        <a ng-href="/">
+            <img src="/img/brand-logo.png" id="navbar-logo">    
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="close-button" id="close-button">&times;</div>
+        <ul>
+            <li><h3>New Product</h3></a></li>
+        </ul>
+        <!-- Mobile Icons -->
+        <div class="mobile-icons">
+            <a><div class="icon-container"><a ng-href="/" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
+        </div>
+    </div>        
+    <!-- Destkop Icons -->
+    <div class="icons">
+        <a><div class="icon-container"><a ng-href="/admin/{ adminId}" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
+    </div>
+    <div class="burger-menu" id="burger-menu">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+</nav>
+<!-- Navigation Bar End -->
+    <div class="container fade-in blur">
+        <form name="addProductForm" class="container fade-in blur" id="add-product-form" method="POST" enctype="multipart/form-data" ng-submit="submitForm()">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- First Product Image Upload -->
+                <label for="product-image-upload-1" class="image-upload-label">
+                    <img
+                    alt="Product Image 1"
+                    id="product-image-preview-1"
+                    height="400"
+                    ng-src="{{product.image1 || 'assets/default-placeholder.png'}}"
+                    width="600"
+                    style="cursor: pointer; border: 2px dashed #ccc;"
+                    />
+                </label>
+                <input
+                    type="file"
+                    id="product-image-upload-1"
+                    name="productImage1"
+                    accept="image/*"
+                    style="display: none;"
+                    ng-model="product.image1"
+                    onchange="angular.element(this).scope().updateImagePreview(event, 1)"
+                />
+
+                <!-- Second Product Image Upload -->
+                <label for="product-image-upload-2" class="image-upload-label">
+                    <img
+                    alt="Product Image 2"
+                    id="product-image-preview-2"
+                    height="400"
+                    ng-src="{{product.image2 || 'assets/default-placeholder.png'}}"
+                    width="600"
+                    style="cursor: pointer; border: 2px dashed #ccc;"
+                    />
+                </label>
+                <input
+                    type="file"
+                    id="product-image-upload-2"
+                    name="productImage2"
+                    accept="image/*"
+                    style="display: none;"
+                    ng-model="product.image2"
+                    onchange="angular.element(this).scope().updateImagePreview(event, 2)"
+                />
+            </div>
+        
+            <!-- Right Column -->
+            <div class="right-column">
+              <h1>Add New Product</h1>
+        
+              <!-- Product Name -->
+              <div class="form-group">
+                <label for="product-name">Product Name:</label>
+                <input
+                  type="text"
+                  id="product-name"
+                  name="productName"
+                  ng-model="product.name"
+                  class="form-input"
+                  placeholder="Enter product name"
+                  required
+                />
+              </div>
+        
+              <!-- Product Price -->
+              <div class="form-group">
+                <label for="product-price">Price (IDR):</label>
+                <input
+                  type="number"
+                  id="product-price"
+                  name="productPrice"
+                  ng-model="product.price"
+                  class="form-input"
+                  placeholder="Enter product price"
+                  required
+                />
+              </div>
+        
+              <!-- Product Description -->
+              <div class="form-group">
+                <textarea
+                  id="product-description"
+                  name="productDescription"
+                  ng-model="product.description"
+                  class="form-input"
+                  rows="6"
+                  placeholder="Enter product description"
+                  required
+                ></textarea>
+              </div>
+
+              <!-- Product Type -->
+            <div class="form-group">
+                <label for="product-type">Product Type:</label>
+                <select
+                id="product-type"
+                name="productType"
+                ng-model="product.type"
+                class="form-input"
+                required
+                >
+                <option value="">Select Type</option>
+                <option value="boots">Boots</option>
+                <option value="sneakers">Sneakers</option>
+                <option value="loafers">Loafers</option>
+                <option value="high_heels">High heels</option>
+                </select>
+            </div>
+        
+            <!-- Product Gender -->
+            <div class="form-group">
+                <label for="product-gender">Gender:</label>
+                <select
+                id="product-gender"
+                name="productGender"
+                ng-model="product.gender"
+                class="form-input"
+                required
+                >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                </select>
+            </div>
+
+              <!-- Stock Available -->
+            <div class="form-group">
+            <label for="product-stock">Stock Available:</label>
+            <input
+                type="number"
+                id="product-stock"
+                name="productStock"
+                ng-model="product.stock"
+                class="form-input"
+                placeholder="Enter number of products in stock"
+                required
+            />
+            </div>
+        
+              <!-- Submit Button -->
+              <button type="submit" id="add-product-button" class="add-to-cart">
+                Add Product
+              </button>
+            </div>
+          </form>
+    </div>
+
+    <!-- Footer Start -->
+    <footer class="footer fade-in blur">
+        <div class="footer-content">
+            <div class="logo">
+                <img src="/img/brand-logo.png"/>
+            </div>
+        </div>
+        <div class="copyright">
+            Copyright &copy; 2024 SuShoes Co.
+        </div>
+    </footer>    
+    <!-- Footer End -->
+</div>

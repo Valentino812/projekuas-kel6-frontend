@@ -1,0 +1,65 @@
+<div>
+    <link rel="stylesheet" href="/css/adminLogin.css">
+
+    <!-- Navigation Bar Start-->
+    <nav class="navbar fade-in blur">
+        <div class="navbar-logo">
+            <a ng-href="/">
+                <img src="/img/brand-logo.png" id="navbar-logo">    
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="close-button" id="close-button">&times;</div>
+            <ul>
+                <li><h3>Administration</h3></a></li>
+            </ul>
+            <!-- Mobile Icons -->
+            <div class="mobile-icons">
+                <a><div class="icon-container"><a ng-href="/" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
+            </div>
+        </div>        
+        <!-- Destkop Icons -->
+        <div class="icons">
+            <a><div class="icon-container"><a ng-href="/" id="home-button"><img class="icon" src="/img/home.png"></div></a> </a>
+        </div>
+        <div class="burger-menu" id="burger-menu">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </nav>
+    <!-- Navigation Bar End -->
+
+    <!-- Contact Form Start -->
+    <div class="modal fade-in blur">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h2>Administrator Login</h2>
+            <form ng-submit="adminLogin()"  >
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="username" id="username" name="username" required ng-model="adminLoginData.username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required ng-model="adminLoginData.password">
+                </div>
+                <div class="error-message">{{ errorMessage }}</div>
+                <div class="success-message">{{ successMessage }}</div>
+                <button type="submit">Login ></button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer fade-in blur">
+        <div class="footer-content">
+            <div class="logo">
+                <img src="/img/brand-logo.png"/>
+            </div>
+        </div>
+        <div class="copyright">
+            Copyright &copy; 2024 SuShoes Co.
+        </div>
+    </footer>
+    <!-- Footer End -->    
+</div>
